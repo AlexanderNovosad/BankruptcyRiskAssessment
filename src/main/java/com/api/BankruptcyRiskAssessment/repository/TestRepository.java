@@ -11,6 +11,6 @@ import java.util.List;
 public interface TestRepository extends JpaRepository<Test, Long> {
     List<Test> findAll(Sort sort);
     Test findByNameIgnoreCase(String name);
-    Test findAllByTestCategoryId (Long testCategoryId);
+    List<Test> findAllByTestCategoryId (Long testCategoryId);
 
 }

@@ -11,6 +11,6 @@ import java.util.List;
 public interface QuestionRepository extends JpaRepository<Question, Long> {
     List<Question> findAll(Sort sort);
     Question findByNameIgnoreCase(String name);
-    Question findAllByTestId (Long testId);
+    List<Question> findAllByTestId (Long testId);
     List<Question> findAllByPointsIsBetween(int firstPoint, int lastPoint);
 }

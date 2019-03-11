@@ -7,8 +7,8 @@ import javax.persistence.*;
 
 @Getter
 @Setter
-@Entity(name = "TestCategory")
-@Table(name = "testCategory")
+@Entity(name = "Question")
+@Table(name = "question")
 @EntityListeners(AuditingEntityListener.class)
 public class Question {
     @Id
