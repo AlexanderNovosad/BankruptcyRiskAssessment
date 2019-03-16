@@ -19,5 +19,21 @@ public class TestCategory {
     @Column(nullable = false)
     private String name;
 
+    public Long getTestCategoryId() {
+        return testCategoryId;
+    }
+
+    public void setTestCategoryId(Long testCategoryId) {
+        this.testCategoryId = testCategoryId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public TestCategory(){}
 }

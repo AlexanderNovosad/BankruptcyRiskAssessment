@@ -40,4 +40,75 @@ public class Company {
     @Column(nullable = true)
     private Boolean confirmation;
 
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
+    public String getKindOfCompany() {
+        return kindOfCompany;
+    }
+
+    public void setKindOfCompany(String kindOfCompany) {
+        this.kindOfCompany = kindOfCompany;
+    }
+
+    public Integer getIpn() {
+        return ipn;
+    }
+
+    public void setIpn(Integer ipn) {
+        this.ipn = ipn;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getQuadDescription() {
+        return quadDescription;
+    }
+
+    public void setQuadDescription(String quadDescription) {
+        this.quadDescription = quadDescription;
+    }
+
+    public Integer getEdrpou() {
+        return edrpou;
+    }
+
+    public void setEdrpou(Integer edrpou) {
+        this.edrpou = edrpou;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Integer getPhone() {
+        return phone;
+    }
+
+    public void setPhone(Integer phone) {
+        this.phone = phone;
+    }
+
+    public Boolean getConfirmation() {
+        return confirmation;
+    }
+
+    public void setConfirmation(Boolean confirmation) {
+        this.confirmation = confirmation;
+    }
 }

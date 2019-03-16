@@ -22,5 +22,27 @@ public class Test {
     @Column(nullable = false)
     private String name;
 
+    public Long getTestId() {
+        return testId;
+    }
 
+    public void setTestId(Long testId) {
+        this.testId = testId;
+    }
+
+    public TestCategory getTestCategory() {
+        return testCategory;
+    }
+
+    public void setTestCategory(TestCategory testCategory) {
+        this.testCategory = testCategory;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

@@ -25,4 +25,36 @@ public class TestResult {
 
     @Column(nullable = false)
     private Integer points;
+
+    public Long getTestResultId() {
+        return testResultId;
+    }
+
+    public void setTestResultId(Long testResultId) {
+        this.testResultId = testResultId;
+    }
+
+    public Test getTest() {
+        return test;
+    }
+
+    public void setTest(Test test) {
+        this.test = test;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Integer getPoints() {
+        return points;
+    }
+
+    public void setPoints(Integer points) {
+        this.points = points;
+    }
 }
