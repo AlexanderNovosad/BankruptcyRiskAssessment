@@ -9,8 +9,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Set;
 
-@Getter
-@Setter
+
 @Entity (name = "User")
 @Table (name = "user")
 @EntityListeners(AuditingEntityListener.class)

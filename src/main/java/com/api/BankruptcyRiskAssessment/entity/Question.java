@@ -1,12 +1,10 @@
 package com.api.BankruptcyRiskAssessment.entity;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import lombok.Getter;
-import lombok.Setter;
+
 import javax.persistence.*;
 
-@Getter
-@Setter
+
 @Entity(name = "Question")
 @Table(name = "question")
 @EntityListeners(AuditingEntityListener.class)

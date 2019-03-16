@@ -1,6 +1,7 @@
 package com.api.BankruptcyRiskAssessment.repository;
 
 import com.api.BankruptcyRiskAssessment.entity.TestResult;
+import com.api.BankruptcyRiskAssessment.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface TestResultRepository extends JpaRepository<TestResult, Long> {
-    List<TestResult> findAllByUserId(Long userId);
+    List<TestResult> findAllByUser(User user);
     @Query("select tr from TestResult tr where tr.test.testCategory.testCategoryId = :testCategoryId and tr.user.userId = :userId")
     List<TestResult> findAllByTestCategoryId(@Param("testCategoryId") Long testCategoryId, @Param("userId") Long userId);
 }

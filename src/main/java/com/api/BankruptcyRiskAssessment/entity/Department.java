@@ -6,8 +6,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 
-@Getter
-@Setter
 @Entity(name = "Department")
 @Table(name = "department")
 @EntityListeners(AuditingEntityListener.class)

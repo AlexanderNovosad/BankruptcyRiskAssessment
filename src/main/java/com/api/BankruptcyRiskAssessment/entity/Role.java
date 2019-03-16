@@ -9,8 +9,6 @@ import java.io.Serializable;
 
 @Entity(name = "Role")
 @Table(name = "role")
-@Getter
-@Setter
 @EntityListeners(AuditingEntityListener.class)
 public class Role implements Serializable {
 
