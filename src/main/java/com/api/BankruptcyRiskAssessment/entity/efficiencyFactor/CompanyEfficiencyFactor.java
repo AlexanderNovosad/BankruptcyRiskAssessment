@@ -1,15 +1,12 @@
 package com.api.BankruptcyRiskAssessment.entity.efficiencyFactor;
 
 import com.api.BankruptcyRiskAssessment.entity.Company;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.sql.Date;
 
-@Getter
-@Setter
+
 @Entity(name = "CompanyEfficiencyFactor")
 @Table (name = "companyEfficiencyFactor")
 @EntityListeners(AuditingEntityListener.class)
@@ -27,4 +24,36 @@ public class CompanyEfficiencyFactor {
 
     @Column(nullable = false)
     private Date date;
+
+    public Long getCompanyEfficiencyFactorId() {
+        return companyEfficiencyFactorId;
+    }
+
+    public void setCompanyEfficiencyFactorId(Long companyEfficiencyFactorId) {
+        this.companyEfficiencyFactorId = companyEfficiencyFactorId;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
+    public Integer getEfficiencyFactor() {
+        return efficiencyFactor;
+    }
+
+    public void setEfficiencyFactor(Integer efficiencyFactor) {
+        this.efficiencyFactor = efficiencyFactor;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
 }
