@@ -11,7 +11,7 @@ import java.util.Set;
 
 
 @Entity (name = "User")
-@Table (name = "user")
+@Table (name = "users")
 @EntityListeners(AuditingEntityListener.class)
 public class User implements Serializable {
     @Id
@@ -131,7 +131,6 @@ public class User implements Serializable {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
-
 
 
 }
