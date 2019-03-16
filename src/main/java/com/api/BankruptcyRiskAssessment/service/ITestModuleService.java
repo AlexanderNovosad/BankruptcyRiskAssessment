@@ -49,9 +49,11 @@ public interface ITestModuleService {
     Answer confirmAnswer(Long answerId);
 
     /*Calculations*/
-    int calculateTestPointsForUser(Long testId, Long userId, boolean confirmed);
+    int calculateTestPointsForUser(Long testId, Long userId);
 
-    int calculateDepartmentEfficiencFactory();
+    int calculateUserEfficiencyFactory();
+
+    int calculateDepartmentEfficiencyFactory();
 
     int interpretEfficiencyFactory();
 

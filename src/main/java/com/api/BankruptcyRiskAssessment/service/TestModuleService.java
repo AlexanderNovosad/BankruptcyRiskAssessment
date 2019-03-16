@@ -120,12 +120,17 @@ public class TestModuleService implements ITestModuleService {
 
     /*Calculations*/
     @Override
-    public int calculateTestPointsForUser(Long testId, Long userId, boolean confirmed) {
+    public int calculateTestPointsForUser(Long testId, Long userId) {
         return 0;
     }
 
     @Override
-    public int calculateDepartmentEfficiencFactory() {
+    public int calculateUserEfficiencyFactory(){
+        return 0;
+    }
+
+    @Override
+    public int calculateDepartmentEfficiencyFactory() {
         return 0;
     }
 

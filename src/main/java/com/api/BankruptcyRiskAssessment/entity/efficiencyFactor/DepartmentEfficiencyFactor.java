@@ -1,5 +1,7 @@
 package com.api.BankruptcyRiskAssessment.entity.efficiencyFactor;
 
+import com.api.BankruptcyRiskAssessment.entity.Company;
+import com.api.BankruptcyRiskAssessment.entity.Department;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -15,10 +17,15 @@ import java.sql.Date;
 public class DepartmentEfficiencyFactor {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long departmentEfficiencyFactorId;
 
-    @Column(nullable = false)
-    private Integer company;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "companyId", nullable = false)
+    private Company company;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "departmentId", nullable = false)
+    private Department department;
 
     @Column(nullable = false)
     private Integer efficiencyFactor;
