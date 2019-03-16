@@ -12,7 +12,6 @@ public interface AnswerRepository extends JpaRepository<Answer, Long> {
     List<Answer> findAll(Sort sort);
     Answer findByNameIgnoreCase(String name);
     Answer findByQuestionId(Long questionId);
-    List<Answer> findAllByTestId (Long testId);
-    List<Answer> findAllByUserId (Long userId);
-    List<Answer> findAllByConfirmed(boolean confirmed);
+    List<Answer> findAllByTestIdAndUserId (Long testId, Long userId);
+    List<Answer> findAllByTestIdAndUserIdAndConfirmed(Long testId, Long userId, boolean confirmed);
 }
