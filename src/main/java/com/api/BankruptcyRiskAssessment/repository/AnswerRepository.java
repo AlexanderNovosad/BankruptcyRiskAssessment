@@ -13,7 +13,8 @@ import java.util.List;
 @Repository
 public interface AnswerRepository extends JpaRepository<Answer, Long> {
     List<Answer> findAll(Sort sort);
-    Answer findByQuestion(Question question);
+    List<Answer> findAllByTest(Test test);
+    List<Answer> findAllByQuestion(Question question);
     List<Answer> findAllByTestAndUser (Test test, User user);
     List<Answer> findAllByTestAndUserAndConfirmedTrue(Test test, User user);
 }

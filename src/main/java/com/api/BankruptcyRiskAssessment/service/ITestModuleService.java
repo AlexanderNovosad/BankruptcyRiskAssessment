@@ -1,9 +1,8 @@
 package com.api.BankruptcyRiskAssessment.service;
 
-import com.api.BankruptcyRiskAssessment.entity.Answer;
-import com.api.BankruptcyRiskAssessment.entity.Question;
-import com.api.BankruptcyRiskAssessment.entity.Test;
-import com.api.BankruptcyRiskAssessment.entity.TestCategory;
+import com.api.BankruptcyRiskAssessment.entity.*;
+import com.api.BankruptcyRiskAssessment.entity.DepartmentEfficiencyFactor;
+import com.api.BankruptcyRiskAssessment.entity.UserEfficiencyFactor;
 
 import java.util.List;
 
@@ -11,7 +10,7 @@ public interface ITestModuleService {
    /*Test Category*/
     TestCategory addTestCategory(TestCategory testCategory);
 
-   void deleteTestCategory(Long testCategoryId);
+   TestCategory deleteTestCategory(Long testCategoryId);
 
    TestCategory getTestCategory(Long testCategoryId);
 
@@ -22,7 +21,7 @@ public interface ITestModuleService {
    /*Test*/
    Test addTest(Test test);
 
-   void deleteTest(Long testId);
+   Test deleteTest(Long testId);
 
    Test getTest(Long testId);
 
@@ -33,7 +32,9 @@ public interface ITestModuleService {
    /*Questions for test*/
     Question addQuestion(Question question);
 
-    void deleteQuestion(Long questionId);
+    Question deleteQuestion(Long questionId);
+
+    List<Question> deleteQuestionsByTest(Long testId);
 
     List<Question> findQuestionsByTest(Long testId);
 
@@ -42,18 +43,25 @@ public interface ITestModuleService {
     /*Answers for questions*/
     Answer addAnswer(Answer answer);
 
-    void deleteAnswersByTest(Long testId, Long userId);
+    List<Answer> deleteAnswersByTest(Long testId, Long userId);
+
+    List<Answer> deleteAnswersByTest(Long testId);
+
+    List<Answer> deleteAnswersByQuestion(Long questionId);
 
     List<Answer> findAllAnswersForTest(Long testId, Long userId);
 
-    Answer confirmAnswer(Long answerId);
+    Answer confirmAnswer(Answer answer);
+
+    /*TestResult*/
+    List<TestResult> deleteTestResultByTest(Long testId);
 
     /*Calculations*/
-    int calculateTestPointsForUser(Long testId, Long userId);
+    TestResult calculateTestPointsForUser(Long testId, Long userId);
 
-    int calculateUserEfficiencyFactory();
+    List<UserEfficiencyFactor> calculateUserEfficiencyFactory(Long userId);
 
-    int calculateDepartmentEfficiencyFactory();
+    DepartmentEfficiencyFactor calculateDepartmentEfficiencyFactory(Long departmentId);
 
     int interpretEfficiencyFactory();
 

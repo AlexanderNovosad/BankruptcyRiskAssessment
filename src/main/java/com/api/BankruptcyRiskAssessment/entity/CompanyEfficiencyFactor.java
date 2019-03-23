@@ -1,41 +1,37 @@
-package com.api.BankruptcyRiskAssessment.entity.efficiencyFactor;
+package com.api.BankruptcyRiskAssessment.entity;
 
 import com.api.BankruptcyRiskAssessment.entity.Company;
-import com.api.BankruptcyRiskAssessment.entity.Department;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.sql.Date;
 
-@Entity(name = "DepartmentEfficiencyFactor")
-@Table(name = "departmentEfficiencyFactor")
-@EntityListeners(AuditingEntityListener.class)
-public class DepartmentEfficiencyFactor {
 
+@Entity(name = "CompanyEfficiencyFactor")
+@Table (name = "companyEfficiencyFactor")
+@EntityListeners(AuditingEntityListener.class)
+public class CompanyEfficiencyFactor {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long departmentEfficiencyFactorId;
+    private Long companyEfficiencyFactorId;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "companyId", nullable = false)
     private Company company;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "departmentId", nullable = false)
-    private Department department;
-
     @Column(nullable = false)
     private Integer efficiencyFactor;
 
     @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
-    public Long getDepartmentEfficiencyFactorId() {
-        return departmentEfficiencyFactorId;
+    public Long getCompanyEfficiencyFactorId() {
+        return companyEfficiencyFactorId;
     }
 
-    public void setDepartmentEfficiencyFactorId(Long departmentEfficiencyFactorId) {
-        this.departmentEfficiencyFactorId = departmentEfficiencyFactorId;
+    public void setCompanyEfficiencyFactorId(Long companyEfficiencyFactorId) {
+        this.companyEfficiencyFactorId = companyEfficiencyFactorId;
     }
 
     public Company getCompany() {
@@ -44,14 +40,6 @@ public class DepartmentEfficiencyFactor {
 
     public void setCompany(Company company) {
         this.company = company;
-    }
-
-    public Department getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(Department department) {
-        this.department = department;
     }
 
     public Integer getEfficiencyFactor() {

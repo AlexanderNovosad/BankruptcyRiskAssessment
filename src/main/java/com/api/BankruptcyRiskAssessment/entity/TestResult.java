@@ -1,8 +1,7 @@
 package com.api.BankruptcyRiskAssessment.entity;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import lombok.Getter;
-import lombok.Setter;
+
 import javax.persistence.*;
 
 
@@ -24,6 +23,14 @@ public class TestResult {
 
     @Column(nullable = false)
     private Integer points;
+
+    public TestResult(Test test, User user){
+        this.test = test;
+        this.user = user;
+        this.points = 0;
+    }
+
+    public TestResult(){}
 
     public Long getTestResultId() {
         return testResultId;

@@ -1,6 +1,5 @@
-package com.api.BankruptcyRiskAssessment.entity.efficiencyFactor;
+package com.api.BankruptcyRiskAssessment.entity;
 
-import com.api.BankruptcyRiskAssessment.entity.Department;
 import com.api.BankruptcyRiskAssessment.entity.TestCategory;
 import com.api.BankruptcyRiskAssessment.entity.User;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -19,10 +18,6 @@ public class UserEfficiencyFactor {
     private Long userEfficiencyFactorId;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "departmentId", nullable = false)
-    private Department department;
-
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "userId", nullable = false)
     private User user;
 
@@ -34,6 +29,7 @@ public class UserEfficiencyFactor {
     private Integer efficiencyFactor;
 
     @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
     public Long getUserEfficiencyFactorId() {
@@ -42,14 +38,6 @@ public class UserEfficiencyFactor {
 
     public void setUserEfficiencyFactorId(Long userEfficiencyFactorId) {
         this.userEfficiencyFactorId = userEfficiencyFactorId;
-    }
-
-    public Department getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(Department department) {
-        this.department = department;
     }
 
     public User getUser() {
