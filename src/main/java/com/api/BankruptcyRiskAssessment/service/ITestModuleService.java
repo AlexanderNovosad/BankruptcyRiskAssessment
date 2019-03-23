@@ -1,8 +1,6 @@
 package com.api.BankruptcyRiskAssessment.service;
 
 import com.api.BankruptcyRiskAssessment.entity.*;
-import com.api.BankruptcyRiskAssessment.entity.DepartmentEfficiencyFactor;
-import com.api.BankruptcyRiskAssessment.entity.UserEfficiencyFactor;
 
 import java.util.List;
 
