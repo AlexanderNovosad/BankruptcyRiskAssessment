@@ -1,9 +1,9 @@
 package com.api.BankruptcyRiskAssessment.service;
 
 import com.api.BankruptcyRiskAssessment.entity.*;
-import com.api.BankruptcyRiskAssessment.entity.DepartmentEfficiencyFactor;
-import com.api.BankruptcyRiskAssessment.entity.UserEfficiencyFactor;
 import com.api.BankruptcyRiskAssessment.repository.*;
+import com.api.BankruptcyRiskAssessment.repository.efficientFactorRepository.DepartmentEfficiencyFactorRepository;
+import com.api.BankruptcyRiskAssessment.repository.efficientFactorRepository.UserEfficiencyFactorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -255,7 +255,7 @@ public class TestModuleService implements ITestModuleService {
 
     @Override
     public DepartmentEfficiencyFactor calculateDepartmentEfficiencyFactory(Long departmentId) {
-        List<UserEfficiencyFactor> userEfficiencyFactors = userEfficiencyFactorRepository.findAllByDepartmentId();
+        List<UserEfficiencyFactor> userEfficiencyFactors = userEfficiencyFactorRepository.findAllByDepartmentId(departmentId);
         DepartmentEfficiencyFactor departmentEfficiencyFactor = new DepartmentEfficiencyFactor();
         departmentEfficiencyFactor.setDepartment(departmentRepository.getOne(departmentId));
         departmentEfficiencyFactor.setDate(new java.sql.Date(System.currentTimeMillis()));

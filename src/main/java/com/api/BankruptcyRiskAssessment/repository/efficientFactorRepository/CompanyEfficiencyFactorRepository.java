@@ -1,6 +1,6 @@
 package com.api.BankruptcyRiskAssessment.repository.efficientFactorRepository;
 
-import com.api.BankruptcyRiskAssessment.entity.efficiencyFactor.CompanyEfficiencyFactor;
+import com.api.BankruptcyRiskAssessment.entity.CompanyEfficiencyFactor;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
