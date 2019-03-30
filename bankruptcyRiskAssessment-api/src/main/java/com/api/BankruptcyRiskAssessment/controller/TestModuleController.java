@@ -200,7 +200,7 @@ public class TestModuleController {
     }
 
     /*TestResult*/
-    @DeleteMapping("/tset/testResult")
+    @DeleteMapping("/test/testResult")
     public ResponseEntity<List<TestResult>> deleteTestResultByTest(@RequestParam(value = "test_id") Long testId){
         List<TestResult> testResults = testModuleService.deleteTestResultByTest(testId);
         if(testResults==null){
