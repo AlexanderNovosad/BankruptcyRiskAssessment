@@ -7,8 +7,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface CompanyRepository extends JpaRepository<Company, Long> {
-    Company findCompanyByCompanyNameLike (String name);
-    Company findCompanyByEdrpou (Integer edrpou);
-    List <Company> findAllByIpn (Integer ipn);
-    List <Company> findAll (Sort sort);
+    List<Company> findCompanyByCompanyNameLike(String name);
+
+    Company findCompanyByEdrpou(Integer edrpou);
+
+    Company findCompanyByIpn(Integer ipn);
+
+    List<Company> findAll(Sort sort);
 }

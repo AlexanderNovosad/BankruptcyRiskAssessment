@@ -7,9 +7,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface DepartmentRepository extends JpaRepository <Department, Long> {
+public interface DepartmentRepository extends JpaRepository<Department, Long> {
 
-    Department findDepartmentByHeadOfDepartment (User headOfDepartment);
+    Department findDepartmentByHeadOfDepartment(User headOfDepartment);
+
     List<Department> findAll();
-    List<Department> findAllByCompany (Company company);
+
+    List<Department> findAllByCompany(Company company);
 }

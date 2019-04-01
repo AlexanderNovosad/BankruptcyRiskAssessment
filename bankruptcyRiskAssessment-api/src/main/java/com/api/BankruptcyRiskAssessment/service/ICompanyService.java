@@ -1,4 +1,24 @@
 package com.api.BankruptcyRiskAssessment.service;
 
-public interface ICompany {
+import com.api.BankruptcyRiskAssessment.entity.Company;
+
+import java.util.List;
+
+public interface ICompanyService {
+
+    Company addCompany(Company company);
+
+    Company getCompanyById(Long companyId);
+
+    Company updateCompany(Company company);
+
+    Company deleteCompany(Long companyId);
+
+    List<Company> getAllCompany();
+
+    Company getCompanyByIpn(Integer ipn);
+
+    Company getCompanyByEdrpou(Integer ipn);
+
+    List<Company> getCompanyByName(String name);
 }
