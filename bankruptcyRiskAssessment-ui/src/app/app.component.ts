@@ -7,7 +7,16 @@ import { HttpClient } from "@angular/common/http";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  test
+
   title = 'bankruptcyRiskAssessment-ui';
 
+  constructor(private http: HttpClient){
+
+  }
+
+  // search(){
+  //   this.http.get()
+  // }
 
 }
