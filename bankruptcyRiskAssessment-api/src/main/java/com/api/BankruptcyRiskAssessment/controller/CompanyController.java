@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import static java.util.Objects.isNull;
 
-@RestController("/api/company")
+@RestController("/api/companies")
 public class CompanyController {
 
     private final CompanyService companyService;
@@ -18,7 +18,7 @@ public class CompanyController {
         this.companyService = companyService;
     }
 
-    @PostMapping()
+    @PostMapping(value = "/company")
     public ResponseEntity<Company> addCompany(@RequestBody Company company) {
         if (isNull(company)) {
             return ResponseEntity.notFound().build();
@@ -26,7 +26,7 @@ public class CompanyController {
         return ResponseEntity.ok(companyService.addCompany(company));
     }
 
-    @DeleteMapping()
+    @DeleteMapping(value = "/company")
     public ResponseEntity<Company> deleteCompany(@RequestParam(value = "company_id") Long companyId) {
         Company company = companyService.deleteCompany(companyId);
         if (isNull(company)) {
@@ -35,7 +35,7 @@ public class CompanyController {
         return ResponseEntity.ok(company);
     }
 
-    @GetMapping()
+    @GetMapping(value = "/company")
     public ResponseEntity<Company> getCompanyById(@RequestParam(value = "company_id") Long companyId) {
         Company companyById = companyService.getCompanyById(companyId);
         if (isNull(companyById)) {
@@ -44,7 +44,7 @@ public class CompanyController {
         return ResponseEntity.ok(companyById);
     }
 
-    @PutMapping()
+    @PutMapping(value = "/company")
     public ResponseEntity<Company> updateCompany(@RequestBody Company company) {
         if (isNull(company)) {
             return ResponseEntity.notFound().build();
