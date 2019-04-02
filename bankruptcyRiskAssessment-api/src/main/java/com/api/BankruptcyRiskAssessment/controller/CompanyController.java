@@ -27,7 +27,7 @@ public class CompanyController {
     }
 
     @DeleteMapping(value = "/company")
-    public ResponseEntity<Company> deleteCompany(@RequestParam(value = "company_id") Long companyId) {
+    public ResponseEntity<Company> deleteCompany(@RequestParam(value = "companyId") Long companyId) {
         Company company = companyService.deleteCompany(companyId);
         if (isNull(company)) {
             return ResponseEntity.notFound().build();
@@ -36,7 +36,7 @@ public class CompanyController {
     }
 
     @GetMapping(value = "/company")
-    public ResponseEntity<Company> getCompanyById(@RequestParam(value = "company_id") Long companyId) {
+    public ResponseEntity<Company> getCompanyById(@RequestParam(value = "companyId") Long companyId) {
         Company companyById = companyService.getCompanyById(companyId);
         if (isNull(companyById)) {
             return ResponseEntity.notFound().build();

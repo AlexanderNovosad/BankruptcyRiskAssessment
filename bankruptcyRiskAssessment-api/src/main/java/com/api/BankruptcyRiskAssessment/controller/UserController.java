@@ -38,7 +38,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/user")
-    public ResponseEntity<User> getUser(@RequestParam(value = "user_id") Long userId) {
+    public ResponseEntity<User> getUser(@RequestParam(value = "userId") Long userId) {
         User user = userService.getUser(userId);
         if (isNull(user)) {
             return ResponseEntity.notFound().build();
@@ -47,7 +47,7 @@ public class UserController {
     }
 
     @DeleteMapping(value = "/user")
-    public ResponseEntity<User> deleteUser(@RequestParam(value = "user_id") Long userId) {
+    public ResponseEntity<User> deleteUser(@RequestParam(value = "userId") Long userId) {
         User user = userService.deleteUser(userId);
         if (isNull(user)) {
             return ResponseEntity.notFound().build();
