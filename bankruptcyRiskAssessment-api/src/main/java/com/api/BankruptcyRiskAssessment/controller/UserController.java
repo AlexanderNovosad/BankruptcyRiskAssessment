@@ -11,7 +11,7 @@ import java.util.List;
 
 import static java.util.Objects.isNull;
 
-@RestController("/api/users")
+@RestController("/api/user")
 public class UserController {
 
     private final UserService userService;
@@ -21,7 +21,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PutMapping(value = "/user")
+    @PostMapping(value = "/user")
     public ResponseEntity<User> addUser(@RequestBody User user) {
         if (isNull(user)) {
             return ResponseEntity.notFound().build();
