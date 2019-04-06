@@ -1,0 +1,35 @@
+<div class="titleGlobal">Регистрация</div>
+<form>
+  <div>
+    <span>Имя</span>
+    <input type="text" name="userName" #userName>
+  </div>
+
+  <div>
+    <span>Почта</span>
+    <input type="email" name="userEmail" #userEmail>
+  </div>
+
+  <div>
+    <span>Номер телефона</span>
+    <input type="text" name="userPhoneNumber" #userPhoneNumber>
+  </div>
+
+  <div>
+    <span>Пароль</span>
+    <input type="password" name="userPassword2" #userPassword1>
+  </div>
+
+  <div>
+    <span>Повторите пароль</span>
+    <input type="password" name="userPassword2" #userPassword2>
+  </div>
+  <div>
+    У меня уже есть акаунт. <a routerLink="/auth/login">Ввойти</a>
+  </div>
+  <div>
+    <button name="registrate" type="button" class="darkButton" (click)="registration(
+      userName.value, userEmail.value, userPassword1.value, userPassword2.value,
+      userPhoneNumber.value)">Зарегистрироваться</button>
+  </div>
+</form>

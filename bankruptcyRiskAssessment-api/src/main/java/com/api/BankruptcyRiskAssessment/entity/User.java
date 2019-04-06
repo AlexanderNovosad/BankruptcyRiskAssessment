@@ -23,11 +23,11 @@ public class User implements Serializable {
     @Size(min = 5, max = 20)
     private String lastName;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     @Size(min = 5, max = 20)
     private String login;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     @Size(min = 5, max = 20)
     private String password;
 
@@ -39,12 +39,15 @@ public class User implements Serializable {
     private String phone;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "departmentId", nullable = false)
+    @JoinColumn(name = "departmentId", nullable = true)
     private Department department;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name = "role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "roleId", nullable = false)
     private Role role;
+
+//    @Column(nullable = false)
+//    private Boolean confirm;
 
     public User(User users){
         this.firstName = users.firstName;
@@ -56,6 +59,8 @@ public class User implements Serializable {
         this.department = users.department;
         this.role = users.role;
     }
+
+    public User(){}
 
     public Long getUserId() {
         return userId;
@@ -128,6 +133,14 @@ public class User implements Serializable {
     public void setRole(Role role) {
         this.role = role;
     }
+
+//    public Boolean getConfirm() {
+//        return confirm;
+//    }
+//
+//    public void setConfirm(Boolean confirm) {
+//        this.confirm = confirm;
+//    }
 
 
 }

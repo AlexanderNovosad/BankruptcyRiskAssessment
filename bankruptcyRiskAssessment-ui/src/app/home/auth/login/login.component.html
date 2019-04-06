@@ -1,0 +1,29 @@
+<div>
+  <div class="titleGlobal">
+    <span id="title">Вход</span>
+  </div>
+  <span id="errorMassage" *ngIf="errorMassage">{{errorMassage}}</span>
+  <form>
+    <div id="loginForm-container">
+      <div class="loginTitle">
+        <span >Почта:</span>
+      </div>
+      <div class="loginInput">
+        <input type="login" name="login" #userLogin>
+      </div>
+
+      <div class="loginTitle">
+        <span>Пароль</span>
+      </div>
+      <div class="loginInput">
+        <input type="password" name="loginPassword" #userPassword>
+      </div>
+    </div>
+    <div class="routToRegistr">
+      <span>Нет акаунта? <a routerLink="/auth/registration">Зарегистрироваться</a></span>
+    </div>
+    <div id="loginButton">
+      <button type="button" name="loginButton"  class="darkButton" (click)="login(userLogin.value, userPassword.value)">Ввойти</button>
+    </div>
+  </form>
+</div>

@@ -27,7 +27,7 @@ public class Department {
     private String email;
 
     @Column(nullable = true)
-    private Integer phone;
+    private String phone;
 
     public Long getDepartmentId() {
         return departmentId;
@@ -69,11 +69,11 @@ public class Department {
         this.email = email;
     }
 
-    public Integer getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(Integer phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 }
