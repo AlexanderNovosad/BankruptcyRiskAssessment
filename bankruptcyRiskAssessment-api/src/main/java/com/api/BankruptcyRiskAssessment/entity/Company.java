@@ -36,6 +36,10 @@ public class Company {
     @Column(nullable = true)
     private Boolean confirmation;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="userId", nullable = false)
+    private User headOfDepartment;
+
     public Long getCompanyId() {
         return companyId;
     }
@@ -106,5 +110,13 @@ public class Company {
 
     public void setConfirmation(Boolean confirmation) {
         this.confirmation = confirmation;
+    }
+
+    public User getHeadOfDepartment() {
+        return headOfDepartment;
+    }
+
+    public void setHeadOfDepartment(User headOfDepartment) {
+        this.headOfDepartment = headOfDepartment;
     }
 }
