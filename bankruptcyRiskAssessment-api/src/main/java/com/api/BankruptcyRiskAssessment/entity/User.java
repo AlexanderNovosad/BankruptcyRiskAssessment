@@ -5,7 +5,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.Set;
 
 
 @Entity (name = "User")
@@ -44,8 +43,8 @@ public class User implements Serializable {
     private Department department;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+    @JoinTable(name = "role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Role role;
 
     public User(User users){
         this.firstName = users.firstName;
@@ -55,7 +54,7 @@ public class User implements Serializable {
         this.email = users.email;
         this.phone = users.phone;
         this.department = users.department;
-        this.roles = users.roles;
+        this.role = users.role;
     }
 
     public Long getUserId() {
@@ -122,12 +121,12 @@ public class User implements Serializable {
         this.department = department;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
 
