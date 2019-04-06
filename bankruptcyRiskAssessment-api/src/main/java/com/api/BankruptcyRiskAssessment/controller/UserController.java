@@ -2,7 +2,7 @@ package com.api.BankruptcyRiskAssessment.controller;
 
 
 import com.api.BankruptcyRiskAssessment.entity.User;
-import com.api.BankruptcyRiskAssessment.service.UserService;
+import com.api.BankruptcyRiskAssessment.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +14,10 @@ import static java.util.Objects.isNull;
 @RestController("/api/user")
 public class UserController {
 
-    private final UserService userService;
+    private final IUserService userService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(IUserService userService) {
         this.userService = userService;
     }
 

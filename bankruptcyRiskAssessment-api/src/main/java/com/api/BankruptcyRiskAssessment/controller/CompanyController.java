@@ -1,7 +1,7 @@
 package com.api.BankruptcyRiskAssessment.controller;
 
 import com.api.BankruptcyRiskAssessment.entity.Company;
-import com.api.BankruptcyRiskAssessment.service.CompanyService;
+import com.api.BankruptcyRiskAssessment.service.ICompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,10 +11,10 @@ import static java.util.Objects.isNull;
 @RestController("/api/companies")
 public class CompanyController {
 
-    private final CompanyService companyService;
+    private final ICompanyService companyService;
 
     @Autowired
-    public CompanyController(CompanyService companyService) {
+    public CompanyController(ICompanyService companyService) {
         this.companyService = companyService;
     }
 

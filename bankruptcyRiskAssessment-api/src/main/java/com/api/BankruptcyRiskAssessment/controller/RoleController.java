@@ -2,7 +2,7 @@ package com.api.BankruptcyRiskAssessment.controller;
 
 
 import com.api.BankruptcyRiskAssessment.entity.Role;
-import com.api.BankruptcyRiskAssessment.service.RoleService;
+import com.api.BankruptcyRiskAssessment.service.IRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +14,10 @@ import static java.util.Objects.isNull;
 @RestController("/api/roles")
 public class RoleController {
 
-    private final RoleService roleService;
+    private final IRoleService roleService;
 
     @Autowired
-    public RoleController(RoleService roleService) {
+    public RoleController(IRoleService roleService) {
         this.roleService = roleService;
     }
 
