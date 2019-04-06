@@ -1,4 +1,4 @@
-import {Test} from "./";
+import {Test} from "./Test";
 
 export class Question {
   questionId: number;
