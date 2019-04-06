@@ -1,6 +1,6 @@
 import {Test} from "./Test";
 import {Question} from "./Question";
-import {User} from "../user/User";
+import {User} from "../User";
 
 export class Answer {
   answerId: number;

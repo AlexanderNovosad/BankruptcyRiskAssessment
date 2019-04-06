@@ -1,5 +1,5 @@
-import {Test} from "./";
-import {User} from "../user/User";
+import {Test} from "./Test";
+import {User} from "../User";
 
 export class TestResult {
   testResultId: number;

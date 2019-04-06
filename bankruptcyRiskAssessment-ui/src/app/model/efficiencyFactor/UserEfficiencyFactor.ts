@@ -1,5 +1,5 @@
 import {TestCategory} from "../test/TestCategory";
-import {User} from "../user/User";
+import {User} from "../User";
 
 export class UserEfficiencyFactor {
   userEfficiencyFactorId: number;
