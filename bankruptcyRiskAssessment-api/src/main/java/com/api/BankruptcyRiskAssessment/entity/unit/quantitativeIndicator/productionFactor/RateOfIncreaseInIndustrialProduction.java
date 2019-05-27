@@ -1,4 +1,4 @@
-package com.api.BankruptcyRiskAssessment.entity.unit.quantitativeIndicator;
+package com.api.BankruptcyRiskAssessment.entity.unit.quantitativeIndicator.productionFactor;
 
 public class RateOfIncreaseInIndustrialProduction {
     String name;
