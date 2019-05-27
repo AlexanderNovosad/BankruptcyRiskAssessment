@@ -1,22 +1,26 @@
 package com.api.BankruptcyRiskAssessment.entity.unit.quantitativeIndicator.financialFactor;
 
-public class ReturnOnAssets {
-    double netProfit;
+
+//Оборотність активів
+public class AssetTurnover {
+
+    double revenueFromSales;
     double averageAnnualValueOfAssets;
     double amount;
 
-    public ReturnOnAssets(double netProfit, double averageAnnualValueOfAssets) {
-        this.netProfit = netProfit;
+    public AssetTurnover(double revenueFromSales, double averageAnnualValueOfAssets) {
+        this.revenueFromSales = revenueFromSales;
         this.averageAnnualValueOfAssets = averageAnnualValueOfAssets;
-        this.amount = netProfit / averageAnnualValueOfAssets * 100;
+
+        this.amount = revenueFromSales / averageAnnualValueOfAssets;
     }
 
-    public double getNetProfit() {
-        return netProfit;
+    public double getRevenueFromSales() {
+        return revenueFromSales;
     }
 
-    public void setNetProfit(double netProfit) {
-        this.netProfit = netProfit;
+    public void setRevenueFromSales(double revenueFromSales) {
+        this.revenueFromSales = revenueFromSales;
     }
 
     public double getAverageAnnualValueOfAssets() {
