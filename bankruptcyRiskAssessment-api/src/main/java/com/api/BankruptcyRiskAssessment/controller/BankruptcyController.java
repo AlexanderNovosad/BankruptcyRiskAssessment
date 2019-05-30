@@ -21,19 +21,16 @@ public class BankruptcyController {
     private IBankruptcyService bankruptcyService;
 
     @PostMapping("/indicatorsAssessments")
-    public ResponseEntity<ArrayList<Indicator>> setTheQualitativeAssessments(@RequestBody ArrayList<Indicator> indicators, @RequestBody List<LinguisticAssessment> assessments){
-        return ResponseEntity.ok(bankruptcyService.setThePointsForQualitativeIndicators(indicators, assessments));
+    public ResponseEntity<ArrayList<Indicator>> setTheAssessments(@RequestBody ArrayList<Indicator> indicators, @RequestBody List<LinguisticAssessment> assessments){
+        return ResponseEntity.ok(bankruptcyService.setThePointsForIndicators(indicators, assessments));
     }
 
     @PostMapping("/NedosekinModel")
-    public ResponseEntity<ArrayList<Factor>> calculateBankruptcyPoints(@RequestBody ArrayList<Indicator> productionFactorIndicators, @RequestBody ArrayList<String> productionFactorDependencies, @RequestBody ArrayList<Indicator> managementFactorIndicators, @RequestBody ArrayList<String> managementFactorDependencies, @RequestBody ArrayList<Indicator> financialFactorIndicators, @RequestBody ArrayList<String> financialFactorDependencies, @RequestBody ArrayList<Indicator> personnelFactorIndicators, @RequestBody ArrayList<String> personnelFactorDependencies, @RequestBody ArrayList<Indicator> marketingFactorIndicators, @RequestBody ArrayList<String> marketingFactorDependencies, @RequestBody ArrayList<Indicator> innovationFactorIndicators, @RequestBody ArrayList<String> innovationFactorDependencies, @RequestBody ArrayList<String> factorsDependencies){
+    public ResponseEntity<ArrayList<Factor>> calculateBankruptcyPoints(@RequestBody List<ArrayList<Indicator>> indicators, @RequestBody List<ArrayList<String>> dependencies, @RequestBody ArrayList<String> factorsDependencies){
         ArrayList<Factor> factors = new ArrayList<>();
-        factors.add(bankruptcyService.calculateFactorPoints(productionFactorIndicators, productionFactorDependencies));
-        factors.add(bankruptcyService.calculateFactorPoints(managementFactorIndicators, managementFactorDependencies));
-        factors.add(bankruptcyService.calculateFactorPoints(financialFactorIndicators, financialFactorDependencies));
-        factors.add(bankruptcyService.calculateFactorPoints(personnelFactorIndicators, personnelFactorDependencies));
-        factors.add(bankruptcyService.calculateFactorPoints(marketingFactorIndicators, marketingFactorDependencies));
-        factors.add(bankruptcyService.calculateFactorPoints(innovationFactorIndicators, innovationFactorDependencies));
+        for(int i=0; i<indicators.size(); i++){
+            factors.add(bankruptcyService.calculateFactorPoints(indicators.get(i), dependencies.get(i)));
+        }
         factors.add(bankruptcyService.calculateCompanyPoints(factors,factorsDependencies));
         return ResponseEntity.ok(factors);
     }
