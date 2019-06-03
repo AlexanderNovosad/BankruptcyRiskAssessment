@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import {User} from '../model/User';
 import {HttpClient} from '@angular/common/http';
-import 'rxjs/add/operator/toPromise';
+import {Observable} from 'rxjs';
+import { map } from 'rxjs/operators';
 import {ReplaySubject} from 'rxjs';
+import {Role} from "../model/Role";
 
 @Injectable()
 export class UserService {
@@ -29,6 +31,11 @@ export class UserService {
   public editUserHttpRequest(user: User): Promise<User> {
     return this.httpClient.put(`/api/user`, user)
       .toPromise().then(data => data as User);
+  }
+
+  public getRole(roleId): Promise<Role> {
+    return this.httpClient.get<Role>(`/api/roles/role?role_id=${roleId}`)
+      .toPromise().then(response => response as Role);
   }
 
 }

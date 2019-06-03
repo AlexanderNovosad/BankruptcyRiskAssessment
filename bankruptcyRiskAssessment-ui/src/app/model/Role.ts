@@ -9,9 +9,9 @@ export const roleList: Role[] = [
     name: 'Admin'
   }, {
     roleId: 2,
-    name: 'Director'
+    name: 'User'
   }, {
     roleId: 3,
-    name: 'User'
+    name: 'Expert'
   }
 ];

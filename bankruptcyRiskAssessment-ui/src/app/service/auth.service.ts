@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import 'rxjs/add/operator/toPromise';
+import {Observable} from 'rxjs';
+import { map } from 'rxjs/operators';
 import {User} from '../model/User';
 import {Http, Response, RequestOptions, Headers} from '@angular/http';
 import {Router} from '@angular/router';
@@ -23,7 +24,7 @@ export class AuthService {
     promise.then(value => {
       this.userService.loginUserEvent.next(value.json());
     })
-      .catch(error => console.log('[USER_SERVICE]: ' + error));
+      .catch(error => console.log('[USER_SERVICE]: ' + error)).then(value => console.log("getIt"));
     return promise;
   }
 

@@ -12,7 +12,7 @@ export class User {
   role: Role;
   phone: string;
   department: Department;
-  confirm: boolean;
+  // confirm: boolean;
 
 
 }

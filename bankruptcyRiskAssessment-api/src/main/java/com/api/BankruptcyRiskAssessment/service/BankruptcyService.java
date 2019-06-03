@@ -3,10 +3,12 @@ package com.api.BankruptcyRiskAssessment.service;
 import com.api.BankruptcyRiskAssessment.entity.unit.Factor;
 import com.api.BankruptcyRiskAssessment.entity.unit.Indicator;
 import com.api.BankruptcyRiskAssessment.entity.unit.LinguisticAssessment;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class BankruptcyService implements IBankruptcyService {
 
     @Override

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {AuthService} from '../../data-service/auth.service';
+import {AuthService} from '../../../service/auth.service';
 import {ActivatedRoute} from '@angular/router';
-import {roleList} from '../../data-service/model/user/Role';
+import {Role, roleList} from '../../../model/Role';
+import {UserService} from "../../../service/user.service";
 
 @Component({
   selector: 'app-registration',
@@ -10,25 +11,28 @@ import {roleList} from '../../data-service/model/user/Role';
 })
 export class RegistrationComponent implements OnInit {
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private userService: UserService) { }
 
-  private role;
+  // private role: Role;
+
+
 
   ngOnInit() {
+    // this.userService.getRole(1).then(role => this.role = role).then(role => console.log(role));
   }
 
-  public registration(userName, userEmail, userPassword1, userPassword2, userPhoneNumber) {
+  public registration(firstName, lastName, login, userEmail, userPassword1, userPassword2, userPhoneNumber) {
     if (userPassword2 === userPassword1) {
       this.authService.createNewUser({
         userId: 0,
-        name: userName,
-        eMail: userEmail,
+        firstName: firstName,
+        lastName: lastName,
+        login: login,
         password: userPassword1,
-        phoneNumber: userPhoneNumber,
-        role: this.role,
-        status: false,
-        specialization: null,
-        team: null
+        eMail: userEmail,
+        role: roleList[1],
+        phone: userPhoneNumber,
+        department: null
       });
     } else {
       alert('Пароли не совпадают');
