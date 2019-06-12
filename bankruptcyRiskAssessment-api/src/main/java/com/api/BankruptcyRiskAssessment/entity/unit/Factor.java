@@ -4,6 +4,8 @@ public class Factor {
     private String name;
     private LinguisticAssessment assessment;
 
+    public Factor(String name){this.name = name;}
+
     public Factor(){}
 
     public String getName() {

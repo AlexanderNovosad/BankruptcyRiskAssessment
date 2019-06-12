@@ -14,6 +14,7 @@ public class LinguisticAssessment {
         this.d = 0;
     }
 
+
     public LinguisticAssessment(String name){
         this.name = name;
         if(name.equals("Дуже низький")){

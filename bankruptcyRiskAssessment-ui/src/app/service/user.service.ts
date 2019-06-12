@@ -33,7 +33,7 @@ export class UserService {
       .toPromise().then(data => data as User);
   }
 
-  public getRole(roleId): Promise<Role> {
+  public getRole(roleId: number): Promise<Role> {
     return this.httpClient.get<Role>(`/api/roles/role?role_id=${roleId}`)
       .toPromise().then(response => response as Role);
   }

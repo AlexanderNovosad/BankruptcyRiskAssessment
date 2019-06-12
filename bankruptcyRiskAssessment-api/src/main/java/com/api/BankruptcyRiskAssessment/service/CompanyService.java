@@ -1,23 +1,27 @@
 package com.api.BankruptcyRiskAssessment.service;
 
 import com.api.BankruptcyRiskAssessment.entity.Company;
+import com.api.BankruptcyRiskAssessment.entity.ExpertAccess;
+import com.api.BankruptcyRiskAssessment.entity.User;
 import com.api.BankruptcyRiskAssessment.repository.CompanyRepository;
+import com.api.BankruptcyRiskAssessment.repository.ExpertAccessRepository;
+import com.api.BankruptcyRiskAssessment.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
 import static java.util.Objects.isNull;
 
 @Service
 public class CompanyService implements ICompanyService {
 
-    private final CompanyRepository companyRepository;
-
     @Autowired
-    public CompanyService(CompanyRepository companyRepository) {
-        this.companyRepository = companyRepository;
-    }
+    private CompanyRepository companyRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private ExpertAccessRepository expertAccessRepository;
 
     @Override
     public Company addCompany(Company company) {
@@ -31,6 +35,21 @@ public class CompanyService implements ICompanyService {
             return null;
         }
         return company;
+    }
+
+    @Override
+    public List<ExpertAccess> getCompaniesByExpert(Long userId) {
+        User user = userRepository.getOne(userId);
+        if (user == null) {
+            return null;
+        }
+        List<ExpertAccess> expertAccesses = expertAccessRepository.findAllByExpert(user);
+        if (expertAccesses == null) {
+            return null;
+        }
+//        ArrayList<Company> companies = new ArrayList<Company>();
+//        expertAccesses.forEach(expertAccess -> companies.add(expertAccess.getCompany()));
+        return expertAccesses;
     }
 
     @Override

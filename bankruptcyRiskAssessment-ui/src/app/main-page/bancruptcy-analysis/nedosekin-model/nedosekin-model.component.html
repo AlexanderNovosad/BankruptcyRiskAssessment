@@ -1,0 +1,42 @@
+<div class="label">
+  <span>Виберіть компанію:</span>
+</div>
+<div class="input">
+  <select name="company" id="selectedCompanyId" [value]="selectedCompany" (change)="selectedCompany=$event.target.value">
+    <option *ngFor="let company of getCompanyList()"
+            [value]="company.companyId">
+      {{company.companyName}}
+    </option>
+  </select>
+</div>
+<button name="button" type="button" (click)="getSelectedCompany();createQuantitativeIndicators();createQualitativeIndicators()">Otrimaty</button>
+
+
+<div *ngIf="company!==null">
+  <h2>Список показників для оцінювання банкрутства</h2>
+  <h3>Кількісні показники</h3>
+  <div class="Indicators table" style="border-bottom: 2px solid #6a5750; margin-bottom: 0;">
+    <span>Бізнес-процес</span>
+    <span>Показник</span> <span>Відмітка</span>
+  </div>
+  <div *ngFor="let indicator of getQuantitativeIndicators()" >
+    <div class="indicatorListElement">
+      <span style="text-align: left">{{indicator.factor.name}}</span>
+      <span>{{ indicator.name }}</span> <span>Add</span><button type="button" (click)="checkQuantitativeIndicators(indicator)"></button>
+    </div>
+  </div>
+  <p></p>
+  <h3>Якісні показники</h3>
+  <div class="Indicators table" style="border-bottom: 2px solid #6a5750; margin-bottom: 0;">
+    <span>Бізнес-процес</span>
+    <span>Показник</span> <span>Відмітка</span>
+  </div>
+  <div *ngFor="let indicator of getQualitativeIndicators()">
+    <div class="indicatorListElement">
+      <span style="text-align: left">{{indicator.factor.name}}</span>
+      <span>{{ indicator.name }}</span> <span>Add</span><button type="button" (click)="checkQualitativeIndicators(indicator)"></button>
+    </div>
+  </div>
+  <button type="button" (click)="show()"></button>
+</div>
+<router-outlet></router-outlet>

@@ -13,6 +13,7 @@ import {OverallRatingOfEnterprisesComponent} from "./main-page/overall-rating-of
 import {PersonalAccountComponent} from "./main-page/personal-account/personal-account.component";
 import {StatisticsComponent} from "./main-page/statistics/statistics.component";
 import {TestingEmployeesComponent} from "./main-page/testing-employees/testing-employees.component";
+import {NedosekinModelComponent} from "./main-page/bancruptcy-analysis/nedosekin-model/nedosekin-model.component";
 
 
 const routes: Routes = [
@@ -27,6 +28,7 @@ const routes: Routes = [
     ]},
   {path: 'main-page', component: MainPageComponent, canActivate: [UserAccessService], children:[
       {path: 'bancruptcy-analysis', component: BancruptcyAnalysisComponent, children: [
+          {path: 'nedosekin-model', component: NedosekinModelComponent}
 
         ]},
       {path: 'financial-enterprise-analysis', component: FinancialEnterpriseAnalysisComponent},

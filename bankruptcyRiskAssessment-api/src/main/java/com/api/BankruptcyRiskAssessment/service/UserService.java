@@ -12,12 +12,8 @@ import static java.util.Objects.isNull;
 @Service
 public class UserService implements IUserService {
 
-    private final UserRepository userRepository;
-
     @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private UserRepository userRepository;
 
     @Override
     public User addUser(User user) {

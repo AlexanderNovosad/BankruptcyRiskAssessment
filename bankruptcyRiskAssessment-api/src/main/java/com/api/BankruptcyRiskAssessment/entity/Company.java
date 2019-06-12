@@ -1,14 +1,17 @@
 package com.api.BankruptcyRiskAssessment.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 
 @Entity(name = "Company")
 @Table (name = "company")
 @EntityListeners(AuditingEntityListener.class)
-public class Company {
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class Company implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long companyId;
@@ -37,9 +40,9 @@ public class Company {
     @Column(nullable = true)
     private Boolean confirmation;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name="userId", nullable = false)
-    private User headOfDepartment;
+    private User headOfCompany;
 
     public Long getCompanyId() {
         return companyId;
@@ -113,11 +116,11 @@ public class Company {
         this.confirmation = confirmation;
     }
 
-    public User getHeadOfDepartment() {
-        return headOfDepartment;
+    public User getHeadOfCompany() {
+        return headOfCompany;
     }
 
-    public void setHeadOfDepartment(User headOfDepartment) {
-        this.headOfDepartment = headOfDepartment;
+    public void setHeadOfCompany(User headOfCompany) {
+        this.headOfCompany = headOfCompany;
     }
 }

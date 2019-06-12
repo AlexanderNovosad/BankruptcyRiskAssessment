@@ -12,6 +12,7 @@ import { AuthComponent } from './home/auth/auth.component';
 import { LoginComponent } from './home/auth/login/login.component';
 import { RegistrationComponent } from './home/auth/registration/registration.component';
 import { HomeComponent } from './home/home.component';
+import { CompanyService } from './service/company.service';
 import { AuthService } from './service/auth.service';
 import { AuthAccessService } from './service/auth-access.service';
 import { UserAccessService } from './service/user-access.service';
@@ -29,6 +30,7 @@ import { TestComponent } from './main-page/testing-employees/testing-form/test/t
 import { TestResultComponent } from './main-page/testing-employees/test-result/test-result.component';
 import { TestReviewComponent } from './main-page/testing-employees/test-review/test-review.component';
 import { BancruptcyAnalysisComponent } from './main-page/bancruptcy-analysis/bancruptcy-analysis.component';
+import {NedosekinModelComponent} from "./main-page/bancruptcy-analysis/nedosekin-model/nedosekin-model.component";
 import { ManualInputFormComponent } from './main-page/bancruptcy-analysis/manual-input-form/manual-input-form.component';
 import { DocumentFormComponent } from './main-page/bancruptcy-analysis/document-form/document-form.component';
 import { OverallRatingOfEnterprisesComponent } from './main-page/overall-rating-of-enterprises/overall-rating-of-enterprises.component';
@@ -37,6 +39,7 @@ import { BancruptcyStatisticsComponent } from './main-page/statistics/bancruptcy
 import { LiquidityStatisticsComponent } from './main-page/statistics/liquidity-statistics/liquidity-statistics.component';
 import { FinancialEnterpriseAnalysisComponent } from './main-page/financial-enterprise-analysis/financial-enterprise-analysis.component';
 import { LiquidityAnalysisComponent } from './main-page/financial-enterprise-analysis/liquidity-analysis/liquidity-analysis.component';
+import {BankruptcyService} from "./service/bankruptcy.service";
 
 
 
@@ -67,7 +70,8 @@ import { LiquidityAnalysisComponent } from './main-page/financial-enterprise-ana
     AuthComponent,
     LoginComponent,
     RegistrationComponent,
-    HomeComponent
+    HomeComponent,
+    NedosekinModelComponent
   ],
   imports: [
     BrowserModule,
@@ -82,7 +86,9 @@ import { LiquidityAnalysisComponent } from './main-page/financial-enterprise-ana
     AuthAccessService,
     UserAccessService,
     AuthService,
-    MessageService
+    MessageService,
+    CompanyService,
+    BankruptcyService
   ],
   bootstrap: [AppComponent]
 })

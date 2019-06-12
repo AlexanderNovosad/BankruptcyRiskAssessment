@@ -14,12 +14,8 @@ import static java.util.Objects.isNull;
 @RestController("/api/departments")
 public class DepartmentController {
 
-    private final IDepartmentService departmentService;
-
     @Autowired
-    public DepartmentController(IDepartmentService departmentService) {
-        this.departmentService = departmentService;
-    }
+    private IDepartmentService departmentService;
 
     @PostMapping(value = "/department")
     public ResponseEntity<Department> addDepartment(@RequestBody Department department) {

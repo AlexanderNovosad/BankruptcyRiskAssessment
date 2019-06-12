@@ -1,13 +1,16 @@
 package com.api.BankruptcyRiskAssessment.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity(name = "Department")
 @Table(name = "department")
 @EntityListeners(AuditingEntityListener.class)
-public class Department {
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class Department implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long departmentId;

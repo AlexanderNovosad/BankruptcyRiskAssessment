@@ -10,12 +10,8 @@ import java.util.List;
 @Service
 public class RoleService implements IRoleService {
 
-    private final RoleRepository roleRepository;
-
     @Autowired
-    public RoleService(RoleRepository roleRepository) {
-        this.roleRepository = roleRepository;
-    }
+    private RoleRepository roleRepository;
 
     @Override
     public Role addRole(Role role) {

@@ -5,9 +5,12 @@ public class Indicator {
     private LinguisticAssessment assessment;
     private Factor factor;
 
-    public Indicator(String name){
+    public Indicator(String name, Factor factor){
         this.name = name;
+        this.factor = factor;
     }
+
+    public Indicator(){}
 
     public String getName() {
         return name;

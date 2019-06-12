@@ -14,12 +14,8 @@ import static java.util.Objects.isNull;
 @RestController("/api/user")
 public class UserController {
 
-    private final IUserService userService;
-
     @Autowired
-    public UserController(IUserService userService) {
-        this.userService = userService;
-    }
+    private IUserService userService;
 
     @PostMapping(value = "/user")
     public ResponseEntity<User> addUser(@RequestBody User user) {

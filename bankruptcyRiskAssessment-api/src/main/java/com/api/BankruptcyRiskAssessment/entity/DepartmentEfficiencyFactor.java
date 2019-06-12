@@ -3,12 +3,13 @@ package com.api.BankruptcyRiskAssessment.entity;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity(name = "DepartmentEfficiencyFactor")
 @Table(name = "departmentEfficiencyFactor")
 @EntityListeners(AuditingEntityListener.class)
-public class DepartmentEfficiencyFactor {
+public class DepartmentEfficiencyFactor implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -14,12 +14,8 @@ import static java.util.Objects.isNull;
 @RestController("/api/roles")
 public class RoleController {
 
-    private final IRoleService roleService;
-
     @Autowired
-    public RoleController(IRoleService roleService) {
-        this.roleService = roleService;
-    }
+    private IRoleService roleService;
 
     @PostMapping(value = "/role")
     public ResponseEntity<Role> addRole(@RequestBody Role role) {

@@ -14,12 +14,8 @@ import static java.util.Objects.isNull;
 @Service
 public class DepartmentService implements IDepartmentService {
 
-    private final DepartmentRepository departmentRepository;
-
     @Autowired
-    public DepartmentService(DepartmentRepository departmentRepository) {
-        this.departmentRepository = departmentRepository;
-    }
+    private DepartmentRepository departmentRepository;
 
     @Override
     public Department addDepartment(Department department) {

@@ -1,22 +1,22 @@
 package com.api.BankruptcyRiskAssessment.controller;
 
 import com.api.BankruptcyRiskAssessment.entity.Company;
+import com.api.BankruptcyRiskAssessment.entity.ExpertAccess;
 import com.api.BankruptcyRiskAssessment.service.ICompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static java.util.Objects.isNull;
 
-@RestController("/api/companies")
+@RestController
+@RequestMapping("/api/companies")
 public class CompanyController {
 
-    private final ICompanyService companyService;
-
     @Autowired
-    public CompanyController(ICompanyService companyService) {
-        this.companyService = companyService;
-    }
+    public ICompanyService companyService;
 
     @PostMapping(value = "/company")
     public ResponseEntity<Company> addCompany(@RequestBody Company company) {
@@ -42,6 +42,20 @@ public class CompanyController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(companyById);
+    }
+
+    @GetMapping(value = "/company/expert")
+    public ResponseEntity<List<ExpertAccess>> getCompanyByUser(@RequestParam(value = "userId") Long userId) {
+        List<ExpertAccess> companies = companyService.getCompaniesByExpert(userId);
+        if (isNull(companies)) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(companies);
+    }
+
+    @GetMapping(value = "/")
+    public ResponseEntity<List<Company>> getCompanies() {
+        return ResponseEntity.ok(companyService.getAllCompany());
     }
 
     @PutMapping(value = "/company")
