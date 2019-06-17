@@ -3,6 +3,8 @@ import {HttpClient} from "@angular/common/http";
 import {Factor} from "../model/Factor";
 import {Indicator} from "../model/Indicator";
 import {QuantitativeIndicator} from "../model/QuantitativeIndicator";
+import {PreQuantitativeIndicator} from "../model/PreQuantitativeIndicator";
+import {LinguisticAssessment} from "../model/LinguisticAssessment";
 
 @Injectable()
 export class BankruptcyService{
@@ -12,14 +14,33 @@ export class BankruptcyService{
     return this.httpClient.get<Factor[]>(`/api/bankruptcy/factors`).toPromise();
   }
 
-  public createQualitativeIndicators(factors: Factor[]): Promise<Indicator[]>{
-    console.log(factors);
-    return this.httpClient.post<Indicator[]>(`/api/bankruptcy/indicators/QualitativeIndicators`,factors).toPromise();
+  public getQualitativeIndicators(): Promise<Indicator[]>{
+    return this.httpClient.get<Indicator[]>(`/api/bankruptcy/indicators/QualitativeIndicators`).toPromise();
   }
 
-  public createQuantitativeIndicators(factors: Factor[]): Promise<QuantitativeIndicator[]>{
-    console.log(factors);
-    return this.httpClient.post<QuantitativeIndicator[]>(`/api/bankruptcy/indicators/QuantitativeIndicators`,factors).toPromise();
+  public getQuantitativeIndicators(): Promise<QuantitativeIndicator[]>{
+    return this.httpClient.get<QuantitativeIndicator[]>(`/api/bankruptcy/indicators/QuantitativeIndicators`).toPromise();
   }
+
+  public getPreQuantitativeIndicators(quantitativeIndicators: QuantitativeIndicator[]): Promise<PreQuantitativeIndicator[]>{
+    return this.httpClient.post<PreQuantitativeIndicator[]>(`/api/bankruptcy/indicators/QuantitativeIndicators/PreQuantitativeIndicators`, quantitativeIndicators).toPromise();
+  }
+
+  public calculateAmountOfQuantitativeIndicators(quantitativeIndicatorsList: QuantitativeIndicator[], preQuantitativeIndicatorsList: PreQuantitativeIndicator[]): Promise<QuantitativeIndicator[]>{
+    let inData = {quantitativeIndicators: quantitativeIndicatorsList, preQuantitativeIndicators: preQuantitativeIndicatorsList};
+    return this.httpClient.post<QuantitativeIndicator[]>(`/api/bankruptcy/indicators/QuantitativeIndicators`, inData).toPromise();
+  }
+
+  public setTheAssessments(indicators: Indicator[], assessments: LinguisticAssessment[]): Promise<Indicator[]>{
+    let inData = {IndicatorList: indicators, assessmentList: assessments};
+    return this.httpClient.post<Indicator[]>(`/api/bankruptcy/indicatorsAssessments`, inData).toPromise();
+  }
+
+  public calculateBankruptcyPoints(indicators: [Indicator[]], dependencies: [String[]], factorsDependencies: String[]): Promise<Factor[]>{
+    let inData = {IndicatorList: indicators, dependenceList: dependencies, factorsDependenciesList: factorsDependencies};
+    return this.httpClient.post<Indicator[]>(`/api/bankruptcy/nedosekinModel`, inData).toPromise();
+  }
+
+
 
 }

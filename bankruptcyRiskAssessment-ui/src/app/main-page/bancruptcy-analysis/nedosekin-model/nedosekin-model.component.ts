@@ -42,8 +42,10 @@ export class NedosekinModelComponent implements OnInit {
     console.log(this.company);
     this.bancruptcyService.getFactors().then(factorList=>this.factorList=factorList);
     console.log(this.factorList);
-    // this.getQuantitativeIndicators();
-    // this.getQualitativeIndicators();
+    this.createQuantitativeIndicators();
+    console.log(this.quantitativeIndicators);
+    this.createQualitativeIndicators();
+    console.log(this.qualitativeIndicators);
     return this.company;
   }
 
@@ -58,12 +60,12 @@ export class NedosekinModelComponent implements OnInit {
   }
 
   public createQualitativeIndicators(): Indicator[]{
-    this.bancruptcyService.createQualitativeIndicators(this.getFactors()).then(indicators=>this.qualitativeIndicators=indicators);
+    this.bancruptcyService.getQualitativeIndicators().then(indicators=>this.qualitativeIndicators=indicators);
     return this.qualitativeIndicators;
   }
 
   public createQuantitativeIndicators(): QuantitativeIndicator[]{
-    this.bancruptcyService.createQuantitativeIndicators(this.getFactors()).then(indicators=>this.quantitativeIndicators=indicators);
+    this.bancruptcyService.getQuantitativeIndicators().then(indicators=>this.quantitativeIndicators=indicators);
     return this.quantitativeIndicators;
   }
 

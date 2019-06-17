@@ -1,27 +1,25 @@
 package com.api.BankruptcyRiskAssessment.service;
 
-import com.api.BankruptcyRiskAssessment.entity.unit.Factor;
-import com.api.BankruptcyRiskAssessment.entity.unit.Indicator;
-import com.api.BankruptcyRiskAssessment.entity.unit.LinguisticAssessment;
-import com.api.BankruptcyRiskAssessment.entity.unit.QuantitativeIndicator;
+import com.api.BankruptcyRiskAssessment.entity.unit.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface IBankruptcyService {
 
-    ArrayList<Indicator> setThePointsForIndicators(ArrayList<Indicator> indicators, List<LinguisticAssessment> assessments);
+    List<Indicator> setThePointsForIndicators(List<Indicator> indicators, List<LinguisticAssessment> assessments);
 
-    ArrayList<Indicator> createQualitativeIndicators(List<Factor> factors);
+    List<Indicator> getQualitativeIndicators();
 
-    ArrayList<QuantitativeIndicator> createQuantitativeIndicators(List<Factor> factors);
+    List<QuantitativeIndicator> getQuantitativeIndicators();
 
-    ArrayList<Factor> createFactors();
+    List<PreQuantitativeIndicator> getPreQuantitativeIndicators(List<QuantitativeIndicator> quantitativeIndicators);
 
-//    ArrayList<QuantitativeIndicator> setThePointsQuantitativeIndicators(ArrayList<QuantitativeIndicator> indicators, List<LinguisticAssessment> assessments);
+    List<QuantitativeIndicator> calculateAmountOfQuantitativeIndicators(List<QuantitativeIndicator> quantitativeIndicators, List<PreQuantitativeIndicator> preQuantitativeIndicators);
 
-    Factor calculateFactorPoints(ArrayList<Indicator> factorIndicators, ArrayList<String> factorDependencies);
+    List<Factor> getFactors();
 
-    Factor calculateCompanyPoints(ArrayList<Factor> factors, ArrayList<String> factorsDependencies);
+    Factor calculateFactorPoints(List<Indicator> factorIndicators, List<String> factorDependencies);
+
+    Factor calculateCompanyPoints(List<Factor> factors, List<String> factorsDependencies);
 
 }
