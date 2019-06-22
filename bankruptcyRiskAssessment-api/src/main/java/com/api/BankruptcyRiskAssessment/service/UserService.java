@@ -14,6 +14,8 @@ public class UserService implements IUserService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private IRoleService roleService;
 
     @Override
     public User addUser(User user) {
@@ -71,6 +73,12 @@ public class UserService implements IUserService {
             return null;
         }
         return userRepository.findUserByLastName(lastName);
+    }
+
+    @Override
+    public User setUserAsExpert(User user){
+        user.setRole(roleService.getRoleByName("Expert"));
+        return user;
     }
 
 

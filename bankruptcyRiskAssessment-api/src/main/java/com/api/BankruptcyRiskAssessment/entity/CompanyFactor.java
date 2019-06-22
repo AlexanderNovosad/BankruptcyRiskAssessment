@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity(name = "CompanyFactor")
-@Table(name = "companyFactor")
+@Table(name = "NedosekinModel")
 @EntityListeners(AuditingEntityListener.class)
 public class CompanyFactor implements Serializable {
     @Id
@@ -27,6 +27,8 @@ public class CompanyFactor implements Serializable {
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
+
+    public CompanyFactor(){}
 
     public CompanyFactor(String name, String linguisticAssessment, Company company){
         this.name = name;

@@ -1,15 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
-<p>
-  main-page works!
-</p>
-<a href="/main-page/bancruptcy-analysis">Аналіз ризику банкрутства</a>
-  <router-outlet></router-outlet>
-</body>
-</html>
+﻿<div style="width: 100%; height: 153px"></div>
+<div id="headerBackground"></div>
+<div id="dashboard">
+  <header>
+    <span id="title" onmousedown="return false" onselectstart="return false" style="cursor: default">
+      Bankrupty Risk Assessment - ui
+    </span>
+    <div id="currentUser">
+      <a routerLink="/main-page/personal-cabinet">{{currentUser?.login}}</a>
+      <button id="logoutButton" (click)="logout()">Выход</button>
+    </div>
+  </header>
+
+  <div id="main-page">
+    <ul id="userMenu">
+      <a routerLink="/main-page/personal-cabinet/">
+        <li><div>Персональний кабінет</div></li>
+      </a>
+
+      <!-- Место для отдельных меню -->
+      <a routerLink="/main-page/bancruptcy-analysis">
+        <li>Аналіз ризику банкрутства</li>
+      </a>
+
+      <a routerLink="/main-page/personal-cabinet/account-settings">
+        <li style="border-right: none"><div>Редагувати профіль</div></li>
+      </a>
+
+    </ul>
+    <div id="routingCounter">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+<footer>
+  <span></span>
+  <span></span>
+  <span>Зв'яжіться з нами</span>
+</footer>
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+  <!--<meta charset="UTF-8">-->
+  <!--<title>Title</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<p>-->
+  <!--main-page works!-->
+<!--</p>-->
+<!--<a href="/main-page/bancruptcy-analysis">Аналіз ризику банкрутства</a>-->
+  <!--<router-outlet></router-outlet>-->
+<!--</body>-->
+<!--</html>-->
 

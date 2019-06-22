@@ -1,15 +1,12 @@
 package com.api.BankruptcyRiskAssessment.service;
 
 import com.api.BankruptcyRiskAssessment.entity.Company;
-import com.api.BankruptcyRiskAssessment.entity.ExpertAccess;
-import com.api.BankruptcyRiskAssessment.entity.User;
 import com.api.BankruptcyRiskAssessment.repository.CompanyRepository;
-import com.api.BankruptcyRiskAssessment.repository.ExpertAccessRepository;
 import com.api.BankruptcyRiskAssessment.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
 
 import static java.util.Objects.isNull;
 
@@ -20,8 +17,7 @@ public class CompanyService implements ICompanyService {
     private CompanyRepository companyRepository;
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private ExpertAccessRepository expertAccessRepository;
+
 
     @Override
     public Company addCompany(Company company) {
@@ -35,21 +31,6 @@ public class CompanyService implements ICompanyService {
             return null;
         }
         return company;
-    }
-
-    @Override
-    public List<ExpertAccess> getCompaniesByExpert(Long userId) {
-        User user = userRepository.getOne(userId);
-        if (user == null) {
-            return null;
-        }
-        List<ExpertAccess> expertAccesses = expertAccessRepository.findAllByExpert(user);
-        if (expertAccesses == null) {
-            return null;
-        }
-//        ArrayList<Company> companies = new ArrayList<Company>();
-//        expertAccesses.forEach(expertAccess -> companies.add(expertAccess.getCompany()));
-        return expertAccesses;
     }
 
     @Override
@@ -95,5 +76,16 @@ public class CompanyService implements ICompanyService {
     @Override
     public List<Company> getCompanyByName(String name) {
         return companyRepository.findCompanyByCompanyNameLike(name);
+    }
+
+    @Override
+    public List<Company> getCompaniesThatNotConfirmation(){
+        return companyRepository.findAllByConfirmationFalse();
+    }
+
+    @Override
+    public Company confirmCompany(Company company){
+        company.setConfirmation(true);
+        return company;
     }
 }

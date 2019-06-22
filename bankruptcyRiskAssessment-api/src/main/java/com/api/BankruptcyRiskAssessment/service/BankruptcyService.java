@@ -1,6 +1,9 @@
 package com.api.BankruptcyRiskAssessment.service;
 
+import com.api.BankruptcyRiskAssessment.entity.*;
 import com.api.BankruptcyRiskAssessment.entity.unit.*;
+import com.api.BankruptcyRiskAssessment.repository.CompanyFactorRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -9,6 +12,9 @@ import java.util.List;
 
 @Service
 public class BankruptcyService implements IBankruptcyService {
+
+    @Autowired
+    CompanyFactorRepository companyFactorRepository;
 
     private static final List<Factor> factors = new ArrayList<>();
     private static final List<QuantitativeIndicator> quantitativeIndicators = new ArrayList<>();
@@ -266,12 +272,15 @@ public class BankruptcyService implements IBankruptcyService {
     @Override
     public List<PreQuantitativeIndicator> getPreQuantitativeIndicators(List<QuantitativeIndicator> quantitativeIndicators){
         List<PreQuantitativeIndicator> privatePreQuantitativeIndicators = new ArrayList<>();
-        privatePreQuantitativeIndicators = preQuantitativeIndicators;
         for(int i=0;i<quantitativeIndicators.size();i++){
             for(int j=0;j<preQuantitativeIndicators.size();j++){
-                if(preQuantitativeIndicators.get(j).getQuantitativeIndicators().contains(quantitativeIndicators.get(i))){
-                    if(!privatePreQuantitativeIndicators.contains(preQuantitativeIndicators.get(j))){
+                for(int k=0;k<preQuantitativeIndicators.get(j).getQuantitativeIndicators().size();k++){
+                    if(preQuantitativeIndicators.get(j).getQuantitativeIndicators().get(k).getName().equals(quantitativeIndicators.get(i).getName())){
                         privatePreQuantitativeIndicators.add(preQuantitativeIndicators.get(j));
+//                        if(!privatePreQuantitativeIndicators.contains(preQuantitativeIndicators.get(j))){
+////                            privatePreQuantitativeIndicators.add(preQuantitativeIndicators.get(j));
+////                        }
+
                     }
                 }
             }
@@ -971,19 +980,21 @@ public class BankruptcyService implements IBankruptcyService {
     }
 
     @Override
-    public Factor calculateFactorPoints(List<Indicator> factorIndicators, List<String> factorDependencies){
-        int[] r = new int[factorIndicators.size()];
+    public Factor calculateFactorPoints(Company company, List<Indicator> factorIndicators, List<String> factorDependencies){
+        double[] r = new double[factorIndicators.size()];
         r[factorIndicators.size()-1] = 1;
-        for(int i = factorDependencies.size(); i>0; i--){
-            if(factorDependencies.get(i) == "="){
-                r[i-1] = r[i];
-            }
-            else {
-                r[i-1] = r[i]+1;
+        if(factorIndicators.size()>1){
+            for(int i = factorIndicators.size()-1; i>0; i--){
+                if(factorDependencies.get(i-1).equals("=")){
+                    r[i-1] = r[i];
+                }
+                else {
+                    r[i-1] = r[i]+1;
+                }
             }
         }
 
-        int K = 0;
+        double K = 0;
         for (int i = 0; i<factorIndicators.size(); i++){
             K = K+r[i];
         }
@@ -993,7 +1004,8 @@ public class BankruptcyService implements IBankruptcyService {
             p[i] = r[i]/K;
         }
 
-        Factor factor = factorIndicators.get(1).getFactor();
+        Factor factor = factorIndicators.get(0).getFactor();
+        factor.setAssessment(new LinguisticAssessment());
         for(int i = 0; i<factorIndicators.size(); i++){
             factor.getAssessment().setA(factor.getAssessment().getA()+factorIndicators.get(i).getAssessment().getA()*p[i]);
             factor.getAssessment().setB(factor.getAssessment().getB()+factorIndicators.get(i).getAssessment().getB()*p[i]);
@@ -1002,25 +1014,52 @@ public class BankruptcyService implements IBankruptcyService {
         }
 
         LinguisticAssessment[] linguisticAssessments = {new LinguisticAssessment("Дуже низький"), new LinguisticAssessment("Низький"), new LinguisticAssessment("Середній"), new LinguisticAssessment("Високий"), new LinguisticAssessment("Дуже високий")};
-        double a = Math.min(Math.abs(factor.getAssessment().getA()-linguisticAssessments[0].getA()), Math.abs(factor.getAssessment().getA()-linguisticAssessments[1].getA()));
-        double b = Math.min(Math.abs(factor.getAssessment().getB()-linguisticAssessments[0].getB()), Math.abs(factor.getAssessment().getB()-linguisticAssessments[1].getB()));
-        double c = Math.min(Math.abs(factor.getAssessment().getC()-linguisticAssessments[0].getC()), Math.abs(factor.getAssessment().getC()-linguisticAssessments[1].getC()));
-        double d = Math.min(Math.abs(factor.getAssessment().getD()-linguisticAssessments[0].getD()), Math.abs(factor.getAssessment().getD()-linguisticAssessments[1].getD()));
-        for(int i = 2; i<5; i++){
-            a = Math.min(a, Math.abs(factor.getAssessment().getA()-linguisticAssessments[i].getA()));
-            b = Math.min(b, Math.abs(factor.getAssessment().getB()-linguisticAssessments[i].getB()));
-            c = Math.min(c, Math.abs(factor.getAssessment().getC()-linguisticAssessments[i].getC()));
-            d = Math.min(d, Math.abs(factor.getAssessment().getD()-linguisticAssessments[i].getD()));
+        double a[] = new double[5];
+        double b[] = new double[5];
+        double c[] = new double[5];
+        double d[] = new double[5];
+        for(int i = 0; i<5; i++){
+            a[i] = (double)Math.round((Math.abs(factor.getAssessment().getA()-linguisticAssessments[i].getA())) * 10000d) / 10000d;
+            b[i] = (double)Math.round((Math.abs(factor.getAssessment().getB()-linguisticAssessments[i].getB())) * 10000d) / 10000d;
+            c[i] = (double)Math.round((Math.abs(factor.getAssessment().getC()-linguisticAssessments[i].getC())) * 10000d) / 10000d;
+            d[i] = (double)Math.round((Math.abs(factor.getAssessment().getD()-linguisticAssessments[i].getD())) * 10000d) / 10000d;
         }
-        if(a<0.15 && a>=0 && b<0.25 && b>=0 && c<0.35 && c>0.15 && d<0.45 && d>0.25)
+        double minA = Math.min(a[0],a[1]);
+        double minB = Math.min(b[0],b[1]);
+        double minC = Math.min(c[0],c[1]);
+        double minD = Math.min(d[0],d[1]);
+        for(int i = 2; i<5; i++){
+            minA = Math.min(minA,a[i]);
+            minB = Math.min(minB,a[i]);
+            minC = Math.min(minC,a[i]);
+            minD = Math.min(minD,a[i]);
+        }
+        int minCount[] = new int[5];
+        for(int i=0;i<5;i++){
+            minCount[i]=0;
+            if(minA==a[i])
+                minCount[i]=minCount[i]+1;
+            if(minB==b[i])
+                minCount[i]=minCount[i]+1;
+            if(minC==c[i])
+                minCount[i]=minCount[i]+1;
+            if(minD==d[i])
+                minCount[i]=minCount[i]+1;
+        }
+        int maximum = Math.max(minCount[0],minCount[1]);
+        for(int i=2;i<5;i++){
+            maximum=Math.max(maximum,minCount[i]);
+        }
+
+        if(maximum==minCount[0])
             factor.getAssessment().setName("Дуже низький");
-        if(a<0.35 && a>=0.15 && b<0.45 && b>=0.25 && c<0.55 && c>=0.35 && d<0.65 && d>=0.45)
+        if(maximum==minCount[1])
             factor.getAssessment().setName("Низький");
-        if(a<0.55 && a>=0.35 && b<0.65 && b>=0.45 && c<0.75 && c>=0.55 && d<0.85 && d>=0.65)
+        if(maximum==minCount[2])
             factor.getAssessment().setName("Середній");
-        if(a<0.75 && a>=0.55 && b<0.85 && b>=0.65 && c<1 && c>=0.75 && d<1 && d>=0.85)
+        if(maximum==minCount[3])
             factor.getAssessment().setName("Високий");
-        if(a>=0.75 && b>=0.85 && c>=1 && d>=1)
+        if(maximum==minCount[4])
             factor.getAssessment().setName("Дуже високий");
 
         double v = 0;
@@ -1059,23 +1098,26 @@ public class BankruptcyService implements IBankruptcyService {
             v = 1-abcdv;
             factor.getAssessment().setName(factor.getAssessment().getName()+"("+v+")");
         }
+        companyFactorRepository.saveAndFlush(new CompanyFactor(factor.getName(),factor.getAssessment().getName(),company));
         return factor;
     }
 
     @Override
-    public Factor calculateCompanyPoints(List<Factor> factors, List<String> factorDependencies){
-        int[] r = new int[factors.size()];
+    public Factor calculateCompanyPoints(Company company, List<Factor> factors, List<String> factorDependencies){
+        double[] r = new double[factors.size()];
         r[factors.size()-1] = 1;
-        for(int i = factorDependencies.size(); i>0; i--){
-            if(factorDependencies.get(i) == "="){
-                r[i-1] = r[i];
-            }
-            else {
-                r[i-1] = r[i]+1;
+        if(factors.size()>1){
+            for(int i = factors.size()-1; i>0; i--){
+                if(factorDependencies.get(i-1).equals("=")){
+                    r[i-1] = r[i];
+                }
+                else {
+                    r[i-1] = r[i]+1;
+                }
             }
         }
 
-        int K = 0;
+        double K = 0;
         for (int i = 0; i<factors.size(); i++){
             K = K+r[i];
         }
@@ -1086,6 +1128,7 @@ public class BankruptcyService implements IBankruptcyService {
         }
 
         Factor factor = new Factor("Стан підприємства");
+        factor.setAssessment(new LinguisticAssessment());
         for(int i = 0; i<factors.size(); i++){
             factor.getAssessment().setA(factor.getAssessment().getA()+factors.get(i).getAssessment().getA()*p[i]);
             factor.getAssessment().setB(factor.getAssessment().getB()+factors.get(i).getAssessment().getB()*p[i]);
@@ -1094,25 +1137,53 @@ public class BankruptcyService implements IBankruptcyService {
         }
 
         LinguisticAssessment[] linguisticAssessments = {new LinguisticAssessment("Дуже низький"), new LinguisticAssessment("Низький"), new LinguisticAssessment("Середній"), new LinguisticAssessment("Високий"), new LinguisticAssessment("Дуже високий")};
-        double a = Math.min(Math.abs(factor.getAssessment().getA()-linguisticAssessments[0].getA()), Math.abs(factor.getAssessment().getA()-linguisticAssessments[1].getA()));
-        double b = Math.min(Math.abs(factor.getAssessment().getB()-linguisticAssessments[0].getB()), Math.abs(factor.getAssessment().getB()-linguisticAssessments[1].getB()));
-        double c = Math.min(Math.abs(factor.getAssessment().getC()-linguisticAssessments[0].getC()), Math.abs(factor.getAssessment().getC()-linguisticAssessments[1].getC()));
-        double d = Math.min(Math.abs(factor.getAssessment().getD()-linguisticAssessments[0].getD()), Math.abs(factor.getAssessment().getD()-linguisticAssessments[1].getD()));
-        for(int i = 2; i<5; i++){
-            a = Math.min(a, Math.abs(factor.getAssessment().getA()-linguisticAssessments[i].getA()));
-            b = Math.min(b, Math.abs(factor.getAssessment().getB()-linguisticAssessments[i].getB()));
-            c = Math.min(c, Math.abs(factor.getAssessment().getC()-linguisticAssessments[i].getC()));
-            d = Math.min(d, Math.abs(factor.getAssessment().getD()-linguisticAssessments[i].getD()));
+        double a[] = new double[5];
+        double b[] = new double[5];
+        double c[] = new double[5];
+        double d[] = new double[5];
+        for(int i = 0; i<5; i++){
+            a[i] = (double)Math.round((Math.abs(factor.getAssessment().getA()-linguisticAssessments[i].getA())) * 10000d) / 10000d;
+            b[i] = (double)Math.round((Math.abs(factor.getAssessment().getB()-linguisticAssessments[i].getB())) * 10000d) / 10000d;
+            c[i] = (double)Math.round((Math.abs(factor.getAssessment().getC()-linguisticAssessments[i].getC())) * 10000d) / 10000d;
+            d[i] = (double)Math.round((Math.abs(factor.getAssessment().getD()-linguisticAssessments[i].getD())) * 10000d) / 10000d;
         }
-        if(a<0.15 && a>=0 && b<0.25 && b>=0 && c<0.35 && c>0.15 && d<0.45 && d>0.25)
+        double minA = Math.min(a[0],a[1]);
+        double minB = Math.min(b[0],b[1]);
+        double minC = Math.min(c[0],c[1]);
+        double minD = Math.min(d[0],d[1]);
+        for(int i = 2; i<5; i++){
+            minA = Math.min(minA,a[i]);
+            minB = Math.min(minB,a[i]);
+            minC = Math.min(minC,a[i]);
+            minD = Math.min(minD,a[i]);
+        }
+
+        int minCount[] = new int[5];
+        for(int i=0;i<5;i++){
+            minCount[i]=0;
+            if(minA==a[i])
+                minCount[i]=minCount[i]+1;
+            if(minB==b[i])
+                minCount[i]=minCount[i]+1;
+            if(minC==c[i])
+                minCount[i]=minCount[i]+1;
+            if(minD==d[i])
+                minCount[i]=minCount[i]+1;
+        }
+        int maximum = Math.max(minCount[0],minCount[1]);
+        for(int i=2;i<5;i++){
+            maximum=Math.max(maximum,minCount[i]);
+        }
+
+        if(maximum==minCount[0])
             factor.getAssessment().setName("Дуже низький");
-        if(a<0.35 && a>=0.15 && b<0.45 && b>=0.25 && c<0.55 && c>=0.35 && d<0.65 && d>=0.45)
+        if(maximum==minCount[1])
             factor.getAssessment().setName("Низький");
-        if(a<0.55 && a>=0.35 && b<0.65 && b>=0.45 && c<0.75 && c>=0.55 && d<0.85 && d>=0.65)
+        if(maximum==minCount[2])
             factor.getAssessment().setName("Середній");
-        if(a<0.75 && a>=0.55 && b<0.85 && b>=0.65 && c<1 && c>=0.75 && d<1 && d>=0.85)
+        if(maximum==minCount[3])
             factor.getAssessment().setName("Високий");
-        if(a>=0.75 && b>=0.85 && c>=1 && d>=1)
+        if(maximum==minCount[4])
             factor.getAssessment().setName("Дуже високий");
 
         double v = 0;
@@ -1151,6 +1222,95 @@ public class BankruptcyService implements IBankruptcyService {
             v = 1-abcdv;
             factor.getAssessment().setName(factor.getAssessment().getName()+"("+v+")");
         }
+        companyFactorRepository.saveAndFlush(new CompanyFactor(factor.getName(),factor.getAssessment().getName(),company));
         return factor;
+    }
+
+    @Override
+    public MultiFactorModelOfAltman multiFactorModelOfAltmanResult(Company company, MultiFactorModelOfAltmanData multiFactorModelOfAltmanData){
+        double x1;
+        double x2;
+        double x3;
+        double x4;
+        double x5;
+        double z;
+        x1 = (multiFactorModelOfAltmanData.getCurrentAssets()-multiFactorModelOfAltmanData.getСurrentLiabilities())/multiFactorModelOfAltmanData.getTotalValueOfAssets();
+        x2 = multiFactorModelOfAltmanData.getNetProfit()/multiFactorModelOfAltmanData.getTotalValueOfAssets();
+        x3 = multiFactorModelOfAltmanData.getProfitBeforePayments()/multiFactorModelOfAltmanData.getTotalValueOfAssets();
+        x4 = multiFactorModelOfAltmanData.getBookValueOfEquity()/multiFactorModelOfAltmanData.getObligation();
+        x5 = multiFactorModelOfAltmanData.getReceipts()/multiFactorModelOfAltmanData.getTotalValueOfAssets();
+        z = 1.2*x1+1.4*x2+3.3*x3+0.6*x4+x5;
+        MultiFactorModelOfAltman multiFactorModelOfAltman = new MultiFactorModelOfAltman(z,x1,x2,x3,x4,x5,company);
+        return multiFactorModelOfAltman;
+    }
+
+    @Override
+    public LissModel lissModelResult(Company company, LissModelData lissModelData){
+        double x1;
+        double x2;
+        double x3;
+        double x4;
+        double z;
+        x1 = lissModelData.getWorkingCapital()/lissModelData.getAmountOfAssets();
+        x2 = lissModelData.getProfitFromSales()/lissModelData.getAmountOfAssets();
+        x3 = lissModelData.getUndividedProfit()/lissModelData.getAmountOfAssets();
+        x4 = lissModelData.getEquityCapital()/lissModelData.getAttractedCapital();
+        z = 0.063*x1+0.092*x2+0.057*x3+0.001*x4;
+        LissModel lissModel = new LissModel(z,x1,x2,x3,x4,company);
+        return lissModel;
+    }
+
+    @Override
+    public DavidBelikovModel davidBelikovModelResult(Company company, DavidBelikovModelData davidBelikovModelData){
+        double x1;
+        double x2;
+        double x3;
+        double x4;
+        double z;
+        x1 = davidBelikovModelData.getCurrentAssets()/davidBelikovModelData.getTotalValueOfAssets();
+        x2 = davidBelikovModelData.getNetProfit()/davidBelikovModelData.getEquityCapital();
+        x3 = davidBelikovModelData.getReceipts()/davidBelikovModelData.getTotalValueOfAssets();
+        x4 = davidBelikovModelData.getNetProfit()/davidBelikovModelData.getСost();
+        z = 8.38*x1+1.0*x2+0.054*x3+0.63*x4;
+        DavidBelikovModel davidBelikovModel = new DavidBelikovModel(z,x1,x2,x3,x4,company);
+        return davidBelikovModel;
+    }
+
+    @Override
+    public SpringateModel springateModelResult(Company company, SpringateModelData springateModelData){
+        double x1;
+        double x2;
+        double x3;
+        double x4;
+        double z;
+        x1 = springateModelData.getWorkingCapital()/springateModelData.getTotalValueOfAssets();
+        x2 = springateModelData.getProfitFromSales()/springateModelData.getTotalValueOfAssets();
+        x3 = springateModelData.getProfitFromSales()/springateModelData.getShortTermDebt();
+        x4 = springateModelData.getSalesVolume()/springateModelData.getTotalValueOfAssets();
+        z = 1.03*x1+3.07*x2+0.66*x3+0.63*x4;
+        SpringateModel springateModel = new SpringateModel(z,x1,x2,x3,x4,company);
+        return springateModel;
+
+    }
+
+    @Override
+    public UniversalDiscriminatoryModel universalDiscriminatoryModelResult(Company company, UniversalDiscriminatoryModelData universalDiscriminatoryModelData){
+        double x1;
+        double x2;
+        double x3;
+        double x4;
+        double x5;
+        double x6;
+        double z;
+        x1 = universalDiscriminatoryModelData.getCashFlow()/universalDiscriminatoryModelData.getObligation();
+        x2 = universalDiscriminatoryModelData.getTotalValueOfAssets()/universalDiscriminatoryModelData.getObligation();
+        x3 = universalDiscriminatoryModelData.getNetProfit()/universalDiscriminatoryModelData.getTotalValueOfAssets();
+        x4 = universalDiscriminatoryModelData.getNetProfit()/universalDiscriminatoryModelData.getReceipts();
+        x5 = universalDiscriminatoryModelData.getInventories()/universalDiscriminatoryModelData.getReceipts();
+        x6 = universalDiscriminatoryModelData.getReceipts()/universalDiscriminatoryModelData.getTotalValueOfAssets();
+        z = 1.5*x1+0.08*x2+10*x3+5*x4+0.3*x5+0.1*x6;
+        UniversalDiscriminatoryModel universalDiscriminatoryModel = new UniversalDiscriminatoryModel(z,x1,x2,x3,x4,x5,x6,company);
+        return universalDiscriminatoryModel;
+
     }
 }

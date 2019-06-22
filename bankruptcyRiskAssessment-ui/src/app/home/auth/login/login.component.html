@@ -1,12 +1,12 @@
 <div>
   <div class="titleGlobal">
-    <span id="title">Вход</span>
+    <span id="title">Вхід</span>
   </div>
   <span id="errorMassage" *ngIf="errorMassage">{{errorMassage}}</span>
   <form>
     <div id="loginForm-container">
       <div class="loginTitle">
-        <span >Логин:</span>
+        <span >Логін:</span>
       </div>
       <div class="loginInput">
         <input type="login" name="login" #userLogin>
@@ -20,10 +20,10 @@
       </div>
     </div>
     <div class="routToRegistr">
-      <span>Нет акаунта? <a routerLink="/home/auth/registration">Зарегистрироваться</a></span>
+      <span>Нема акаунта? <a routerLink="/home/auth/registration">Зареєструйся</a></span>
     </div>
     <div id="loginButton">
-      <button type="button" name="loginButton"  class="darkButton" (click)="login(userLogin.value, userPassword.value)">Ввойти</button>
+      <button type="button" name="loginButton"  class="darkButton" (click)="login(userLogin.value, userPassword.value)">Ввійти</button>
     </div>
   </form>
 </div>

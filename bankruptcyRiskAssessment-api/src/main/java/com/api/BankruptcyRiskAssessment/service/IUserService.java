@@ -21,4 +21,6 @@ public interface IUserService {
     List<User> getUserByFirstName(String firstName);
 
     List<User> getUserByLastName(String lastName);
+
+    User setUserAsExpert(User user);
 }

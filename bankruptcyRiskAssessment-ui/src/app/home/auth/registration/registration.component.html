@@ -1,27 +1,27 @@
-<div class="titleGlobal">Регистрация</div>
+<div class="titleGlobal">Реєстрація</div>
 <form>
   <div>
-    <span>Имя</span>
+    <span>Ім'я</span>
     <input type="text" name="firstName" #firstName>
   </div>
 
   <div>
-    <span>Фамилия</span>
+    <span>Фамілія</span>
     <input type="text" name="lastName" #lastName>
   </div>
 
   <div>
-    <span>Логин</span>
+    <span>Логін</span>
     <input type="text" name="login" #login>
   </div>
 
   <div>
-    <span>Почта</span>
+    <span>Електронна пошта</span>
     <input type="email" name="userEmail" #userEmail>
   </div>
 
   <div>
-    <span>Номер телефона</span>
+    <span>Номер телефону</span>
     <input type="text" name="userPhoneNumber" #userPhoneNumber>
   </div>
 
@@ -31,15 +31,15 @@
   </div>
 
   <div>
-    <span>Повторите пароль</span>
+    <span>Повторіть пароль</span>
     <input type="password" name="userPassword2" #userPassword2>
   </div>
   <div>
-    У меня уже есть акаунт. <a routerLink="home/auth/login">Ввойти</a>
+    В мене вже є акаунт. <a routerLink="home/auth/login">Ввійти</a>
   </div>
   <div>
     <button name="registrate" type="button" class="darkButton" (click)="registration(
       firstName.value, lastName.value, login.value, userEmail.value, userPassword1.value, userPassword2.value,
-      userPhoneNumber.value)">Зарегистрироваться</button>
+      userPhoneNumber.value)">Зареєструватися</button>
   </div>
 </form>

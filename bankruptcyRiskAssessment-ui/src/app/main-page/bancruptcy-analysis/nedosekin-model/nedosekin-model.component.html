@@ -1,4 +1,4 @@
-<div class="label">
+﻿<div class="label">
   <span>Виберіть компанію:</span>
 </div>
 <div class="input">
@@ -9,34 +9,173 @@
     </option>
   </select>
 </div>
-<button name="button" type="button" (click)="getSelectedCompany()">Otrimaty</button>
+<button name="button" type="button" (click)="getSelectedCompany()">Отримати</button>
 
 
-<div *ngIf="company!==null">
+<div *ngIf="company!==null && openIndicatorsSelect">
   <h2>Список показників для оцінювання банкрутства</h2>
   <h3>Кількісні показники</h3>
-  <div class="Indicators table" style="border-bottom: 2px solid #6a5750; margin-bottom: 0;">
-    <span>Бізнес-процес</span>
-    <span>Показник</span> <span>Відмітка</span>
-  </div>
-  <div *ngFor="let indicator of getQuantitativeIndicators()" >
-    <div class="indicatorListElement">
-      <span style="text-align: left">{{indicator.factor.name}}</span>
-      <span>{{ indicator.name }}</span> <span>Add</span><button type="button" (click)="checkQuantitativeIndicators(indicator)"></button>
-    </div>
-  </div>
+  <table class="Indicators table" style="border: #f6f1ed">
+    <tr style="border-bottom: 2px solid #6a5750; margin-bottom: 0;">
+      <th>Бізнес-процес</th>
+      <th>Показник</th>
+      <th>Відмітка</th>
+    </tr>
+    <tr *ngFor="let indicator of getQuantitativeIndicators()">
+      <td>{{indicator.factor.name}}</td><td>{{ indicator.name }}</td><td><label>Add
+      <input type="checkbox" (click)="checkQuantitativeIndicators(indicator)">
+    </label></td>
+    </tr>
+  </table>
   <p></p>
   <h3>Якісні показники</h3>
-  <div class="Indicators table" style="border-bottom: 2px solid #6a5750; margin-bottom: 0;">
-    <span>Бізнес-процес</span>
-    <span>Показник</span> <span>Відмітка</span>
-  </div>
-  <div *ngFor="let indicator of getQualitativeIndicators()">
-    <div class="indicatorListElement">
-      <span style="text-align: left">{{indicator.factor.name}}</span>
-      <span>{{ indicator.name }}</span> <span>Add</span><button type="button" (click)="checkQualitativeIndicators(indicator)"></button>
+  <table class="Indicators table" style="border: #f6f1ed">
+    <tr style="border-bottom: 2px solid #6a5750; margin-bottom: 0;">
+      <th>Бізнес-процес</th>
+      <th>Показник</th>
+      <th>Відмітка</th>
+    </tr>
+    <tr *ngFor="let indicator of getQualitativeIndicators()">
+      <td>{{indicator.factor.name}}</td><td>{{ indicator.name }}</td><td><label>Add
+      <input type="checkbox" (click)="checkQualitativeIndicators(indicator)">
+    </label></td>
+    </tr>
+  </table>
+  <button type="button" (click)="nextToQualitativeIndicatorsCalculation()">Далі</button>
+</div>
+
+<div *ngIf="openQualitativeIndicatorsCalculation">
+  <h2>Дані фінансових показників</h2>
+  <div *ngFor="let preIndicator of getPreQuantitativeIndicators()" >
+    <div class="preQuantitativeIndicatorListElement">
+      <span style="text-align: left">{{preIndicator.name}} </span>
+      <label> Значення:
+      <input type="number" name="amount" [(ngModel)]="preIndicator.amount">
+    </label>
     </div>
   </div>
-  <button type="button" (click)="show()"></button>
+  <button type="button" (click)="backToIndicatorsSelect()">Назад</button> <button type="button" (click)="NextToIndicatorsPointsSets()">Далі</button>
+</div>
+
+<div *ngIf="openIndicatorsPointsSets">
+  <h2>Експертна оцінка значень кількісних показників</h2>
+  <table class="Indicators table" style="border: #f6f1ed">
+    <tr style="border-bottom: 2px solid #6a5750; margin-bottom: 0;">
+      <th>Бізнес-процес</th>
+      <th>Показник</th>
+      <th>Значення</th>
+      <th>Оцінка</th>
+    </tr>
+    <tr *ngFor="let quantitativeIndicator of getFinalQuantitativeIndicators()">
+      <td>{{quantitativeIndicator.factor.name}}</td><td>{{ quantitativeIndicator.name }}</td><td>{{quantitativeIndicator.amount}}</td>
+      <td><select name="assessment" id="quantitativeIndicatorAssessment" [value]="quantitativeIndicator.assessment.name" (change)="quantitativeIndicator.assessment=setTheAssessments($event.target.value)">
+      <option *ngFor="let assessment of getAssessments()"
+              [value]="assessment.name">
+        {{assessment.name}}
+      </option>
+    </select></td>
+    </tr>
+  </table>
+
+  <h2>Експертна оцінка значень якісних показників</h2>
+  <table class="Indicators table" style="border: #f6f1ed">
+    <tr style="border-bottom: 2px solid #6a5750; margin-bottom: 0;">
+      <th>Бізнес-процес</th>
+      <th>Показник</th>
+      <th>Оцінка</th>
+    </tr>
+    <tr *ngFor="let qualitativeIndicator of getFinalQualitativeIndicators()">
+      <td>{{qualitativeIndicator.factor.name}}</td><td>{{ qualitativeIndicator.name }}</td>
+      <td><select name="assessment" id="qualitativeIndicatorAssessment" [value]="qualitativeIndicator.assessment.name" (change)="qualitativeIndicator.assessment=setTheAssessments($event.target.value)">
+        <option *ngFor="let assessment of getAssessments()"
+                [value]="assessment.name">
+          {{assessment.name}}
+        </option>
+      </select></td>
+    </tr>
+  </table>
+
+  <button type="button" (click)="saveAssessments()">Зберегти</button>
+
+  <div *ngIf="openAssessments">
+    <h2>Залежності між бізнес-процесами</h2>
+    <div *ngFor="let bancruptcyFactor of getBancruptcyFactors()" >
+      <div class="bancruptcyFactorListElement">
+        <span style="text-align: left">{{bancruptcyFactor.factor.name}}</span><br>
+        <label>
+          <input type="text" name="dependence" *ngIf="bancruptcyFactor.dependence!=='пуст'" [(ngModel)]="bancruptcyFactor.dependence">
+        </label>
+      </div>
+    </div>
+    <h2>Залежності між показниками</h2>
+    <h3>Виробничий фактор</h3>
+    <div *ngFor="let bancruptcyIndicator of getBancruptcyIndicators()" >
+      <div class="bancruptcyIndicatorsListElement" *ngIf="bancruptcyIndicator.indicator.factor.name == 'Виробничий фактор'">
+        <span style="text-align: left">{{bancruptcyIndicator.indicator.name}}</span><br>
+        <label>
+          <input type="text" name="dependence" *ngIf="bancruptcyIndicator.dependence!=='пуст'" [(ngModel)]="bancruptcyIndicator.dependence">
+        </label>
+      </div>
+    </div>
+    <h3>Управлінський фактор</h3>
+    <div *ngFor="let bancruptcyIndicator of getBancruptcyIndicators()" >
+      <div class="bancruptcyIndicatorsListElement" *ngIf="bancruptcyIndicator.indicator.factor.name=='Управлінський фактор'">
+        <span style="text-align: left">{{bancruptcyIndicator.indicator.name}}</span><br>
+        <label>
+          <input type="text" name="dependence" *ngIf="bancruptcyIndicator.dependence!=='пуст'" [(ngModel)]="bancruptcyIndicator.dependence">
+        </label>
+      </div>
+    </div>
+    <h3>Фінансовий фактор</h3>
+    <div *ngFor="let bancruptcyIndicator of getBancruptcyIndicators()" >
+      <div class="bancruptcyIndicatorsListElement" *ngIf="bancruptcyIndicator.indicator.factor.name=='Фінансовий фактор'">
+        <span style="text-align: left">{{bancruptcyIndicator.indicator.name}}</span><br>
+        <label>
+          <input type="text" name="dependence" *ngIf="bancruptcyIndicator.dependence!=='пуст'" [(ngModel)]="bancruptcyIndicator.dependence">
+        </label>
+      </div>
+    </div>
+    <h3>Кадровий фактор</h3>
+    <div *ngFor="let bancruptcyIndicator of getBancruptcyIndicators()" >
+      <div class="bancruptcyIndicatorsListElement" *ngIf="bancruptcyIndicator.indicator.factor.name=='Кадровий фактор'">
+        <span style="text-align: left">{{bancruptcyIndicator.indicator.name}}</span><br>
+        <label>
+          <input type="text" name="dependence" *ngIf="bancruptcyIndicator.dependence!=='пуст'" [(ngModel)]="bancruptcyIndicator.dependence">
+        </label>
+      </div>
+    </div>
+    <h3>Маркетинговий фактор</h3>
+    <div *ngFor="let bancruptcyIndicator of getBancruptcyIndicators()" >
+      <div class="bancruptcyIndicatorsListElement" *ngIf="bancruptcyIndicator.indicator.factor.name=='Маркетинговий фактор'">
+        <span style="text-align: left">{{bancruptcyIndicator.indicator.name}}</span><br>
+        <label>
+          <input type="text" name="dependence" *ngIf="bancruptcyIndicator.dependence!=='пуст'" [(ngModel)]="bancruptcyIndicator.dependence">
+        </label>
+      </div>
+    </div>
+    <h3>Інноваційний фактор</h3>
+    <div *ngFor="let bancruptcyIndicator of getBancruptcyIndicators()" >
+      <div class="bancruptcyIndicatorsListElement" *ngIf="bancruptcyIndicator.indicator.factor.name=='Інноваційний фактор'">
+        <span style="text-align: left">{{bancruptcyIndicator.indicator.name}}</span><br>
+        <label>
+          <input type="text" name="dependence" *ngIf="bancruptcyIndicator.dependence!=='пуст'" [(ngModel)]="bancruptcyIndicator.dependence">
+        </label>
+      </div>
+    </div>
+  </div>
+  <button type="button" (click)="backToQualitativeIndicatorsCalculation()">Назад</button> <button type="button" (click)="NextToResults()">Далі</button>
+</div>
+
+<div *ngIf="openResults">
+  <h2>Результат</h2>
+  <div *ngFor="let factor of getFinalResults()" >
+    <div class="resultElement">
+      <span style="text-align: left"> {{factor.name}}  </span>
+      <p></p>
+      <span> {{factor.assessment.name}} </span>
+    </div>
+  </div>
+  <p>Ризик банкрутства підприємства становить  {{getRisk()}}</p>
+  <button type="button" (click)="backToIndicatorsPointsSets()">Назад</button> <button type="button" (click)="finish()">Закінчити</button>
 </div>
 <router-outlet></router-outlet>

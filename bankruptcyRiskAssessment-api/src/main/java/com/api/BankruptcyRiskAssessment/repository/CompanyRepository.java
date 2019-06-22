@@ -21,4 +21,6 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
     List<Company> findAllByHeadOfCompany(User headOfDepartment);
 
     List<Company> findAll(Sort sort);
+
+    List<Company> findAllByConfirmationFalse();
 }

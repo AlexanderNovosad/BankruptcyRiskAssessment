@@ -60,5 +60,14 @@ public class UserController {
         return ResponseEntity.ok(allUser);
     }
 
+    @PostMapping(value = "/expert")
+    public ResponseEntity<User> setUserAsExpert(@RequestParam(value = "userId") Long userId){
+        User user = userService.getUser(userId);
+        if(isNull(user)){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(userService.setUserAsExpert(user));
+    }
+
 
 }

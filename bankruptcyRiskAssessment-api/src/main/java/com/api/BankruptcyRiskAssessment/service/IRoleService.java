@@ -15,4 +15,6 @@ public interface IRoleService {
     Role deleteRole(Long roleId);
 
     List<Role> getAllRole();
+
+    Role getRoleByName(String name);
 }

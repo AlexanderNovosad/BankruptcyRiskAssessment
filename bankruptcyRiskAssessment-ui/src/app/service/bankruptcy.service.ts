@@ -36,9 +36,10 @@ export class BankruptcyService{
     return this.httpClient.post<Indicator[]>(`/api/bankruptcy/indicatorsAssessments`, inData).toPromise();
   }
 
-  public calculateBankruptcyPoints(indicators: [Indicator[]], dependencies: [String[]], factorsDependencies: String[]): Promise<Factor[]>{
-    let inData = {IndicatorList: indicators, dependenceList: dependencies, factorsDependenciesList: factorsDependencies};
-    return this.httpClient.post<Indicator[]>(`/api/bankruptcy/nedosekinModel`, inData).toPromise();
+  public calculateBankruptcyPoints(companyId: number, indicatorList: [Indicator[]], dependenceList: [String[]], factorsDependenceList: String[]): Promise<Factor[]>{
+    let inData = {indicators: indicatorList, dependencies: dependenceList, factorsDependencies: factorsDependenceList};
+    console.log(inData);
+    return this.httpClient.post<Indicator[]>(`/api/bankruptcy/nedosekinModel?companyId=${companyId}`, inData).toPromise();
   }
 
 

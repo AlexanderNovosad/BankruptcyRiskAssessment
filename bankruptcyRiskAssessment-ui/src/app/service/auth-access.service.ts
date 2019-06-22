@@ -17,7 +17,7 @@ export class AuthAccessService implements CanActivate {
         if (!user) {
           resolve(true);
         } else {
-          this.router.navigateByUrl(`/main-page/personal-account`);
+          this.router.navigateByUrl(`/main-page`);
           resolve(false);
         }
       });

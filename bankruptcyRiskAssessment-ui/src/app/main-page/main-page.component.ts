@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {User} from '../model/User';
+import {UserService} from "../service/user.service";
+import {AuthService} from "../service/auth.service";
 
 @Component({
   selector: 'app-main-page',
@@ -7,9 +10,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MainPageComponent implements OnInit {
 
-  constructor() { }
+  currentUser: User;
+
+  constructor(private userService: UserService,
+              private authService: AuthService) { }
 
   ngOnInit() {
+    this.currentUser = this.userService.getCurrentUser();
+  }
+
+  logout() {
+    this.authService.logout();
   }
 
 }
