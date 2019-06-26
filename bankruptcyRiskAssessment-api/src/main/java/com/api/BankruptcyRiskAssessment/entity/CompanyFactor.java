@@ -20,6 +20,9 @@ public class CompanyFactor implements Serializable {
     @Column(nullable = false)
     private String linguisticAssessment;
 
+    @Column(nullable = false)
+    private Double assessmentPoint;
+
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "companyId", nullable = false)
     private Company company;
@@ -30,9 +33,10 @@ public class CompanyFactor implements Serializable {
 
     public CompanyFactor(){}
 
-    public CompanyFactor(String name, String linguisticAssessment, Company company){
+    public CompanyFactor(String name, String linguisticAssessment, double assessmentPoint, Company company){
         this.name = name;
         this.linguisticAssessment = linguisticAssessment;
+        this.assessmentPoint = assessmentPoint;
         this.company = company;
         this.date = new Date(System.currentTimeMillis());
     }
@@ -76,5 +80,13 @@ public class CompanyFactor implements Serializable {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public Double getAssessmentPoint() {
+        return assessmentPoint;
+    }
+
+    public void setAssessmentPoint(Double assessmentPoint) {
+        this.assessmentPoint = assessmentPoint;
     }
 }

@@ -40,6 +40,8 @@ import { LiquidityStatisticsComponent } from './main-page/statistics/liquidity-s
 import { FinancialEnterpriseAnalysisComponent } from './main-page/financial-enterprise-analysis/financial-enterprise-analysis.component';
 import { LiquidityAnalysisComponent } from './main-page/financial-enterprise-analysis/liquidity-analysis/liquidity-analysis.component';
 import {BankruptcyService} from "./service/bankruptcy.service";
+import {MultiFactorModelOfAltmanComponent} from "./main-page/bancruptcy-analysis/multi-factor-model-of-altman/multi-factor-model-of-altman.component";
+import {LissModelComponent} from "./main-page/bancruptcy-analysis/liss-model/liss-model.component";
 
 
 
@@ -71,7 +73,9 @@ import {BankruptcyService} from "./service/bankruptcy.service";
     LoginComponent,
     RegistrationComponent,
     HomeComponent,
-    NedosekinModelComponent
+    NedosekinModelComponent,
+    MultiFactorModelOfAltmanComponent,
+    LissModelComponent
   ],
   imports: [
     BrowserModule,

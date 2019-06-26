@@ -15,7 +15,7 @@ import java.util.List;
 
 import static java.util.Objects.isNull;
 
-@RestController("/api/exper")
+@RestController("/api/expert")
 public class ExpertController {
 
     @Autowired
@@ -32,7 +32,7 @@ public class ExpertController {
         return ResponseEntity.ok(users);
     }
 
-    @PostMapping(value = "/role")
+    @PostMapping(value = "/")
     public ResponseEntity<ExpertAccess> addExpertAccess(@RequestBody ExpertAccess expertAccess) {
         if (isNull(expertAccess)) {
             return ResponseEntity.notFound().build();

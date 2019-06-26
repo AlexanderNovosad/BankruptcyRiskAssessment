@@ -13,7 +13,7 @@ public class DavidBelikovModel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long lissModelId;
+    private Long davidBelikovId;
 
     @Column(nullable = false)
     private Double z;
@@ -50,12 +50,12 @@ public class DavidBelikovModel implements Serializable {
         this.date = new Date(System.currentTimeMillis());
     }
 
-    public Long getLissModelId() {
-        return lissModelId;
+    public Long getDavidBelikovId() {
+        return davidBelikovId;
     }
 
-    public void setLissModelId(Long lissModelId) {
-        this.lissModelId = lissModelId;
+    public void setDavidBelikovId(Long davidBelikovId) {
+        this.davidBelikovId = davidBelikovId;
     }
 
     public Double getZ() {

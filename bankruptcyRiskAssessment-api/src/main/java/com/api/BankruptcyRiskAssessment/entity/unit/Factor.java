@@ -3,6 +3,7 @@ package com.api.BankruptcyRiskAssessment.entity.unit;
 public class Factor {
     private String name;
     private LinguisticAssessment assessment;
+    private double assessmentPoint;
 
     public Factor(String name){this.name = name;}
 
@@ -22,5 +23,13 @@ public class Factor {
 
     public void setAssessment(LinguisticAssessment assessment) {
         this.assessment = assessment;
+    }
+
+    public double getAssessmentPoint() {
+        return assessmentPoint;
+    }
+
+    public void setAssessmentPoint(double assessmentPoint) {
+        this.assessmentPoint = assessmentPoint;
     }
 }

@@ -22,7 +22,7 @@
       <th>Відмітка</th>
     </tr>
     <tr *ngFor="let indicator of getQuantitativeIndicators()">
-      <td>{{indicator.factor.name}}</td><td>{{ indicator.name }}</td><td><label>Add
+      <td>{{indicator.factor.name}}</td><td>{{ indicator.name }}</td><td><label>
       <input type="checkbox" (click)="checkQuantitativeIndicators(indicator)">
     </label></td>
     </tr>
@@ -36,7 +36,7 @@
       <th>Відмітка</th>
     </tr>
     <tr *ngFor="let indicator of getQualitativeIndicators()">
-      <td>{{indicator.factor.name}}</td><td>{{ indicator.name }}</td><td><label>Add
+      <td>{{indicator.factor.name}}</td><td>{{ indicator.name }}</td><td><label>
       <input type="checkbox" (click)="checkQualitativeIndicators(indicator)">
     </label></td>
     </tr>
@@ -46,14 +46,23 @@
 
 <div *ngIf="openQualitativeIndicatorsCalculation">
   <h2>Дані фінансових показників</h2>
-  <div *ngFor="let preIndicator of getPreQuantitativeIndicators()" >
-    <div class="preQuantitativeIndicatorListElement">
-      <span style="text-align: left">{{preIndicator.name}} </span>
-      <label> Значення:
-      <input type="number" name="amount" [(ngModel)]="preIndicator.amount">
-    </label>
-    </div>
-  </div>
+  <table class="preQuantitativeIndicatorListTable" style="border: #f6f1ed">
+    <tr style="border-bottom: 2px solid #6a5750; margin-bottom: 0;">
+      <th>Показник</th>
+      <th>Значення</th>
+    </tr>
+    <tr *ngFor="let preIndicator of getPreQuantitativeIndicators()">
+      <td>{{preIndicator.name}}</td><td><input type="number" name="amount" [(ngModel)]="preIndicator.amount"></td>
+    </tr>
+  </table>
+  <!--<div *ngFor="let preIndicator of getPreQuantitativeIndicators()" >-->
+    <!--<div class="preQuantitativeIndicatorListElement">-->
+      <!--<span style="text-align: left">{{preIndicator.name}} </span>-->
+      <!--<label> Значення:-->
+      <!--<input type="number" name="amount" [(ngModel)]="preIndicator.amount">-->
+    <!--</label>-->
+    <!--</div>-->
+  <!--</div>-->
   <button type="button" (click)="backToIndicatorsSelect()">Назад</button> <button type="button" (click)="NextToIndicatorsPointsSets()">Далі</button>
 </div>
 
@@ -69,7 +78,8 @@
     <tr *ngFor="let quantitativeIndicator of getFinalQuantitativeIndicators()">
       <td>{{quantitativeIndicator.factor.name}}</td><td>{{ quantitativeIndicator.name }}</td><td>{{quantitativeIndicator.amount}}</td>
       <td><select name="assessment" id="quantitativeIndicatorAssessment" [value]="quantitativeIndicator.assessment.name" (change)="quantitativeIndicator.assessment=setTheAssessments($event.target.value)">
-      <option *ngFor="let assessment of getAssessments()"
+        <option value="0">-- Не вибрано --</option>
+        <option *ngFor="let assessment of getAssessments()"
               [value]="assessment.name">
         {{assessment.name}}
       </option>
@@ -87,6 +97,7 @@
     <tr *ngFor="let qualitativeIndicator of getFinalQualitativeIndicators()">
       <td>{{qualitativeIndicator.factor.name}}</td><td>{{ qualitativeIndicator.name }}</td>
       <td><select name="assessment" id="qualitativeIndicatorAssessment" [value]="qualitativeIndicator.assessment.name" (change)="qualitativeIndicator.assessment=setTheAssessments($event.target.value)">
+        <option value="0">-- Не вибрано --</option>
         <option *ngFor="let assessment of getAssessments()"
                 [value]="assessment.name">
           {{assessment.name}}
@@ -168,14 +179,31 @@
 
 <div *ngIf="openResults">
   <h2>Результат</h2>
-  <div *ngFor="let factor of getFinalResults()" >
-    <div class="resultElement">
-      <span style="text-align: left"> {{factor.name}}  </span>
-      <p></p>
-      <span> {{factor.assessment.name}} </span>
-    </div>
-  </div>
-  <p>Ризик банкрутства підприємства становить  {{getRisk()}}</p>
+  <table class="resultTable" style="border: #f6f1ed">
+    <tr style="border-bottom: 2px solid #6a5750; margin-bottom: 0;">
+      <th rowspan="2">Бізнес-процеси</th>
+      <th rowspan="2">Рівень стану бізнес-процесу</th>
+      <th colspan="2">Ступінь подібності</th>
+    </tr>
+    <tr>
+      <th>Значення</th>
+      <th>%</th>
+    </tr>
+    <tr *ngFor="let factor of getFinalResults()">
+      <td>{{factor.name}}</td><td>{{factor.assessment.name}}</td><td>{{factor.assessmentPoint}}</td><td>{{factor.assessmentPoint*100}}</td>
+    </tr>
+    <tr>
+      <td>Ступінь ризику банкрутства підприємства</td><td>{{getRisk()}}</td><td></td><td></td>
+    </tr>
+  </table>
+  <!--<div *ngFor="let factor of getFinalResults()" >-->
+    <!--<div class="resultElement">-->
+      <!--<span style="text-align: left"> {{factor.name}}  </span>-->
+      <!--<p></p>-->
+      <!--<span> {{factor.assessment.name}} </span>-->
+    <!--</div>-->
+  <!--</div>-->
+  <p>Ступінь ризику банкрутства підприємства становить  {{getRisk()}}</p>
   <button type="button" (click)="backToIndicatorsPointsSets()">Назад</button> <button type="button" (click)="finish()">Закінчити</button>
 </div>
 <router-outlet></router-outlet>

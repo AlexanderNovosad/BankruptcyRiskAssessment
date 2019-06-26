@@ -1,14 +1,14 @@
 package com.api.BankruptcyRiskAssessment.entity.unit;
 
 public class MultiFactorModelOfAltmanData {
-    double currentAssets;
-    double сurrentLiabilities;
-    double totalValueOfAssets;
-    double netProfit;
-    double profitBeforePayments;
-    double bookValueOfEquity;
-    double obligation;
-    double receipts;
+    private double currentAssets;
+    private double сurrentLiabilities;
+    private double totalValueOfAssets;
+    private double netProfit;
+    private double profitBeforePayments;
+    private double bookValueOfEquity;
+    private double obligation;
+    private double receipts;
 
     MultiFactorModelOfAltmanData(){}
 

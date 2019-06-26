@@ -1,12 +1,12 @@
 package com.api.BankruptcyRiskAssessment.entity.unit;
 
 public class LissModelData {
-    double workingCapital;
-    double amountOfAssets;
-    double profitFromSales;
-    double undividedProfit;
-    double equityCapital;
-    double attractedCapital;
+    private double workingCapital;
+    private double amountOfAssets;
+    private double profitFromSales;
+    private double undividedProfit;
+    private double equityCapital;
+    private double attractedCapital;
 
     LissModelData(){}
 

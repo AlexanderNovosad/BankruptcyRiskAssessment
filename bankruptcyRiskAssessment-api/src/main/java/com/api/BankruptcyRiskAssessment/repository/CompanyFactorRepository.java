@@ -6,11 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 @Transactional
 public interface CompanyFactorRepository extends JpaRepository<CompanyFactor, Long> {
-    ArrayList<CompanyFactor> findAllByCompany(Company company);
-    ArrayList<CompanyFactor> findAll();
+    List<CompanyFactor> findAllByCompany(Company company);
+    List<CompanyFactor> findAll();
 }

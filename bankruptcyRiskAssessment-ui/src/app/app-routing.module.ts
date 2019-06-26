@@ -14,6 +14,14 @@ import {PersonalAccountComponent} from "./main-page/personal-account/personal-ac
 import {StatisticsComponent} from "./main-page/statistics/statistics.component";
 import {TestingEmployeesComponent} from "./main-page/testing-employees/testing-employees.component";
 import {NedosekinModelComponent} from "./main-page/bancruptcy-analysis/nedosekin-model/nedosekin-model.component";
+import {MultiFactorModelOfAltman} from "./model/MultiFactorModelOfAltman";
+import {MultiFactorModelOfAltmanComponent} from "./main-page/bancruptcy-analysis/multi-factor-model-of-altman/multi-factor-model-of-altman.component";
+import {LissModelComponent} from "./main-page/bancruptcy-analysis/liss-model/liss-model.component";
+import {ProfileSettingsComponent} from "./main-page/personal-account/profile-settings/profile-settings.component";
+import {ProfileCompanyComponent} from "./main-page/personal-account/profile-company/profile-company.component";
+import {MessagesComponent} from "./main-page/personal-account/messages/messages.component";
+// import {CompanyRegistrationComponent} from "./main-page/personal-account/profile-company/company-registration/company-registration.component";
+import {RecommendationsComponent} from "./main-page/personal-account/recommendations/recommendations.component";
 
 
 const routes: Routes = [
@@ -28,13 +36,20 @@ const routes: Routes = [
     ]},
   {path: 'main-page', component: MainPageComponent, canActivate: [UserAccessService], children:[
       {path: 'bancruptcy-analysis', component: BancruptcyAnalysisComponent, children: [
-          {path: 'nedosekin-model', component: NedosekinModelComponent}
+          {path: 'nedosekin-model', component: NedosekinModelComponent},
+          {path: 'multi-factor-model-of-altman', component: MultiFactorModelOfAltmanComponent},
+          {path: 'liss-model', component: LissModelComponent}
 
         ]},
       {path: 'financial-enterprise-analysis', component: FinancialEnterpriseAnalysisComponent},
       {path: 'overall-rating-of-enterprises', component: OverallRatingOfEnterprisesComponent},
-      {path: 'personal-account', component: PersonalAccountComponent},
-      {path: 'statistics', component: StatisticsComponent},
+      {path: 'personal-account', component: PersonalAccountComponent, children:[
+          {path: 'statistics', component: StatisticsComponent},
+          {path: 'profile-settings', component: ProfileSettingsComponent},
+          {path: 'profile-company', component: ProfileCompanyComponent},
+          {path: 'messages', component: MessagesComponent},
+          {path: 'recommendations', component: RecommendationsComponent},
+        ]},
       {path: 'testing-employees', component: TestingEmployeesComponent}
     ]},
 

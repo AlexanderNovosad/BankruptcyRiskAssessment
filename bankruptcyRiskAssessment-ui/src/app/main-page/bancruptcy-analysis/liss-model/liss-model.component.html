@@ -1,0 +1,72 @@
+<div class="label">
+  <span>Виберіть компанію:</span>
+</div>
+<div class="input">
+  <select name="company" id="selectedCompanyId" [value]="selectedCompany" (change)="selectedCompany=$event.target.value">
+    <option *ngFor="let company of getCompanyList()"
+            [value]="company.companyId">
+      {{company.companyName}}
+    </option>
+  </select>
+</div>
+<button name="button" type="button" (click)="getSelectedCompany()">Отримати</button>
+
+<div *ngIf="company!==null && openCalculation">
+  <h2>Дані фінансових показників</h2>
+  <table class="preQuantitativeIndicatorListTable" style="border: #f6f1ed">
+    <tr style="border-bottom: 2px solid #6a5750; margin-bottom: 0;">
+      <th>Показник</th>
+      <th>Значення</th>
+    </tr>
+    <tr>
+      <td>Сума активів</td><td><input type="number" name="amountOfAssets" [(ngModel)]="lissModelData.amountOfAssets"></td>
+    </tr>
+    <tr>
+      <td>Оборотний капітал</td><td><input type="number" name="workingCapital" [(ngModel)]="lissModelData.workingCapital"></td>
+    </tr>
+    <tr>
+      <td>Прибуток від реалізації</td><td><input type="number" name="profitFromSales" [(ngModel)]="lissModelData.profitFromSales"></td>
+    </tr>
+    <tr>
+      <td>Залучений капітал</td><td><input type="number" name="attractedCapital" [(ngModel)]="lissModelData.attractedCapital"></td>
+    </tr>
+    <tr>
+      <td>Власний капітал</td><td><input type="number" name="equityCapital" [(ngModel)]="lissModelData.equityCapital"></td>
+    </tr>
+    <tr>
+      <td>Нерозподілений прибуток</td><td><input type="number" name="undividedProfit" [(ngModel)]="lissModelData.undividedProfit"></td>
+    </tr>
+  </table>
+  <button type="button" (click)="NextToResults()">Розрахувати</button>
+</div>
+
+<div *ngIf="openResults">
+  <h2>Результат</h2>
+  <table class="resultTable" style="border: #f6f1ed">
+    <tr style="border-bottom: 2px solid #6a5750; margin-bottom: 0;">
+      <th>Показник</th>
+      <th>Значення</th>
+    </tr>
+    <tr>
+      <td>x1</td><td>{{finalResult.x1}}</td>
+    </tr>
+    <tr>
+      <td>x2</td><td>{{finalResult.x2}}</td>
+    </tr>
+    <tr>
+      <td>x3</td><td>{{finalResult.x3}}</td>
+    </tr>
+    <tr>
+      <td>x4</td><td>{{finalResult.x4}}</td>
+    </tr>
+    <tr>
+      <td>z</td><td>{{finalResult.z}}</td>
+    </tr>
+    <tr>
+      <td>Ступінь ризику банкрутства підприємства</td><td>{{getRisk()}}</td><td></td><td></td>
+    </tr>
+  </table>
+  <p>Ступінь ризику банкрутства підприємства становить  {{getRisk()}}</p>
+  <button type="button" (click)="finish()">Закінчити</button>
+</div>
+<router-outlet></router-outlet>

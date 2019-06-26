@@ -13,7 +13,7 @@ public class UniversalDiscriminatoryModel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long lissModelId;
+    private Long universalDiscriminatoryId;
 
     @Column(nullable = false)
     private Double z;
@@ -58,12 +58,12 @@ public class UniversalDiscriminatoryModel implements Serializable {
         this.date = new Date(System.currentTimeMillis());
     }
 
-    public Long getLissModelId() {
-        return lissModelId;
+    public Long getUniversalDiscriminatoryModelId() {
+        return universalDiscriminatoryId;
     }
 
-    public void setLissModelId(Long lissModelId) {
-        this.lissModelId = lissModelId;
+    public void setUniversalDiscriminatoryModelId(Long universalDiscriminatoryId) {
+        this.universalDiscriminatoryId = universalDiscriminatoryId;
     }
 
     public Double getZ() {

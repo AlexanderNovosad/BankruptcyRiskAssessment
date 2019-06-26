@@ -1,3 +1,54 @@
-<p>
-  profile-settings works!
-</p>
+<div id="account-settings">
+  <div class="titleGlobal">
+    Редагування профілю
+  </div>
+
+  <div id="img"></div>
+
+  <div class="settingsFields">
+    Ім'я
+    <input type="text" name="inputName" [(ngModel)] = "firsName" placeholder="Ім'я">
+  </div>
+  <div class="settingsFields">
+    Фамілія
+    <input type="text" name="inputName" [(ngModel)] = "lastName" placeholder="Фамілія">
+  </div>
+
+  <div class="settingsFields">
+    Телефон
+    <input type="text" name="inputName" [(ngModel)] = "phone" placeholder="Телефон">
+  </div>
+
+  <div class="settingsFields">
+    Логін
+    <input type="email" name="email"
+           [(ngModel)] = "login"
+           (keyup) = "validLogin()" placeholder="Новий логін">
+    <span>{{loginError}}</span>
+  </div>
+
+  <div class="settingsFields">
+    Електронна пошта
+    <input type="email" name="email"
+           [(ngModel)] = "email"
+           (keyup) = "validEmail()" placeholder="Нова пошта">
+    <span>{{emailError}}</span>
+  </div>
+
+  <div class="settingsFields">
+    Пароль
+    <input type="password"
+           name="password"
+           [(ngModel)]="password"
+           (keyup) ="validPassword()" placeholder="Новий пароль">
+    <input name="rePassword"
+           type="password"
+           [(ngModel)]="rePassword"
+           (keyup)="validRePassword()" placeholder="Повторіть новий пароль">
+
+    <span>{{passwordError}}</span>
+  </div>
+
+  <button type="button" class="darkButton"
+          (click)="sendEditedUser()">Зберегти</button>
+</div>

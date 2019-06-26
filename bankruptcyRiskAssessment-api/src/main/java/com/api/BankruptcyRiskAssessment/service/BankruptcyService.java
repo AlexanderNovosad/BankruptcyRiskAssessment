@@ -277,9 +277,6 @@ public class BankruptcyService implements IBankruptcyService {
                 for(int k=0;k<preQuantitativeIndicators.get(j).getQuantitativeIndicators().size();k++){
                     if(preQuantitativeIndicators.get(j).getQuantitativeIndicators().get(k).getName().equals(quantitativeIndicators.get(i).getName())){
                         privatePreQuantitativeIndicators.add(preQuantitativeIndicators.get(j));
-//                        if(!privatePreQuantitativeIndicators.contains(preQuantitativeIndicators.get(j))){
-////                            privatePreQuantitativeIndicators.add(preQuantitativeIndicators.get(j));
-////                        }
 
                     }
                 }
@@ -1096,9 +1093,11 @@ public class BankruptcyService implements IBankruptcyService {
             abcdv = Math.min(abcdv, Math.abs(factor.getAssessment().getC()-linguisticAssessments[4].getC()));
             abcdv = Math.min(abcdv, Math.abs(factor.getAssessment().getD()-linguisticAssessments[4].getD()));
             v = 1-abcdv;
-            factor.getAssessment().setName(factor.getAssessment().getName()+"("+v+")");
+            factor.getAssessment().setName(factor.getAssessment().getName());
+//            factor.getAssessment().setName(factor.getAssessment().getName()+"("+v+")");
+            factor.setAssessmentPoint(v);
         }
-        companyFactorRepository.saveAndFlush(new CompanyFactor(factor.getName(),factor.getAssessment().getName(),company));
+        companyFactorRepository.saveAndFlush(new CompanyFactor(factor.getName(),factor.getAssessment().getName(), factor.getAssessmentPoint(), company));
         return factor;
     }
 
@@ -1220,9 +1219,11 @@ public class BankruptcyService implements IBankruptcyService {
             abcdv = Math.min(abcdv, Math.abs(factor.getAssessment().getC()-linguisticAssessments[4].getC()));
             abcdv = Math.min(abcdv, Math.abs(factor.getAssessment().getD()-linguisticAssessments[4].getD()));
             v = 1-abcdv;
-            factor.getAssessment().setName(factor.getAssessment().getName()+"("+v+")");
+            factor.getAssessment().setName(factor.getAssessment().getName());
+//            factor.getAssessment().setName(factor.getAssessment().getName()+"("+v+")");
+            factor.setAssessmentPoint(v);
         }
-        companyFactorRepository.saveAndFlush(new CompanyFactor(factor.getName(),factor.getAssessment().getName(),company));
+        companyFactorRepository.saveAndFlush(new CompanyFactor(factor.getName(),factor.getAssessment().getName(), factor.getAssessmentPoint(), company));
         return factor;
     }
 
@@ -1270,7 +1271,7 @@ public class BankruptcyService implements IBankruptcyService {
         x1 = davidBelikovModelData.getCurrentAssets()/davidBelikovModelData.getTotalValueOfAssets();
         x2 = davidBelikovModelData.getNetProfit()/davidBelikovModelData.getEquityCapital();
         x3 = davidBelikovModelData.getReceipts()/davidBelikovModelData.getTotalValueOfAssets();
-        x4 = davidBelikovModelData.getNetProfit()/davidBelikovModelData.getСost();
+        x4 = davidBelikovModelData.getNetProfit()/davidBelikovModelData.getCost();
         z = 8.38*x1+1.0*x2+0.054*x3+0.63*x4;
         DavidBelikovModel davidBelikovModel = new DavidBelikovModel(z,x1,x2,x3,x4,company);
         return davidBelikovModel;

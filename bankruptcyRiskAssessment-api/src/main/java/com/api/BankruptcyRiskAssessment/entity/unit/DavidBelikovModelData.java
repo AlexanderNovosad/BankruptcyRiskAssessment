@@ -1,12 +1,12 @@
 package com.api.BankruptcyRiskAssessment.entity.unit;
 
 public class DavidBelikovModelData {
-    double currentAssets;
-    double totalValueOfAssets;
-    double netProfit;
-    double equityCapital;
-    double receipts;
-    double сost;
+    private double currentAssets;
+    private double totalValueOfAssets;
+    private double netProfit;
+    private double equityCapital;
+    private double receipts;
+    private double cost;
 
     DavidBelikovModelData(){}
 
@@ -50,11 +50,11 @@ public class DavidBelikovModelData {
         this.receipts = receipts;
     }
 
-    public double getСost() {
-        return сost;
+    public double getCost() {
+        return cost;
     }
 
-    public void setСost(double сost) {
-        this.сost = сost;
+    public void setCost(double cost) {
+        this.cost = cost;
     }
 }

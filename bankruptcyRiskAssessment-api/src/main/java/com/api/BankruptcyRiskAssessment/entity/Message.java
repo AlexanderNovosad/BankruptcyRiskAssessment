@@ -16,12 +16,10 @@ public class Message implements Serializable{
     @Column(nullable = false)
     private String messageBody;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name="userId", nullable = false)
+    @Column(nullable = false)
     private Long senderId;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name="userId", nullable = false)
+    @Column(nullable = false)
     private Long receiverId;
 
     public Message() {

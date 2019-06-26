@@ -1,12 +1,12 @@
 package com.api.BankruptcyRiskAssessment.entity.unit;
 
 public class UniversalDiscriminatoryModelData {
-    double cashFlow;
-    double obligation;
-    double totalValueOfAssets;
-    double netProfit;
-    double receipts;
-    double inventories;
+    private double cashFlow;
+    private double obligation;
+    private double totalValueOfAssets;
+    private double netProfit;
+    private double receipts;
+    private double inventories;
 
     UniversalDiscriminatoryModelData(){}
 

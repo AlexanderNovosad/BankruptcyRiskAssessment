@@ -38,4 +38,12 @@ export class UserService {
       .toPromise().then(response => response as Role);
   }
 
+  private getUsersByRoleIdHttpRequest(roleId: number): Promise<User[]> {
+    return this.httpClient.get<User[]>(`/api/user/role?role_id=${roleId}`).toPromise();
+  }
+
+  public getUsers(): Promise<User[]> {
+    return this.httpClient.get<User[]>(`/api/user/user_list`).toPromise();
+  }
+
 }

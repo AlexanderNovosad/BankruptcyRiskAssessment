@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 
@@ -35,6 +36,7 @@ public class Company implements Serializable {
     private String address;
 
     @Column(nullable = true)
+    @Size(min = 6, max = 15)
     private String phone;
 
     @Column(nullable = true)

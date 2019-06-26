@@ -25,12 +25,12 @@ public class User implements Serializable {
     @Size(min = 5, max = 20)
     private String lastName;
 
-    @Column(nullable = false)
-    @Size(min = 5, max = 20)
+    @Column(nullable = false, unique = true)
+    @Size(min = 5, max = 250)
     private String login;
 
     @Column(nullable = false)
-    @Size(min = 5, max = 20)
+    @Size(min = 5, max = 250)
     private String password;
 
     @Column(nullable = true)

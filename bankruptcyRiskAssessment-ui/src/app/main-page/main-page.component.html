@@ -6,15 +6,19 @@
       Bankrupty Risk Assessment - ui
     </span>
     <div id="currentUser">
-      <a routerLink="/main-page/personal-cabinet">{{currentUser?.login}}</a>
-      <button id="logoutButton" (click)="logout()">Выход</button>
+      <a routerLink="/main-page/personal-cabinet" style="">{{currentUser?.login}}  </a>
+      <button id="logoutButton" (click)="logout()">Вихід</button>
     </div>
   </header>
 
   <div id="main-page">
     <ul id="userMenu">
-      <a routerLink="/main-page/personal-cabinet/">
+      <a routerLink="/main-page/personal-account/">
         <li><div>Персональний кабінет</div></li>
+      </a>
+
+      <a *ngIf="currentUser.login=='admin'" routerLink="/main-page/admin-panel/">
+        <li><div>Управління</div></li>
       </a>
 
       <!-- Место для отдельных меню -->
@@ -22,8 +26,12 @@
         <li>Аналіз ризику банкрутства</li>
       </a>
 
-      <a routerLink="/main-page/personal-cabinet/account-settings">
-        <li style="border-right: none"><div>Редагувати профіль</div></li>
+      <a routerLink="/main-page/statistics">
+        <li>Статистика</li>
+      </a>
+
+      <a routerLink="/main-page/personal-cabinet/profile-settings">
+        <li style="border-right: none"><div>Налаштування</div></li>
       </a>
 
     </ul>

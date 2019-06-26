@@ -6,14 +6,14 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-@Entity(name = "SpringateModelModel")
-@Table(name = "springateModelModel")
+@Entity(name = "SpringateModel")
+@Table(name = "springateModel")
 @EntityListeners(AuditingEntityListener.class)
 public class SpringateModel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long lissModelId;
+    private Long springateModelId;
 
     @Column(nullable = false)
     private Double z;
@@ -50,12 +50,12 @@ public class SpringateModel implements Serializable {
         this.date = new Date(System.currentTimeMillis());
     }
 
-    public Long getLissModelId() {
-        return lissModelId;
+    public Long getSpringateModelId() {
+        return springateModelId;
     }
 
-    public void setLissModelId(Long lissModelId) {
-        this.lissModelId = lissModelId;
+    public void setSpringateModelId(Long springateModelId) {
+        this.springateModelId = springateModelId;
     }
 
     public Double getZ() {

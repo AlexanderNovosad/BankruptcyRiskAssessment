@@ -1,0 +1,53 @@
+#account-settings {
+  width: 700px;
+  margin: auto;
+  padding: auto;
+  padding-bottom: 10px;
+  background-color: #f6f1ed;
+  color: #30231d;
+}
+
+.settingsFields  {
+  margin-top: 20px;
+  margin-bottom: 40px;
+  margin-left: 20px;
+  font-weight: bold;
+  font-size: 25px;
+  position: relative;
+}
+
+.settingsFields span {
+  position: absolute;
+  z-index: 200;
+  font-size: 12px;
+  margin:0;
+  padding:0;
+}
+.settingsFields input {
+  display: block;
+  width: 276px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  background-color: rgba(1,1,1,0);
+  border: 0px solid #b5a397;
+  border-bottom: 2px solid #b5a397;
+  color: #30231d;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+button {
+  padding: 10px 13px 10px 13px;
+  float: right;
+  margin-top: -75px;
+  margin-right: 150px;
+}
+#img {
+  background-image: url('boss.svg');
+  float:right;
+  margin-right: 105px;
+  margin-top: 55px;
+  width: 200px;
+  height: 200px;
+  z-index: 4000;
+}

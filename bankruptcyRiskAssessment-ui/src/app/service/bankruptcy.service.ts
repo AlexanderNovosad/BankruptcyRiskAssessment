@@ -5,6 +5,10 @@ import {Indicator} from "../model/Indicator";
 import {QuantitativeIndicator} from "../model/QuantitativeIndicator";
 import {PreQuantitativeIndicator} from "../model/PreQuantitativeIndicator";
 import {LinguisticAssessment} from "../model/LinguisticAssessment";
+import {MultiFactorModelOfAltman} from "../model/MultiFactorModelOfAltman";
+import {MultiFactorModelOfAltmanData} from "../model/MultiFactorModelOfAltmanData";
+import {LissModel} from "../model/LissModel";
+import {LissModelData} from "../model/LissModelData";
 
 @Injectable()
 export class BankruptcyService{
@@ -39,7 +43,15 @@ export class BankruptcyService{
   public calculateBankruptcyPoints(companyId: number, indicatorList: [Indicator[]], dependenceList: [String[]], factorsDependenceList: String[]): Promise<Factor[]>{
     let inData = {indicators: indicatorList, dependencies: dependenceList, factorsDependencies: factorsDependenceList};
     console.log(inData);
-    return this.httpClient.post<Indicator[]>(`/api/bankruptcy/nedosekinModel?companyId=${companyId}`, inData).toPromise();
+    return this.httpClient.post<Factor[]>(`/api/bankruptcy/nedosekinModel?companyId=${companyId}`, inData).toPromise();
+  }
+
+  public calculateMultiFactorModelOfAltman(companyId: number, multiFactorModelOfAltmanData: MultiFactorModelOfAltmanData): Promise<MultiFactorModelOfAltman>{
+    return this.httpClient.post<MultiFactorModelOfAltman>(`/api/bankruptcy/multiFactorModelOfAltman?companyId=${companyId}`, multiFactorModelOfAltmanData).toPromise();
+  }
+
+  public calculateLissModel(companyId: number, lissModelData: LissModelData): Promise<LissModel>{
+    return this.httpClient.post<LissModel>(`/api/bankruptcy/multiFactorModelOfAltman?companyId=${companyId}`, lissModelData).toPromise();
   }
 
 

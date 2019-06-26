@@ -54,7 +54,7 @@ export class NedosekinModelComponent implements OnInit {
   dependencies: [String[]];
   factorsDependencies: String[];
   finalResult: Factor[]=[];
-  risk: string = null;
+  risk: string = '';
 
 
 
@@ -158,29 +158,26 @@ export class NedosekinModelComponent implements OnInit {
     console.log(this.dependencies);
     console.log(this.factorsDependencies);
     this.bancruptcyService.calculateBankruptcyPoints(this.company.companyId, this.indicators,this.dependencies,this.factorsDependencies).then(results=>this.finalResult=results);
-    var risk: string = '';
-    for(var i=0;i<this.finalResult.length;i++){
-      if(this.finalResult[i].name.startsWith("Стан підприємства")){
-        if(this.finalResult[i].assessment.name.startsWith("Дуже низький"))
-             risk = this.finalResult[i].assessment.name.replace("Дуже низький","");
-        if(this.finalResult[i].assessment.name.startsWith("Низький"))
-             risk = this.finalResult[i].assessment.name.replace("Низький","");
-        if(this.finalResult[i].assessment.name.startsWith("Середній"))
-             risk = this.finalResult[i].assessment.name.replace("Середній","");
-        if(this.finalResult[i].assessment.name.startsWith("Високий"))
-             risk = this.finalResult[i].assessment.name.replace("Високий","");
-         if(this.finalResult[i].assessment.name.startsWith("Дуже високий"))
-             risk = this.finalResult[i].assessment.name.replace("Дуже високий","");		
-        risk.replace("(","");
-        risk.replace(")","");
-      }
-    }
-
-    this.risk = risk;
     return this.finalResult;
   }
 
   public getRisk(): string{
+    var risk: string = '';
+    for(var i=0;i<this.finalResult.length;i++){
+      if(this.finalResult[i].name.startsWith("Стан підприємства")){
+        if(this.finalResult[i].assessment.name.startsWith("Дуже низький"))
+          risk = this.finalResult[i].assessment.name.replace("Дуже низький","Позаграничний");
+        if(this.finalResult[i].assessment.name.startsWith("Низький"))
+          risk = this.finalResult[i].assessment.name.replace("Низький","Небезпечний");
+        if(this.finalResult[i].assessment.name.startsWith("Середній"))
+          risk = this.finalResult[i].assessment.name.replace("Середній","Граничний");
+        if(this.finalResult[i].assessment.name.startsWith("Високий"))
+          risk = this.finalResult[i].assessment.name.replace("Високий","Прийнятний");
+        if(this.finalResult[i].assessment.name.startsWith("Дуже високий"))
+          risk = this.finalResult[i].assessment.name.replace("Дуже високий","Незначний");
+      }
+    }
+    this.risk = risk;
     return this.risk;
   }
 

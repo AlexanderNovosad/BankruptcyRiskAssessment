@@ -1,11 +1,11 @@
 package com.api.BankruptcyRiskAssessment.entity.unit;
 
 public class SpringateModelData {
-    double workingCapital;
-    double totalValueOfAssets;
-    double profitFromSales;
-    double shortTermDebt;
-    double salesVolume;
+    private double workingCapital;
+    private double totalValueOfAssets;
+    private double profitFromSales;
+    private double shortTermDebt;
+    private double salesVolume;
 
     SpringateModelData(){}
 

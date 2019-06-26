@@ -1,3 +1,32 @@
-<p>
-  messages works!
-</p>
+<div id="messages">
+  <div class="contactsList">
+    <div class="titleGlobal"
+         onmousedown="return false" onselectstart="return false" style="cursor: default">
+      {{selectedUser?.name}}
+    </div>
+    <ul>
+      <li *ngFor="let user of users"
+          (click)="selectUser(user)"
+          class="listItemGlobal"
+          onmousedown="return false" onselectstart="return false">
+        {{user.name}}
+      </li>
+    </ul>
+  </div>
+  <div class="messageBox">
+    <ul id="scrollingBox">
+      <li *ngFor="let message of messages"
+          [style.background-color]="isReaded(message?.readed)"
+          [style.text-align]="isUserReceiver(message?.senderId)">
+        {{message.messageBody}}<br><span>{{parseDate(message.date)}}</span>
+      </li>
+    </ul>
+    <div>
+      <input type="text" #inputText>
+      <button type="button" class="darkButton"
+              (click)="sendMessage(inputText.value);
+              inputText.value = ''">Отправить</button>
+    </div>
+  </div>
+</div>
+
