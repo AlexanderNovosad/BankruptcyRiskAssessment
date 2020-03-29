@@ -2,7 +2,7 @@
   <div class="contactsList">
     <div class="titleGlobal"
          onmousedown="return false" onselectstart="return false" style="cursor: default">
-      {{selectedUser?.name}}
+      {{selectedUser?.firstName}} {{selectedUser?.lastName}}
     </div>
     <ul>
       <li *ngFor="let user of users"

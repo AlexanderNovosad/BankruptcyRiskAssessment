@@ -11,7 +11,7 @@ import {BancruptcyAnalysisComponent} from "./main-page/bancruptcy-analysis/bancr
 import {FinancialEnterpriseAnalysisComponent} from "./main-page/financial-enterprise-analysis/financial-enterprise-analysis.component";
 import {OverallRatingOfEnterprisesComponent} from "./main-page/overall-rating-of-enterprises/overall-rating-of-enterprises.component";
 import {PersonalAccountComponent} from "./main-page/personal-account/personal-account.component";
-import {StatisticsComponent} from "./main-page/statistics/statistics.component";
+import {StatisticsComponent} from "./main-page/personal-account/statistics/statistics.component";
 import {TestingEmployeesComponent} from "./main-page/testing-employees/testing-employees.component";
 import {NedosekinModelComponent} from "./main-page/bancruptcy-analysis/nedosekin-model/nedosekin-model.component";
 import {MultiFactorModelOfAltman} from "./model/MultiFactorModelOfAltman";
@@ -20,8 +20,9 @@ import {LissModelComponent} from "./main-page/bancruptcy-analysis/liss-model/lis
 import {ProfileSettingsComponent} from "./main-page/personal-account/profile-settings/profile-settings.component";
 import {ProfileCompanyComponent} from "./main-page/personal-account/profile-company/profile-company.component";
 import {MessagesComponent} from "./main-page/personal-account/messages/messages.component";
-// import {CompanyRegistrationComponent} from "./main-page/personal-account/profile-company/company-registration/company-registration.component";
+import {CompanyRegistrationComponent} from "./main-page/personal-account/profile-company/company-registration/company-registration.component";
 import {RecommendationsComponent} from "./main-page/personal-account/recommendations/recommendations.component";
+import {AdminPanelComponent} from "./main-page/personal-account/admin-panel/admin-panel.component";
 
 
 const routes: Routes = [
@@ -46,9 +47,12 @@ const routes: Routes = [
       {path: 'personal-account', component: PersonalAccountComponent, children:[
           {path: 'statistics', component: StatisticsComponent},
           {path: 'profile-settings', component: ProfileSettingsComponent},
-          {path: 'profile-company', component: ProfileCompanyComponent},
+          {path: 'profile-company', component: ProfileCompanyComponent, children:[
+              {path: 'company-registration', component: CompanyRegistrationComponent},
+            ]},
           {path: 'messages', component: MessagesComponent},
           {path: 'recommendations', component: RecommendationsComponent},
+          {path: 'admin-panel', component: AdminPanelComponent},
         ]},
       {path: 'testing-employees', component: TestingEmployeesComponent}
     ]},

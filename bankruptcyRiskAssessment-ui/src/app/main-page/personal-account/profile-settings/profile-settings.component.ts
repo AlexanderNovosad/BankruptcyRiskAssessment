@@ -40,17 +40,17 @@ export class ProfileSettingsComponent implements OnInit {
   }
 
   validEmail() {
-    this.emailError = this.EMAIL_REGEXP.test(this.email) ? '' : 'Неправельний формат електронної пошти';
+    this.emailError = this.EMAIL_REGEXP.test(this.email) ? '' : 'Невірний формат електронної пошти';
     if (!this.email)
       this.emailError = '';
   }
   validLogin() {
-    this.loginError = this.LOGIN_REGEXP.test(this.login) ? '' : 'Неправельний формат логіну';
+    this.loginError = this.LOGIN_REGEXP.test(this.login) ? '' : 'Невірний формат логіну';
     if (!this.login)
       this.loginError = '';
   }
   validPassword() {
-    this.passwordError = this.PASSWORD_REGEXP.test(this.password) ? '' : 'Неправельний формат пароля' ;
+    this.passwordError = this.PASSWORD_REGEXP.test(this.password) ? '' : 'Невірний формат пароля' ;
     if (!this.password)
       this.passwordError = '';
   }
@@ -93,10 +93,10 @@ export class ProfileSettingsComponent implements OnInit {
           this.emailError = ''; this.password = ''; this.email = ''; this.passwordError = '';
           this.firsName = ''; this.lastName=''; this.phone=''; this.login=''; this.rePassword = '';
 
-          alert('Сохранено'); // Must be rewrited to angular alert
+          alert('Збережено'); // Must be rewrited to angular alert
         },
         error => {
-          alert('Ошибка сохранения');
+          alert('Помилка збереження');
           alert(error.message);
         });
   }

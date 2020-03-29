@@ -5,6 +5,8 @@ import {Observable} from 'rxjs';
 import { map } from 'rxjs/operators';
 import {ReplaySubject} from 'rxjs';
 import {Role} from "../model/Role";
+import {Company} from "../model/Company";
+import {ExpertAccess} from "../model/ExpertAccess";
 
 @Injectable()
 export class UserService {
@@ -44,6 +46,22 @@ export class UserService {
 
   public getUsers(): Promise<User[]> {
     return this.httpClient.get<User[]>(`/api/user/user_list`).toPromise();
+  }
+
+  public getUserById(userId: number): Promise<User>{
+    return this.httpClient.get<User>(`/api/user/user?companyId=${userId}`).toPromise();
+  }
+
+  public getExperts(){
+      return this.httpClient.get<User[]>('/api/expert');
+  }
+
+  public setExpertForCompany(expertAccess: ExpertAccess) {
+    return this.httpClient.post<ExpertAccess>('/api/expert/add', expertAccess).subscribe(
+      err => {
+        console.log('Error occured');
+      }
+    );
   }
 
 }

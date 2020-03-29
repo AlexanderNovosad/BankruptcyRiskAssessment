@@ -23,6 +23,7 @@ import { ProfileSettingsComponent } from './main-page/personal-account/profile-s
 import { MessagesComponent } from './main-page/personal-account/messages/messages.component';
 import { CompanyEmployeesComponent } from './main-page/personal-account/company-employees/company-employees.component';
 import { ProfileCompanyComponent } from './main-page/personal-account/profile-company/profile-company.component';
+import { CompanyRegistrationComponent } from './main-page/personal-account/profile-company/company-registration/company-registration.component';
 import { RecommendationsComponent } from './main-page/personal-account/recommendations/recommendations.component';
 import { TestingEmployeesComponent } from './main-page/testing-employees/testing-employees.component';
 import { TestingFormComponent } from './main-page/testing-employees/testing-form/testing-form.component';
@@ -34,14 +35,16 @@ import {NedosekinModelComponent} from "./main-page/bancruptcy-analysis/nedosekin
 import { ManualInputFormComponent } from './main-page/bancruptcy-analysis/manual-input-form/manual-input-form.component';
 import { DocumentFormComponent } from './main-page/bancruptcy-analysis/document-form/document-form.component';
 import { OverallRatingOfEnterprisesComponent } from './main-page/overall-rating-of-enterprises/overall-rating-of-enterprises.component';
-import { StatisticsComponent } from './main-page/statistics/statistics.component';
-import { BancruptcyStatisticsComponent } from './main-page/statistics/bancruptcy-statistics/bancruptcy-statistics.component';
-import { LiquidityStatisticsComponent } from './main-page/statistics/liquidity-statistics/liquidity-statistics.component';
+import { StatisticsComponent } from './main-page/personal-account/statistics/statistics.component';
+import { BancruptcyStatisticsComponent } from './main-page/personal-account/statistics/bancruptcy-statistics/bancruptcy-statistics.component';
+import { LiquidityStatisticsComponent } from './main-page/personal-account/statistics/liquidity-statistics/liquidity-statistics.component';
 import { FinancialEnterpriseAnalysisComponent } from './main-page/financial-enterprise-analysis/financial-enterprise-analysis.component';
 import { LiquidityAnalysisComponent } from './main-page/financial-enterprise-analysis/liquidity-analysis/liquidity-analysis.component';
-import {BankruptcyService} from "./service/bankruptcy.service";
-import {MultiFactorModelOfAltmanComponent} from "./main-page/bancruptcy-analysis/multi-factor-model-of-altman/multi-factor-model-of-altman.component";
-import {LissModelComponent} from "./main-page/bancruptcy-analysis/liss-model/liss-model.component";
+import {BankruptcyService} from './service/bankruptcy.service';
+import {MultiFactorModelOfAltmanComponent} from './main-page/bancruptcy-analysis/multi-factor-model-of-altman/multi-factor-model-of-altman.component';
+import {LissModelComponent} from './main-page/bancruptcy-analysis/liss-model/liss-model.component';
+import {AdminPanelComponent} from './main-page/personal-account/admin-panel/admin-panel.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 
@@ -75,14 +78,17 @@ import {LissModelComponent} from "./main-page/bancruptcy-analysis/liss-model/lis
     HomeComponent,
     NedosekinModelComponent,
     MultiFactorModelOfAltmanComponent,
-    LissModelComponent
+    CompanyRegistrationComponent,
+    LissModelComponent,
+    AdminPanelComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     HttpModule,
-    FormsModule
+    FormsModule,
+    NgbModule.forRoot()
   ],
   providers: [
     TestServiceService,

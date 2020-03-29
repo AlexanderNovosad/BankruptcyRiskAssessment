@@ -32,7 +32,7 @@ public class ExpertController {
         return ResponseEntity.ok(users);
     }
 
-    @PostMapping(value = "/")
+    @PostMapping(value = "/add")
     public ResponseEntity<ExpertAccess> addExpertAccess(@RequestBody ExpertAccess expertAccess) {
         if (isNull(expertAccess)) {
             return ResponseEntity.notFound().build();

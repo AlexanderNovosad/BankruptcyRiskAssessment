@@ -1,3 +1,38 @@
-<p>
-  personal-account works!
-</p>
+<div id="personal-cabinet">
+  <ul id="userMenu">
+    <a routerLink="/main-page/personal-account/messages">
+      <li><div>Повідомленння</div></li>
+    </a>
+
+    <!-- Место для отдельных меню -->
+
+    <a routerLink="/main-page/personal-account/profile-settings">
+      <li style="border-right: none"><div>Редактировать профиль</div></li>
+    </a>
+
+    <!--<a routerLink="/main-page/personal-account/company-employess">-->
+      <!--<li>робітники компаніїї</li>-->
+    <!--</a>-->
+
+    <a routerLink="/main-page/personal-account/profile-company">
+      <li>Профіль компанії</li>
+    </a>
+
+    <a routerLink="/main-page/personal-account/statistics">
+      <li>Статистика</li>
+    </a>
+
+    <a routerLink="/main-page/personal-account/recomendations">
+      <li>Рекомендації</li>
+    </a>
+
+    <a *ngIf="currentUser.role.roleId == 1" routerLink="/main-page/personal-account/admin-panel">
+      <li>Панель адміністратора</li>
+    </a>
+
+  </ul>
+
+  <div id="routingCounter">
+    <router-outlet></router-outlet>
+  </div>
+</div>

@@ -1,3 +1,43 @@
-<p>
-  company-registration works!
-</p>
+<div class="titleGlobal">Реєстрація Підприємства</div>
+<form>
+  <div>
+    <span>Назва підприємства</span>
+    <input type="text" name="companyName" #companyName>
+  </div>
+
+  <div>
+    <span>Тип підприємства</span>
+    <input type="text" name="kindOfCompany" #kindOfCompany>
+  </div>
+
+  <div>
+    <span>ІПН</span>
+    <input type="text" name="ipn" #ipn>
+  </div>
+
+  <div>
+    <span>Опис діяльності по КВАД</span>
+    <input type="text" name="quadDescription" #quadDescription>
+  </div>
+
+  <div>
+    <span>ЄДРПО</span>
+    <input type="text" name="edrpou" #edrpou>
+  </div>
+
+  <div>
+    <span>Адреса</span>
+    <input type="text" name="address" #address>
+  </div>
+
+  <div>
+    <span>Телефон</span>
+    <input type="text" name="phone" #phone>
+  </div>
+  <p>
+  <div>
+    <button name="registrate" type="button" class="darkButton" (click)="registration(
+      kindOfCompany.value, ipn.value, companyName.value, quadDescription.value, edrpou.value, address.value,
+      phone.value)">Зареєструвати</button>
+  </div>
+</form>
