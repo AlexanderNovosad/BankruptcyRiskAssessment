@@ -8,6 +8,7 @@ public class LinguisticAssessment {
     private double d;
 
     public LinguisticAssessment(){
+        this.name = "null";
         this.a = 0;
         this.b = 0;
         this.c = 0;

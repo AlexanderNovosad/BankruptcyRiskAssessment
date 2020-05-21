@@ -35,7 +35,7 @@ export class NedosekinModelComponent implements OnInit {
   openResults: boolean = false;
   openAssessments: boolean = false;
   allIndicators: Indicator[]=[];
-  assessments: LinguisticAssessment[]=[];
+  assessments: LinguisticAssessment[];
   productionIndicators: Indicator[]=[];
   productionDependecies: String[]=[];
   managementIndicators: Indicator[]=[];
@@ -54,12 +54,15 @@ export class NedosekinModelComponent implements OnInit {
   dependencies: [String[]];
   factorsDependencies: String[];
   finalResult: Factor[]=[];
+  openCompanySelection: boolean = true;
   risk: string = '';
 
 
 
   ngOnInit() {
     this.companyService.getCompanies(this.userService.getCurrentUser().userId).then(expertAccessList=>this.expertAccessList=expertAccessList);
+    this.openCompanySelection = true;
+    this.assessments = assessments;
     // this.companyService.getAllCompanies().then(companyList=>this.companyList=companyList);
   }
 
@@ -79,6 +82,7 @@ export class NedosekinModelComponent implements OnInit {
     this.createQualitativeIndicators();
     console.log(this.qualitativeIndicators);
     this.openIndicatorsSelect = true;
+    this.openCompanySelection = false;
     return this.company;
   }
 
@@ -101,7 +105,7 @@ export class NedosekinModelComponent implements OnInit {
   }
 
   public getAssessments(): LinguisticAssessment[]{
-    return assessments;
+    return this.assessments;
   }
 
   public createQualitativeIndicators(): Indicator[]{
@@ -123,7 +127,7 @@ export class NedosekinModelComponent implements OnInit {
 
   public checkQuantitativeIndicators(indicator: QuantitativeIndicator): void{
     if(this.finalQuantitativeIndicators.includes(indicator)){
-      this.finalQuantitativeIndicators.splice(this.finalQualitativeIndicators.indexOf(indicator),1);
+      this.finalQuantitativeIndicators.splice(this.finalQuantitativeIndicators.indexOf(indicator),1);
     }
     else this.finalQuantitativeIndicators.push(indicator);
   }
@@ -148,15 +152,10 @@ export class NedosekinModelComponent implements OnInit {
   public setTheAssessments(getAssessment: string): LinguisticAssessment{
     console.log(getAssessment);
     return this.getAssessments().find(assessment=>getAssessment==assessment.name);
-    // this.bancruptcyService.setTheAssessments(this.allIndicators, this.assessments).then(indicators=>this.allIndicators=indicators);
-    // return this.allIndicators;
   }
 
   public calculateBankruptcyPoints(){
     this.preCalculateBankruptcyPoints();
-    console.log(this.indicators);
-    console.log(this.dependencies);
-    console.log(this.factorsDependencies);
     this.bancruptcyService.calculateBankruptcyPoints(this.company.companyId, this.indicators,this.dependencies,this.factorsDependencies).then(results=>this.finalResult=results);
     return this.finalResult;
   }
@@ -207,7 +206,6 @@ export class NedosekinModelComponent implements OnInit {
 
   public saveAssessments(): void{
     this.concatIndicators();
-    // this.setTheAssessments();
     this.createBancruptcyFactors();
     this.createBancruptcyIndicators();
     this.openAssessments=true;
@@ -287,32 +285,6 @@ export class NedosekinModelComponent implements OnInit {
       var bancruptcyIndicator = new BancruptcyIndicator(this.allIndicators[i]);
         this.bancruptcyIndicators.push(bancruptcyIndicator);
     }
-    // this.bancruptcyIndicators = []; *ngIf="bancruptcyIndicator.dependence!=='пуст'"
-    // this.splitIndicators();
-    // if(this.productionIndicators!=null){
-    //   var bancruptcyIndicators = new BancruptcyIndicators(this.productionIndicators,this.productionDependecies);
-    //   this.bancruptcyIndicators.push(bancruptcyIndicators);
-    // }
-    // if(this.managementIndicators!=null){
-    //   var bancruptcyIndicators = new BancruptcyIndicators(this.managementIndicators,this.managementDependecies);
-    //   this.bancruptcyIndicators.push(bancruptcyIndicators);
-    // }
-    // if(this.financialIndicators!=null){
-    //   var bancruptcyIndicators = new BancruptcyIndicators(this.financialIndicators,this.financialDependecies);
-    //   this.bancruptcyIndicators.push(bancruptcyIndicators);
-    // }
-    // if(this.personnelIndicators!=null){
-    //   var bancruptcyIndicators = new BancruptcyIndicators(this.personnelIndicators,this.personnelDependecies);
-    //   this.bancruptcyIndicators.push(bancruptcyIndicators);
-    // }
-    // if(this.marketingIndicators!=null){
-    //   var bancruptcyIndicators = new BancruptcyIndicators(this.marketingIndicators,this.marketingDependecies);
-    //   this.bancruptcyIndicators.push(bancruptcyIndicators);
-    // }
-    // if(this.innovationIndicators!=null){
-    //   var bancruptcyIndicators = new BancruptcyIndicators(this.innovationIndicators,this.innovationDependecies);
-    //   this.bancruptcyIndicators.push(bancruptcyIndicators);
-    // }
   }
 
   public getBancruptcyIndicators(): BancruptcyIndicator[]{
@@ -360,8 +332,6 @@ export class NedosekinModelComponent implements OnInit {
         this.innovationIndicators.push(this.bancruptcyIndicators[i].indicator);
         this.innovationDependecies.push(this.bancruptcyIndicators[i].dependence);
       }
-      // this.indicators.push(this.bancruptcyIndicators[i].indicators);
-      // this.dependencies.push(this.bancruptcyIndicators[i].dependencies);
     }
     this.productionDependecies.pop();
     this.managementDependecies.pop();

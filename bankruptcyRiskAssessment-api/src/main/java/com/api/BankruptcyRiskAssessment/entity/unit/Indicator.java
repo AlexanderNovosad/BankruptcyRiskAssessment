@@ -8,6 +8,7 @@ public class Indicator {
     public Indicator(String name, Factor factor){
         this.name = name;
         this.factor = factor;
+        this.setAssessment(new LinguisticAssessment());
     }
 
     public Indicator(){}

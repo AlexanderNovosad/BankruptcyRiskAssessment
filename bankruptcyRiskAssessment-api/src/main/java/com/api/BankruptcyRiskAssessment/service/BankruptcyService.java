@@ -1076,6 +1076,7 @@ public class BankruptcyService implements IBankruptcyService {
             abcdv = Math.min(abcdv, Math.abs(factor.getAssessment().getD()-linguisticAssessments[0].getD()));
             v = 1-abcdv;
             factor.getAssessment().setName(factor.getAssessment().getName()+"("+v+")");
+            factor.setAssessmentPoint(v);
         }
         if(factor.getAssessment().getName().equals("Низький")){
             double abcdv = Math.max(Math.abs(factor.getAssessment().getA()-linguisticAssessments[1].getA()), Math.abs(factor.getAssessment().getB()-linguisticAssessments[1].getB()));
@@ -1083,6 +1084,7 @@ public class BankruptcyService implements IBankruptcyService {
             abcdv = Math.min(abcdv, Math.abs(factor.getAssessment().getD()-linguisticAssessments[1].getD()));
             v = 1-abcdv;
             factor.getAssessment().setName(factor.getAssessment().getName()+"("+v+")");
+            factor.setAssessmentPoint(v);
         }
         if(factor.getAssessment().getName().equals("Середній")){
             double abcdv = Math.max(Math.abs(factor.getAssessment().getA()-linguisticAssessments[2].getA()), Math.abs(factor.getAssessment().getB()-linguisticAssessments[2].getB()));
@@ -1090,6 +1092,7 @@ public class BankruptcyService implements IBankruptcyService {
             abcdv = Math.min(abcdv, Math.abs(factor.getAssessment().getD()-linguisticAssessments[2].getD()));
             v = 1-abcdv;
             factor.getAssessment().setName(factor.getAssessment().getName()+"("+v+")");
+            factor.setAssessmentPoint(v);
         }
         if(factor.getAssessment().getName().equals("Високий")){
             double abcdv = Math.max(Math.abs(factor.getAssessment().getA()-linguisticAssessments[3].getA()), Math.abs(factor.getAssessment().getB()-linguisticAssessments[3].getB()));
@@ -1097,14 +1100,14 @@ public class BankruptcyService implements IBankruptcyService {
             abcdv = Math.min(abcdv, Math.abs(factor.getAssessment().getD()-linguisticAssessments[3].getD()));
             v = 1-abcdv;
             factor.getAssessment().setName(factor.getAssessment().getName()+"("+v+")");
+            factor.setAssessmentPoint(v);
         }
         if(factor.getAssessment().getName().equals("Дуже високий")){
             double abcdv = Math.max(Math.abs(factor.getAssessment().getA()-linguisticAssessments[4].getA()), Math.abs(factor.getAssessment().getB()-linguisticAssessments[4].getB()));
             abcdv = Math.min(abcdv, Math.abs(factor.getAssessment().getC()-linguisticAssessments[4].getC()));
             abcdv = Math.min(abcdv, Math.abs(factor.getAssessment().getD()-linguisticAssessments[4].getD()));
             v = 1-abcdv;
-            factor.getAssessment().setName(factor.getAssessment().getName());
-//            factor.getAssessment().setName(factor.getAssessment().getName()+"("+v+")");
+            factor.getAssessment().setName(factor.getAssessment().getName()+"("+v+")");
             factor.setAssessmentPoint(v);
         }
         companyFactorRepository.saveAndFlush(new CompanyFactor(factor.getName(),factor.getAssessment().getName(), factor.getAssessmentPoint(), company));
@@ -1202,6 +1205,7 @@ public class BankruptcyService implements IBankruptcyService {
             abcdv = Math.min(abcdv, Math.abs(factor.getAssessment().getD()-linguisticAssessments[0].getD()));
             v = 1-abcdv;
             factor.getAssessment().setName(factor.getAssessment().getName()+"("+v+")");
+            factor.setAssessmentPoint(v);
         }
         if(factor.getAssessment().getName().equals("Низький")){
             double abcdv = Math.max(Math.abs(factor.getAssessment().getA()-linguisticAssessments[1].getA()), Math.abs(factor.getAssessment().getB()-linguisticAssessments[1].getB()));
@@ -1209,6 +1213,7 @@ public class BankruptcyService implements IBankruptcyService {
             abcdv = Math.min(abcdv, Math.abs(factor.getAssessment().getD()-linguisticAssessments[1].getD()));
             v = 1-abcdv;
             factor.getAssessment().setName(factor.getAssessment().getName()+"("+v+")");
+            factor.setAssessmentPoint(v);
         }
         if(factor.getAssessment().getName().equals("Середній")){
             double abcdv = Math.max(Math.abs(factor.getAssessment().getA()-linguisticAssessments[2].getA()), Math.abs(factor.getAssessment().getB()-linguisticAssessments[2].getB()));
@@ -1216,6 +1221,7 @@ public class BankruptcyService implements IBankruptcyService {
             abcdv = Math.min(abcdv, Math.abs(factor.getAssessment().getD()-linguisticAssessments[2].getD()));
             v = 1-abcdv;
             factor.getAssessment().setName(factor.getAssessment().getName()+"("+v+")");
+            factor.setAssessmentPoint(v);
         }
         if(factor.getAssessment().getName().equals("Високий")){
             double abcdv = Math.max(Math.abs(factor.getAssessment().getA()-linguisticAssessments[3].getA()), Math.abs(factor.getAssessment().getB()-linguisticAssessments[3].getB()));
@@ -1223,14 +1229,14 @@ public class BankruptcyService implements IBankruptcyService {
             abcdv = Math.min(abcdv, Math.abs(factor.getAssessment().getD()-linguisticAssessments[3].getD()));
             v = 1-abcdv;
             factor.getAssessment().setName(factor.getAssessment().getName()+"("+v+")");
+            factor.setAssessmentPoint(v);
         }
         if(factor.getAssessment().getName().equals("Дуже високий")){
             double abcdv = Math.max(Math.abs(factor.getAssessment().getA()-linguisticAssessments[4].getA()), Math.abs(factor.getAssessment().getB()-linguisticAssessments[4].getB()));
             abcdv = Math.min(abcdv, Math.abs(factor.getAssessment().getC()-linguisticAssessments[4].getC()));
             abcdv = Math.min(abcdv, Math.abs(factor.getAssessment().getD()-linguisticAssessments[4].getD()));
             v = 1-abcdv;
-            factor.getAssessment().setName(factor.getAssessment().getName());
-//            factor.getAssessment().setName(factor.getAssessment().getName()+"("+v+")");
+            factor.getAssessment().setName(factor.getAssessment().getName()+"("+v+")");
             factor.setAssessmentPoint(v);
         }
         companyFactorRepository.saveAndFlush(new CompanyFactor(factor.getName(),factor.getAssessment().getName(), factor.getAssessmentPoint(), company));
@@ -1252,6 +1258,7 @@ public class BankruptcyService implements IBankruptcyService {
         x5 = multiFactorModelOfAltmanData.getReceipts()/multiFactorModelOfAltmanData.getTotalValueOfAssets();
         z = 1.2*x1+1.4*x2+3.3*x3+0.6*x4+x5;
         MultiFactorModelOfAltman multiFactorModelOfAltman = new MultiFactorModelOfAltman(z,x1,x2,x3,x4,x5,company);
+        multiFactorModelOfAltmanRepository.saveAndFlush(multiFactorModelOfAltman);
         return multiFactorModelOfAltman;
     }
 
@@ -1268,6 +1275,7 @@ public class BankruptcyService implements IBankruptcyService {
         x4 = lissModelData.getEquityCapital()/lissModelData.getAttractedCapital();
         z = 0.063*x1+0.092*x2+0.057*x3+0.001*x4;
         LissModel lissModel = new LissModel(z,x1,x2,x3,x4,company);
+        lissModelRepository.saveAndFlush(lissModel);
         return lissModel;
     }
 
@@ -1284,6 +1292,7 @@ public class BankruptcyService implements IBankruptcyService {
         x4 = davidBelikovModelData.getNetProfit()/davidBelikovModelData.getCost();
         z = 8.38*x1+1.0*x2+0.054*x3+0.63*x4;
         DavidBelikovModel davidBelikovModel = new DavidBelikovModel(z,x1,x2,x3,x4,company);
+        davidBelikovModelRepository.saveAndFlush(davidBelikovModel);
         return davidBelikovModel;
     }
 
@@ -1300,6 +1309,7 @@ public class BankruptcyService implements IBankruptcyService {
         x4 = springateModelData.getSalesVolume()/springateModelData.getTotalValueOfAssets();
         z = 1.03*x1+3.07*x2+0.66*x3+0.63*x4;
         SpringateModel springateModel = new SpringateModel(z,x1,x2,x3,x4,company);
+        springateModelRepository.saveAndFlush(springateModel);
         return springateModel;
 
     }
@@ -1321,6 +1331,7 @@ public class BankruptcyService implements IBankruptcyService {
         x6 = universalDiscriminatoryModelData.getReceipts()/universalDiscriminatoryModelData.getTotalValueOfAssets();
         z = 1.5*x1+0.08*x2+10*x3+5*x4+0.3*x5+0.1*x6;
         UniversalDiscriminatoryModel universalDiscriminatoryModel = new UniversalDiscriminatoryModel(z,x1,x2,x3,x4,x5,x6,company);
+        universalDiscriminatoryModelRepository.saveAndFlush(universalDiscriminatoryModel);
         return universalDiscriminatoryModel;
 
     }

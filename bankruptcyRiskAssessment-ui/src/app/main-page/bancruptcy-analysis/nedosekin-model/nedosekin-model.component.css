@@ -1,18 +1,24 @@
 #productionFactorIndicatorsDependence :last-child{
   display: none;
+  visibility: hidden;
 }
 #managementFactorIndicatorsDependence :last-child{
   display: none;
+  visibility: hidden;
 }
 #financialFactorIndicatorsDependence :last-child{
   display: none;
+  visibility: hidden;
 }
 #personnelFactorIndicatorsDependence :last-child{
   display: none;
+  visibility: hidden;
 }
 #marketingFactorIndicatorsDependence :last-child{
   display: none;
+  visibility: hidden;
 }
 #innovationFactorIndicatorsDependence :last-child{
   display: none;
+  visibility: hidden;
 }
