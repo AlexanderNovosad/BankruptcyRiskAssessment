@@ -11,7 +11,7 @@
 </div>
 <button name="button" type="button" (click)="getSelectedCompany()">Отримати</button>
 
-<div *ngIf="company!==null && openCalculation">
+<div *ngIf="company!=null && openCalculation">
   <h2>Дані фінансових показників</h2>
   <table class="preQuantitativeIndicatorListTable" style="border: #f6f1ed">
     <tr style="border-bottom: 2px solid #6a5750; margin-bottom: 0;">
@@ -76,6 +76,6 @@
     </tr>
   </table>
   <p>Ступінь ризику банкрутства підприємства становить  {{getRisk()}}</p>
-  <button type="button" (click)="finish()">Закінчити</button>
+  <a><button type="button">Закінчити</button></a>
 </div>
 <router-outlet></router-outlet>

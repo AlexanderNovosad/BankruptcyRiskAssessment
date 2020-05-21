@@ -1,10 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<h1>Запити на реєстрацію</h1>
 
-</body>
-</html>
+<h2 *ngIf="getCompanyListForConfirmation()==null">
+  На даний час запити на реєстрацію підприємства в системі відсутні.
+</h2>
+<div *ngIf="getCompanyListForConfirmation()!=null">
+  <h2>Список запитів на реєстрацію</h2>
+  <table class="Companies table" style="border: #f6f1ed">
+    <tr style="border-bottom: 2px solid #6a5750; margin-bottom: 0;">
+      <th>Назва підприємства</th>
+      <th>Тип підприємства</th>
+      <th>Адреса підприємства</th>
+      <th>Діяльність підприємства</th>
+      <th>ІПН підприємства</th>
+      <th>ЄДРПО підприємства</th>
+      <th>Телефон підприємства</th>
+      <th>Підтвердження</th>
+    </tr>
+    <tr *ngFor="let company of getCompanyListForConfirmation()">
+      <td>{{company.companyName}}</td><td>{{ company.kindOfCompany}}</td><td>{{ company.address}}</td><td>{{ company.quadDescription}}</td><td>{{company.ipn}}</td><td>{{ company.edrpou}}</td><td>{{ company.phone}}</td>
+      <td><button name="button" type="button" (click)="confirmCompany(company.companyId)">Підтвердити</button><button name="button" type="button" (click)="notConfirmCompany(company.companyId)">Відмовити</button></td>
+    </tr>
+  </table>
+</div>
+<br>
+
+<h1>Експерти</h1>
+<div *ngIf="getExperts()!=null">
+  <h2>Список експертів</h2>
+  <table class="experts-table" style="border: #f6f1ed">
+    <tr style="border-bottom: 2px solid #6a5750; margin-bottom: 0;">
+      <th>Ім'я</th>
+      <th>Призвіще</th>
+      <th>Електронна пошта</th>
+      <th>Телефон</th>
+      <th></th>
+    </tr>
+    <tr *ngFor="let expert of getExperts()">
+      <td>{{expert.firstName}}</td><td>{{expert.lastName}}</td><td>{{expert.email}}</td><td>{{expert.phone}}</td>
+      <td><button name="button" type="button" (click)="excludeExpert(expert.userId)">Виключити</button></td>
+    </tr>
+  </table>
+</div>
+
+<div>
+  <h2>Призначити експерта</h2>
+  <input type="text" [value]="searchUserBy" (input)="searchUserBy = $event.target.value">
+  <div *ngFor="let user of getUserList() | filterUserList: searchUserBy" class="user">
+    Ім'я: {{user.firstName}} {{user.lastName}} -- Пошта: {{user.email}} -- Телефон: {{user.phone}}
+    <button type="button" name="putUserIntoExpert"
+            (click)="putUserIntoExpert(user.userId)">Призначити</button>
+  </div>
+</div>
+
+<div id="routingCounter">
+  <router-outlet></router-outlet>
+</div>

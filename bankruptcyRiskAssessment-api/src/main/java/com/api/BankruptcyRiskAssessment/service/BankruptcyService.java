@@ -2,7 +2,7 @@ package com.api.BankruptcyRiskAssessment.service;
 
 import com.api.BankruptcyRiskAssessment.entity.*;
 import com.api.BankruptcyRiskAssessment.entity.unit.*;
-import com.api.BankruptcyRiskAssessment.repository.CompanyFactorRepository;
+import com.api.BankruptcyRiskAssessment.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +15,16 @@ public class BankruptcyService implements IBankruptcyService {
 
     @Autowired
     CompanyFactorRepository companyFactorRepository;
+    @Autowired
+    LissModelRepository lissModelRepository;
+    @Autowired
+    DavidBelikovModelRepository davidBelikovModelRepository;
+    @Autowired
+    MultiFactorModelOfAltmanRepository multiFactorModelOfAltmanRepository;
+    @Autowired
+    SpringateModelRepository springateModelRepository;
+    @Autowired
+    UniversalDiscriminatoryModelRepository universalDiscriminatoryModelRepository;
 
     private static final List<Factor> factors = new ArrayList<>();
     private static final List<QuantitativeIndicator> quantitativeIndicators = new ArrayList<>();
@@ -1313,5 +1323,35 @@ public class BankruptcyService implements IBankruptcyService {
         UniversalDiscriminatoryModel universalDiscriminatoryModel = new UniversalDiscriminatoryModel(z,x1,x2,x3,x4,x5,x6,company);
         return universalDiscriminatoryModel;
 
+    }
+
+    @Override
+    public List<CompanyFactor> getNedosekinModelIndicatorsForCompany(Company company){
+        return companyFactorRepository.findAllByCompany(company);
+    }
+
+    @Override
+    public List<LissModel> getLissModelIndicatorsForCompany(Company company){
+        return lissModelRepository.findAllByCompany(company);
+    }
+
+    @Override
+    public List<DavidBelikovModel> getDavidBelikovModelIndicatorsForCompany(Company company){
+        return davidBelikovModelRepository.findAllByCompany(company);
+    }
+
+    @Override
+    public List<MultiFactorModelOfAltman> getMultiFactorModelOfAltmanIndicatorsForCompany(Company company){
+        return multiFactorModelOfAltmanRepository.findAllByCompany(company);
+    }
+
+    @Override
+    public List<SpringateModel> getSpringateModelIndicatorsForCompany(Company company){
+        return springateModelRepository.findAllByCompany(company);
+    }
+
+    @Override
+    public List<UniversalDiscriminatoryModel> getUniversalDiscriminatoryModelIndicatorsForCompany(Company company){
+        return universalDiscriminatoryModelRepository.findAllByCompany(company);
     }
 }

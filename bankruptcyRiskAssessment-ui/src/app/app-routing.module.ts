@@ -14,7 +14,6 @@ import {PersonalAccountComponent} from "./main-page/personal-account/personal-ac
 import {StatisticsComponent} from "./main-page/personal-account/statistics/statistics.component";
 import {TestingEmployeesComponent} from "./main-page/testing-employees/testing-employees.component";
 import {NedosekinModelComponent} from "./main-page/bancruptcy-analysis/nedosekin-model/nedosekin-model.component";
-import {MultiFactorModelOfAltman} from "./model/MultiFactorModelOfAltman";
 import {MultiFactorModelOfAltmanComponent} from "./main-page/bancruptcy-analysis/multi-factor-model-of-altman/multi-factor-model-of-altman.component";
 import {LissModelComponent} from "./main-page/bancruptcy-analysis/liss-model/liss-model.component";
 import {ProfileSettingsComponent} from "./main-page/personal-account/profile-settings/profile-settings.component";
@@ -23,6 +22,9 @@ import {MessagesComponent} from "./main-page/personal-account/messages/messages.
 import {CompanyRegistrationComponent} from "./main-page/personal-account/profile-company/company-registration/company-registration.component";
 import {RecommendationsComponent} from "./main-page/personal-account/recommendations/recommendations.component";
 import {AdminPanelComponent} from "./main-page/personal-account/admin-panel/admin-panel.component";
+import {DavidBelikovModelComponent} from './main-page/bancruptcy-analysis/david-belikov-model/david-belikov-model.component';
+import {SpringateModelComponent} from './main-page/bancruptcy-analysis/springate-model/springate-model.component';
+import {UniversalDiscriminatoryModelComponent} from './main-page/bancruptcy-analysis/universal-discriminatory-model/universal-discriminatory-model.component';
 
 
 const routes: Routes = [
@@ -39,8 +41,11 @@ const routes: Routes = [
       {path: 'bancruptcy-analysis', component: BancruptcyAnalysisComponent, children: [
           {path: 'nedosekin-model', component: NedosekinModelComponent},
           {path: 'multi-factor-model-of-altman', component: MultiFactorModelOfAltmanComponent},
-          {path: 'liss-model', component: LissModelComponent}
-
+          {path: 'liss-model', component: LissModelComponent},
+          {path: 'david-belikov-model', component: DavidBelikovModelComponent},
+          {path: 'springate-model', component: SpringateModelComponent},
+          {path: 'universal-discriminatory-model', component: UniversalDiscriminatoryModelComponent},
+          {path: 'statistics', component: StatisticsComponent},
         ]},
       {path: 'financial-enterprise-analysis', component: FinancialEnterpriseAnalysisComponent},
       {path: 'overall-rating-of-enterprises', component: OverallRatingOfEnterprisesComponent},

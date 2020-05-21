@@ -11,7 +11,8 @@ import java.util.List;
 
 import static java.util.Objects.isNull;
 
-@RestController("/api/departments")
+@RestController
+@RequestMapping("/api/departments")
 public class DepartmentController {
 
     @Autowired

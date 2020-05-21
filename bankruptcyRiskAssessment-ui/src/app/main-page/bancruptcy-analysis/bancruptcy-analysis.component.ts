@@ -8,8 +8,14 @@ import { Component, OnInit } from '@angular/core';
 export class BancruptcyAnalysisComponent implements OnInit {
 
   constructor() { }
+  modelSelectionOpen: boolean = true;
 
   ngOnInit() {
+    this.modelSelectionOpen = true;
+  }
+
+  public closeModelSelectionWindow(){
+    this.modelSelectionOpen = false;
   }
 
 }

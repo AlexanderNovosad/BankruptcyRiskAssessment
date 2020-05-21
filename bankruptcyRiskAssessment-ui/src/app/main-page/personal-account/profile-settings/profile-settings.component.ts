@@ -28,7 +28,7 @@ export class ProfileSettingsComponent implements OnInit {
     this.lastName = this.currentUser.lastName;
     this.phone = this.currentUser.phone;
     this.login = this.currentUser.login;
-    this.email = this.currentUser.eMail;
+    this.email = this.currentUser.email;
   }
 
 
@@ -82,7 +82,7 @@ export class ProfileSettingsComponent implements OnInit {
       editedUser.login = this.login;
     }
     if (this.email) {
-      editedUser.eMail = this.email;
+      editedUser.email = this.email;
     }
     if (this.password) {
       editedUser.password = this.password;

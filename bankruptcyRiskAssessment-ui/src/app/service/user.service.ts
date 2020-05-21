@@ -49,19 +49,27 @@ export class UserService {
   }
 
   public getUserById(userId: number): Promise<User>{
-    return this.httpClient.get<User>(`/api/user/user?companyId=${userId}`).toPromise();
+    return this.httpClient.get<User>(`/api/user/user?userId=${userId}`).toPromise();
   }
 
-  public getExperts(){
-      return this.httpClient.get<User[]>('/api/expert');
+  public getExperts(): Observable<User[]>{
+      return this.httpClient.get<User[]>('/api/expert/experts');
   }
 
   public setExpertForCompany(expertAccess: ExpertAccess) {
-    return this.httpClient.post<ExpertAccess>('/api/expert/add', expertAccess).subscribe(
+    return this.httpClient.post<ExpertAccess>(`/api/expert/add`, expertAccess).subscribe(
       err => {
         console.log('Error occured');
       }
     );
+  }
+
+  public excludeExpert(userId: number){
+    return this.httpClient.put<User>(`/api/expert/user`,userId);
+  }
+
+  public putUserIntoExpert(userId: number){
+    return this.httpClient.put<User>(`/api/expert/notUser`,userId);
   }
 
 }

@@ -88,9 +88,6 @@ export class MultiFactorModelOfAltmanComponent implements OnInit {
     return this.finalResult;
   }
 
-  public finish():void{
-
-  }
 
 }
 

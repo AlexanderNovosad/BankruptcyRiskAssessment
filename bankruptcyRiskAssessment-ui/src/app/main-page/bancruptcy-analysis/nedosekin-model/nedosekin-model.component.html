@@ -1,4 +1,5 @@
-﻿<div class="label">
+﻿<div class="companySelection" *ngIf="openCompanySelection">
+<div class="label">
   <span>Виберіть компанію:</span>
 </div>
 <div class="input">
@@ -10,7 +11,7 @@
   </select>
 </div>
 <button name="button" type="button" (click)="getSelectedCompany()">Отримати</button>
-
+</div>
 
 <div *ngIf="company!==null && openIndicatorsSelect">
   <h2>Список показників для оцінювання банкрутства</h2>
@@ -114,7 +115,7 @@
       <div class="bancruptcyFactorListElement">
         <span style="text-align: left">{{bancruptcyFactor.factor.name}}</span><br>
         <label>
-          <input type="text" name="dependence" *ngIf="bancruptcyFactor.dependence!=='пуст'" [(ngModel)]="bancruptcyFactor.dependence">
+          <input type="text" name="factorDependence" *ngIf="bancruptcyFactor.dependence!=='пуст'" [(ngModel)]="bancruptcyFactor.dependence">
         </label>
       </div>
     </div>
@@ -124,7 +125,7 @@
       <div class="bancruptcyIndicatorsListElement" *ngIf="bancruptcyIndicator.indicator.factor.name == 'Виробничий фактор'">
         <span style="text-align: left">{{bancruptcyIndicator.indicator.name}}</span><br>
         <label>
-          <input type="text" name="dependence" *ngIf="bancruptcyIndicator.dependence!=='пуст'" [(ngModel)]="bancruptcyIndicator.dependence">
+          <input type="text" name="productionFactorIndicatorsDependence" *ngIf="bancruptcyIndicator.dependence!=='пуст'" [(ngModel)]="bancruptcyIndicator.dependence">
         </label>
       </div>
     </div>
@@ -133,7 +134,7 @@
       <div class="bancruptcyIndicatorsListElement" *ngIf="bancruptcyIndicator.indicator.factor.name=='Управлінський фактор'">
         <span style="text-align: left">{{bancruptcyIndicator.indicator.name}}</span><br>
         <label>
-          <input type="text" name="dependence" *ngIf="bancruptcyIndicator.dependence!=='пуст'" [(ngModel)]="bancruptcyIndicator.dependence">
+          <input type="text" name="managementFactorIndicatorsDependence" *ngIf="bancruptcyIndicator.dependence!=='пуст'" [(ngModel)]="bancruptcyIndicator.dependence">
         </label>
       </div>
     </div>
@@ -142,7 +143,7 @@
       <div class="bancruptcyIndicatorsListElement" *ngIf="bancruptcyIndicator.indicator.factor.name=='Фінансовий фактор'">
         <span style="text-align: left">{{bancruptcyIndicator.indicator.name}}</span><br>
         <label>
-          <input type="text" name="dependence" *ngIf="bancruptcyIndicator.dependence!=='пуст'" [(ngModel)]="bancruptcyIndicator.dependence">
+          <input type="text" name="financialFactorIndicatorsDependence" *ngIf="bancruptcyIndicator.dependence!=='пуст'" [(ngModel)]="bancruptcyIndicator.dependence">
         </label>
       </div>
     </div>
@@ -151,7 +152,7 @@
       <div class="bancruptcyIndicatorsListElement" *ngIf="bancruptcyIndicator.indicator.factor.name=='Кадровий фактор'">
         <span style="text-align: left">{{bancruptcyIndicator.indicator.name}}</span><br>
         <label>
-          <input type="text" name="dependence" *ngIf="bancruptcyIndicator.dependence!=='пуст'" [(ngModel)]="bancruptcyIndicator.dependence">
+          <input type="text" name="personnelFactorIndicatorsDependence" *ngIf="bancruptcyIndicator.dependence!=='пуст'" [(ngModel)]="bancruptcyIndicator.dependence">
         </label>
       </div>
     </div>
@@ -160,7 +161,7 @@
       <div class="bancruptcyIndicatorsListElement" *ngIf="bancruptcyIndicator.indicator.factor.name=='Маркетинговий фактор'">
         <span style="text-align: left">{{bancruptcyIndicator.indicator.name}}</span><br>
         <label>
-          <input type="text" name="dependence" *ngIf="bancruptcyIndicator.dependence!=='пуст'" [(ngModel)]="bancruptcyIndicator.dependence">
+          <input type="text" name="marketingFactorIndicatorsDependence" *ngIf="bancruptcyIndicator.dependence!=='пуст'" [(ngModel)]="bancruptcyIndicator.dependence">
         </label>
       </div>
     </div>
@@ -169,7 +170,7 @@
       <div class="bancruptcyIndicatorsListElement" *ngIf="bancruptcyIndicator.indicator.factor.name=='Інноваційний фактор'">
         <span style="text-align: left">{{bancruptcyIndicator.indicator.name}}</span><br>
         <label>
-          <input type="text" name="dependence" *ngIf="bancruptcyIndicator.dependence!=='пуст'" [(ngModel)]="bancruptcyIndicator.dependence">
+          <input type="text" name="innovationFactorIndicatorsDependence" *ngIf="bancruptcyIndicator.dependence!=='пуст'" [(ngModel)]="bancruptcyIndicator.dependence">
         </label>
       </div>
     </div>
@@ -204,6 +205,6 @@
     <!--</div>-->
   <!--</div>-->
   <p>Ступінь ризику банкрутства підприємства становить  {{getRisk()}}</p>
-  <button type="button" (click)="backToIndicatorsPointsSets()">Назад</button> <button type="button" (click)="finish()">Закінчити</button>
+  <button type="button" (click)="backToIndicatorsPointsSets()">Назад</button> <a><button type="button">Закінчити</button></a>
 </div>
 <router-outlet></router-outlet>

@@ -4,6 +4,7 @@ import com.api.BankruptcyRiskAssessment.entity.Company;
 import com.api.BankruptcyRiskAssessment.entity.ExpertAccess;
 import com.api.BankruptcyRiskAssessment.service.ICompanyService;
 import com.api.BankruptcyRiskAssessment.service.IExpertService;
+import com.api.BankruptcyRiskAssessment.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,8 @@ public class CompanyController {
     public ICompanyService companyService;
     @Autowired
     public IExpertService expertService;
+    @Autowired
+    public IUserService userService;
 
     @PostMapping(value = "/company")
     public ResponseEntity<Company> addCompany(@RequestBody Company company) {
@@ -72,16 +75,25 @@ public class CompanyController {
 
     @GetMapping(value = "/confirm")
     public ResponseEntity<List<Company>> getCompaniesThatNotConfirmation(){
-        return ResponseEntity.ok(companyService.getCompaniesThatNotConfirmation());
+        return ResponseEntity.ok(companyService.getCompaniesThatNotConfirm());
     }
 
-    @PostMapping(value = "/confirm")
-    public ResponseEntity<Company> confirmCompany(@RequestParam(value = "companyId") Long companyId ){
+    @PatchMapping(value = "/confirm")
+    public ResponseEntity confirmCompany(@RequestBody Long companyId){
         Company company = companyService.getCompanyById(companyId);
         if(isNull(company)){
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(companyService.confirmCompany(company));
+        companyService.confirmCompany(company);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/user")
+    public ResponseEntity<List<Company>> getOwnersCompanies(@RequestParam(value = "userId") Long userId) {
+        if (isNull(userService.getUser(userId))) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(companyService.getOwnersCompanies(userId));
     }
 
 }

@@ -7,20 +7,35 @@
 <div class="label">
   <span>Виберіть модель:</span>
 </div>
-<div>
-  <div class="Nedosekin-model">
+<div class="modelSelection" *ngIf="modelSelectionOpen">
+  <div class="model">
     <img src="">
-    <a href="/main-page/bancruptcy-analysis/nedosekin-model">Модель Недосєкіна</a>
+    <a href="/main-page/bancruptcy-analysis/nedosekin-model" (click)="closeModelSelectionWindow()">Модель Недосєкіна</a>
   </div>
 
-  <div class="Nedosekin-model">
+  <div class="model">
     <img src="">
-    <a href="/main-page/bancruptcy-analysis/multi-factor-model-of-altman">П'ятифакторна модель Альтмана</a>
+    <a href="/main-page/bancruptcy-analysis/multi-factor-model-of-altman" (click)="closeModelSelectionWindow()">П'ятифакторна модель Альтмана</a>
   </div>
 
-  <div class="Nedosekin-model">
+  <div class="model">
     <img src="">
-    <a href="/main-page/bancruptcy-analysis/liss-model">Модель Ліса</a>
+    <a href="/main-page/bancruptcy-analysis/liss-model" (click)="closeModelSelectionWindow()">Модель Ліса</a>
+  </div>
+
+  <div class="model">
+    <img src="">
+    <a href="/main-page/bancruptcy-analysis/david-belikov-model" (click)="closeModelSelectionWindow()">Модель Давидової-Белікова</a>
+  </div>
+
+  <div class="model">
+    <img src="">
+    <a href="/main-page/bancruptcy-analysis/springate-model" (click)="closeModelSelectionWindow()">Модель Спрінгейта</a>
+  </div>
+
+  <div class="model">
+    <img src="">
+    <a href="/main-page/bancruptcy-analysis/universal-discriminatory-model" (click)="closeModelSelectionWindow()">Універсальна дискримінантна модель</a>
   </div>
 </div>
 <router-outlet></router-outlet>

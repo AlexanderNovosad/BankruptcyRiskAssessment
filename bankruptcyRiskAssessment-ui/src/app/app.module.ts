@@ -44,6 +44,10 @@ import {BankruptcyService} from './service/bankruptcy.service';
 import {MultiFactorModelOfAltmanComponent} from './main-page/bancruptcy-analysis/multi-factor-model-of-altman/multi-factor-model-of-altman.component';
 import {LissModelComponent} from './main-page/bancruptcy-analysis/liss-model/liss-model.component';
 import {AdminPanelComponent} from './main-page/personal-account/admin-panel/admin-panel.component';
+import {DavidBelikovModelComponent} from './main-page/bancruptcy-analysis/david-belikov-model/david-belikov-model.component';
+import {SpringateModelComponent} from './main-page/bancruptcy-analysis/springate-model/springate-model.component';
+import {UniversalDiscriminatoryModelComponent} from './main-page/bancruptcy-analysis/universal-discriminatory-model/universal-discriminatory-model.component';
+import { FilterUserListPipe } from './service/filters/filter-user-list.pipe';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
@@ -80,7 +84,11 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     MultiFactorModelOfAltmanComponent,
     CompanyRegistrationComponent,
     LissModelComponent,
-    AdminPanelComponent
+    AdminPanelComponent,
+    DavidBelikovModelComponent,
+    SpringateModelComponent,
+    UniversalDiscriminatoryModelComponent,
+    FilterUserListPipe
   ],
   imports: [
     BrowserModule,
@@ -88,7 +96,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     HttpClientModule,
     HttpModule,
     FormsModule,
-    NgbModule.forRoot()
+    NgbModule
   ],
   providers: [
     TestServiceService,

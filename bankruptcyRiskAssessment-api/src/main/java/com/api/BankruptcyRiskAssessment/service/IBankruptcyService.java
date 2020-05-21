@@ -33,4 +33,16 @@ public interface IBankruptcyService {
 
     UniversalDiscriminatoryModel universalDiscriminatoryModelResult(Company company, UniversalDiscriminatoryModelData universalDiscriminatoryModelData);
 
+    List<CompanyFactor> getNedosekinModelIndicatorsForCompany(Company company);
+
+    List<LissModel> getLissModelIndicatorsForCompany(Company company);
+
+    List<DavidBelikovModel> getDavidBelikovModelIndicatorsForCompany(Company company);
+
+    List<MultiFactorModelOfAltman> getMultiFactorModelOfAltmanIndicatorsForCompany(Company company);
+
+    List<SpringateModel> getSpringateModelIndicatorsForCompany(Company company);
+
+    List<UniversalDiscriminatoryModel> getUniversalDiscriminatoryModelIndicatorsForCompany(Company company);
+
 }

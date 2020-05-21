@@ -22,7 +22,11 @@ public interface ICompanyService {
 
     List<Company> getCompanyByName(String name);
 
-    List<Company> getCompaniesThatNotConfirmation();
+    List<Company> getCompaniesThatNotConfirm();
 
-    Company confirmCompany(Company company);
+    void confirmCompany(Company company);
+
+    List<Company> getOwnersCompanies(Long userId);
+
+
 }

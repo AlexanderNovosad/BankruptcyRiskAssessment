@@ -3,15 +3,7 @@ import {CompanyService} from "../../../service/company.service";
 import {Company} from "../../../model/Company";
 import {UserService} from "../../../service/user.service";
 import {ExpertAccess} from "../../../model/ExpertAccess";
-import {Factor} from "../../../model/Factor";
 import {BankruptcyService} from "../../../service/bankruptcy.service";
-import {Indicator} from "../../../model/Indicator";
-import {QuantitativeIndicator} from "../../../model/QuantitativeIndicator";
-import {PreQuantitativeIndicator} from "../../../model/PreQuantitativeIndicator";
-import {LinguisticAssessment} from "../../../model/LinguisticAssessment";
-import {assessments} from "../../../model/LinguisticAssessment";
-import {MultiFactorModelOfAltman} from "../../../model/MultiFactorModelOfAltman";
-import {MultiFactorModelOfAltmanData} from "../../../model/MultiFactorModelOfAltmanData";
 import {LissModel} from "../../../model/LissModel";
 import {LissModelData} from "../../../model/LissModelData";
 
@@ -37,7 +29,6 @@ export class  LissModelComponent implements OnInit {
 
   ngOnInit() {
     this.companyService.getCompanies(this.userService.getCurrentUser().userId).then(expertAccessList=>this.expertAccessList=expertAccessList);
-    // this.companyService.getAllCompanies().then(companyList=>this.companyList=companyList);
   }
 
   public getCompanyList(): Company[] {
@@ -71,7 +62,7 @@ export class  LissModelComponent implements OnInit {
 
   public getRisk(): string{
     var risk: string = '';
-    if(this.finalResult.z<=0.037)
+    if(this.finalResult.z<0.037)
       risk = 'Загроза банкрутства існує';
     if(this.finalResult.z>=0.037)
       risk = 'Загрози банкрутства немає';
@@ -83,8 +74,5 @@ export class  LissModelComponent implements OnInit {
     return this.finalResult;
   }
 
-  public finish():void{
-
-  }
 
 }

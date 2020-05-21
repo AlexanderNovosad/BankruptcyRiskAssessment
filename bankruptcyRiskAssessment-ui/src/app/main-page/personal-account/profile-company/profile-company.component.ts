@@ -14,13 +14,17 @@ export class ProfileCompanyComponent implements OnInit {
 
   companyList: Company[]=[];
   expertAccessList: ExpertAccess[]=[];
+  expertsList: User[];
   selectedCompany = 0;
   selectedExpert = 0;
+  mainBlockOpen: boolean;
   constructor(private companyService: CompanyService, private userService: UserService) {
   }
 
   ngOnInit() {
     this.companyService.getCompanies(this.getCurrentUser().userId).then(expertAccessList=>this.expertAccessList=expertAccessList);
+    this.userService.getExperts().subscribe((experts:User[]) => this.expertsList = experts, error => {console.log(error);});
+    this.mainBlockOpen = true;
   }
 
   public getCompanyList(): Company[] {
@@ -28,6 +32,7 @@ export class ProfileCompanyComponent implements OnInit {
     this.expertAccessList.forEach(expertAccess=>this.companyList.push(expertAccess.company));
     return this.companyList;
   }
+
   public getOwnCompanyList(): Company[] {
     var ownCompanyList = [];
     for(var i=0;i<this.companyList.length;i++){
@@ -44,7 +49,7 @@ export class ProfileCompanyComponent implements OnInit {
 
   public getExpertList(): User[]{
     var experts: User[]=[];
-    this.userService.getExperts().subscribe(data => (experts=data));
+    experts = this.expertsList;
     return experts;
   }
 
@@ -56,6 +61,15 @@ export class ProfileCompanyComponent implements OnInit {
     this.userService.setExpertForCompany({expertAccessId: 0,
     expert: expert,
     company: company});
+  }
+
+  public checkMainBlock(){
+    return this.mainBlockOpen;
+  }
+
+  public colseMainBlock(){
+    this.mainBlockOpen = false;
+    return this.mainBlockOpen;
   }
 
 }

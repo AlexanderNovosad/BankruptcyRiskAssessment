@@ -11,7 +11,8 @@ import java.util.List;
 
 import static java.util.Objects.isNull;
 
-@RestController("/api/user")
+@RestController
+@RequestMapping("/api/user")
 public class UserController {
 
     @Autowired

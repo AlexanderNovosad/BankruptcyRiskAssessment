@@ -388,10 +388,6 @@ export class NedosekinModelComponent implements OnInit {
     }
   }
 
-  public finish():void{
-
-  }
-
 }
 
 class BancruptcyIndicator {

@@ -9,6 +9,13 @@ import {MultiFactorModelOfAltman} from "../model/MultiFactorModelOfAltman";
 import {MultiFactorModelOfAltmanData} from "../model/MultiFactorModelOfAltmanData";
 import {LissModel} from "../model/LissModel";
 import {LissModelData} from "../model/LissModelData";
+import {CompanyFactor} from "../model/CompanyFactor";
+import {DavidBelikovModel} from "../model/DavidBelikovModel";
+import {SpringateModel} from "../model/SpringateModel";
+import {UniversalDiscriminatoryModel} from "../model/UniversalDiscriminatoryModel";
+import {DavidBelikovModelData} from "../model/DavidBelikovModelData";
+import {SpringateModelData} from "../model/SpringateModelData";
+import {UniversalDiscriminatoryModelData} from "../model/UniversalDiscriminatoryModelData";
 
 @Injectable()
 export class BankruptcyService{
@@ -51,7 +58,43 @@ export class BankruptcyService{
   }
 
   public calculateLissModel(companyId: number, lissModelData: LissModelData): Promise<LissModel>{
-    return this.httpClient.post<LissModel>(`/api/bankruptcy/multiFactorModelOfAltman?companyId=${companyId}`, lissModelData).toPromise();
+    return this.httpClient.post<LissModel>(`/api/bankruptcy/lissModel?companyId=${companyId}`, lissModelData).toPromise();
+  }
+
+  public calculateDavidBelikovModel(companyId: number, davidBelikovModelData: DavidBelikovModelData): Promise<DavidBelikovModel>{
+    return this.httpClient.post<LissModel>(`/api/bankruptcy/davidBelikovModel?companyId=${companyId}`, davidBelikovModelData).toPromise();
+  }
+
+  public calculateSpringateModel(companyId: number, springateModelData: SpringateModelData): Promise<SpringateModel>{
+    return this.httpClient.post<SpringateModel>(`/api/bankruptcy/springateModel?companyId=${companyId}`, springateModelData).toPromise();
+  }
+
+  public calculateUniversalDiscriminatoryModel(companyId: number, universalDiscriminatoryModelData: UniversalDiscriminatoryModelData): Promise<UniversalDiscriminatoryModel>{
+    return this.httpClient.post<UniversalDiscriminatoryModel>(`/api/bankruptcy/universalDiscriminatoryModel?companyId=${companyId}`, universalDiscriminatoryModelData).toPromise();
+  }
+
+  public getNedosekinModelIndicatorsForCompany(companyId: number){
+    return this.httpClient.get<CompanyFactor[]>(`/api/bankruptcy/nedosekinModelIndicators?companyId=${companyId}`);
+  }
+
+  public getLissModelIndicatorsForCompany(companyId: number){
+    return this.httpClient.get<LissModel[]>(`/api/bankruptcy/lissModelIndicators?companyId=${companyId}`);
+  }
+
+  public getDavidBelikovModelIndicatorsForCompany(companyId: number){
+    return this.httpClient.get<DavidBelikovModel[]>(`/api/bankruptcy/davidBelikovModelIndicators?companyId=${companyId}`);
+  }
+
+  public getMultiFactorModelOfAltmanIndicatorsForCompany(companyId: number){
+    return this.httpClient.get<MultiFactorModelOfAltman[]>(`/api/bankruptcy/multiFactorModelOfAltmanIndicators?companyId=${companyId}`);
+  }
+
+  public getSpringateModelIndicatorsForCompany(companyId: number){
+    return this.httpClient.get<SpringateModel[]>(`/api/bankruptcy/springateModelIndicators?companyId=${companyId}`);
+  }
+
+  public getUniversalDiscriminatoryModelIndicatorsForCompany(companyId: number){
+    return this.httpClient.get<UniversalDiscriminatoryModel[]>(`/api/bankruptcy/universalDiscriminatoryModelIndicators?companyId=${companyId}`);
   }
 
 

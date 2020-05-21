@@ -11,7 +11,8 @@ import java.util.List;
 
 import static java.util.Objects.isNull;
 
-@RestController("/api/roles")
+@RestController
+@RequestMapping("/api/roles")
 public class RoleController {
 
     @Autowired

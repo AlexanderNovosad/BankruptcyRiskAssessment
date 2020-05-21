@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {User} from '../model/User';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import { map } from 'rxjs/operators';
 import {Role} from "../model/Role";
@@ -26,7 +26,7 @@ export class CompanyService {
   }
 
   public createNewCompany(newCompany: Company) {
-    return this.httpClient.post<Company>('/api/registration', newCompany)
+    return this.httpClient.post<Company>('/api/companies/company', newCompany)
       .subscribe(
         res => {
           this._router.navigateByUrl('');
@@ -35,6 +35,22 @@ export class CompanyService {
           console.log('Error occured');
         }
       );
+  }
+
+  public getOwnersCompanies(userId: number){
+    return this.httpClient.get<Company[]>(`/api/companies/user?userId=${userId}`);
+  }
+
+  public getCompaniesForConfirmation(){
+    return this.httpClient.get<Company[]>('/api/companies/confirm');
+  }
+
+  public confirmCompany(companyId: number){
+    return this.httpClient.patch<Company>('/api/companies/confirm', companyId);
+  }
+
+  public notConfirmCompany(companyId: number): Observable<Company>{
+    return this.httpClient.delete<Company>(`/api/companies/company?companyId=${companyId}`);
   }
 
 }

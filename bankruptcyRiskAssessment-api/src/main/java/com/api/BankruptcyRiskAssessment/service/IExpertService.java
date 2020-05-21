@@ -21,4 +21,8 @@ public interface IExpertService {
 
     List<User> getAllExperts();
 
+    User excludeExpert(User user);
+
+    User putUserIntoExpert (User user);
+
 }

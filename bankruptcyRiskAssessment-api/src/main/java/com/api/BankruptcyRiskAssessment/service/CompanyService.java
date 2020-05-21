@@ -79,13 +79,18 @@ public class CompanyService implements ICompanyService {
     }
 
     @Override
-    public List<Company> getCompaniesThatNotConfirmation(){
+    public List<Company> getCompaniesThatNotConfirm(){
         return companyRepository.findAllByConfirmationFalse();
     }
 
     @Override
-    public Company confirmCompany(Company company){
+    public void confirmCompany(Company company){
         company.setConfirmation(true);
-        return company;
+        companyRepository.save(company);
+    }
+
+    @Override
+    public List<Company> getOwnersCompanies(Long userId){
+        return companyRepository.findAllByHeadOfCompany(userRepository.getOne(userId));
     }
 }

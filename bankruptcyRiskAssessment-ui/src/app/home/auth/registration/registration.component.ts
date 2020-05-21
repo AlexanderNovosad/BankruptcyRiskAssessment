@@ -29,7 +29,7 @@ export class RegistrationComponent implements OnInit {
         lastName: lastName,
         login: login,
         password: userPassword1,
-        eMail: userEmail,
+        email: userEmail,
         role: roleList[1],
         phone: userPhoneNumber,
         department: null

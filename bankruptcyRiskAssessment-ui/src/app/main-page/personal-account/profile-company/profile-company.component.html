@@ -1,44 +1,46 @@
 <h1>Профіль підприємства</h1>
-<a routerLink="/main-page/personal-account/profile-company/company-registration">
+<a routerLink="/main-page/personal-account/profile-company/company-registration" (click)="colseMainBlock()">
   <li>Зареєструвати підприємство</li>
 </a>
-
-<h2 *ngIf="getCompanyList()==null">
-  В вас немає доступнх підприємств, зареєструйте.
-</h2>
-<h2 *ngIf="getCompanyList()!==null">Список твоїх компаній</h2>
-<table class="Companies table" style="border: #f6f1ed">
-    <tr style="border-bottom: 2px solid #6a5750; margin-bottom: 0;">
-      <th>Назва підприємства</th>
-      <th>Тип підприємства</th>
-      <th>Адреса підприємства</th>
-      <th>Діяльність підприємства</th>
-      <th>ІПН підприємства</th>
-      <th>ЄДРПО підприємства</th>
-      <th>Телефон підприємства</th>
-    </tr>
-    <tr *ngFor="let company of getCompanyList()">
-      <td>{{company.companyName}}</td><td>{{ company.kindOfCompany}}</td><td>{{ company.address}}</td><td>{{ company.quadDescription}}</td><td>{{company.ipn}}</td><td>{{ company.edrpou}}</td><td>{{ company.phone}}</td>
-    </tr>
-  </table>
-<br>
-<div *ngIf="getOwnCompanyList()!==null">
-  <h2>Призначення експертів</h2>
-  <p>Виберіть свою компанію та експерта, що буде проводити аналіз.</p>
-  <select name="company" id="selectedCompanyId" [value]="selectedCompany" (change)="selectedCompany=$event.target.value">
-    <option *ngFor="let company of getOwnCompanyList()"
-            [value]="company.companyId">
-      {{company.companyName}}
-    </option>
-  </select>
-  <select name="expert" id="selectedExpertId" [value]="selectedExpert" (change)="selectedExpert=$event.target.value">
-    <option *ngFor="let expert of getExpertList()"
-            [value]="expert.userId">
-      {{expert.firstName}} {{expert.lastName}}
-    </option>
-  </select>
-  <button name="button" type="button" (click)="setExpertForCompany()">Призначити</button>
+<div *ngIf="checkMainBlock()">
+  <h2 *ngIf="getCompanyList()==null">
+    В вас немає доступнх підприємств, зареєструйте.
+  </h2>
+  <h2 *ngIf="getCompanyList()!=null">Список твоїх компаній</h2>
+  <table class="Companies table" style="border: #f6f1ed">
+      <tr style="border-bottom: 2px solid #6a5750; margin-bottom: 0;">
+        <th>Назва підприємства</th>
+        <th>Тип підприємства</th>
+        <th>Адреса підприємства</th>
+        <th>Діяльність підприємства</th>
+        <th>ІПН підприємства</th>
+        <th>ЄДРПО підприємства</th>
+        <th>Телефон підприємства</th>
+      </tr>
+      <tr *ngFor="let company of getCompanyList()">
+        <td>{{company.companyName}}</td><td>{{ company.kindOfCompany}}</td><td>{{ company.address}}</td><td>{{ company.quadDescription}}</td><td>{{company.ipn}}</td><td>{{ company.edrpou}}</td><td>{{ company.phone}}</td>
+      </tr>
+    </table>
+  <br>
+  <div *ngIf="getOwnCompanyList()!=null">
+    <h2>Призначення експертів</h2>
+    <p>Виберіть свою компанію та експерта, що буде проводити аналіз.</p>
+    <select name="company" id="selectedCompanyId" [value]="selectedCompany" (change)="selectedCompany=$event.target.value">
+      <option *ngFor="let company of getOwnCompanyList()"
+              [value]="company.companyId">
+        {{company.companyName}}
+      </option>
+    </select>
+    <select name="expert" id="selectedExpertId" [value]="selectedExpert" (change)="selectedExpert=$event.target.value">
+      <option *ngFor="let expert of getExpertList()"
+              [value]="expert.userId">
+        {{expert.firstName}} {{expert.lastName}}
+      </option>
+    </select>
+    <button name="button" type="button" (click)="setExpertForCompany()">Призначити</button>
+  </div>
 </div>
+
 <div id="routingCounter">
   <router-outlet></router-outlet>
 </div>

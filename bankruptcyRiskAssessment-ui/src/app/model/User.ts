@@ -8,10 +8,10 @@ export class User {
   lastName: string;
   login: string;
   password: string;
-  eMail: string;
-  role: Role;
+  email: string;
   phone: string;
   department: Department;
+  role: Role;
   // confirm: boolean;
 
 

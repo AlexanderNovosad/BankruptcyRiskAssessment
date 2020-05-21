@@ -74,7 +74,20 @@ public class ExpertService implements IExpertService {
     @Override
     public List<User> getAllExperts(){
         Role role = roleService.getRoleByName("Expert");
+        System.out.print(role);
         return userRepository.findAllByRole(role);
+    }
+
+    @Override
+    public User excludeExpert(User user){
+        user.setRole(roleService.getRoleByName("User"));
+        return userRepository.saveAndFlush(user);
+    }
+
+    @Override
+    public User putUserIntoExpert (User user){
+        user.setRole(roleService.getRoleByName("Expert"));
+        return userRepository.saveAndFlush(user);
     }
 
 }
