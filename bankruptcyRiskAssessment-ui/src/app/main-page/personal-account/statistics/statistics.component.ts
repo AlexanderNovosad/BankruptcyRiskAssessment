@@ -26,54 +26,82 @@ export class StatisticsComponent implements OnInit {
   multiFactorModelOfAltmanIndicators: MultiFactorModelOfAltman[];
   springateModelIndicators: SpringateModel[];
   universalDiscriminatoryModelIndicators: UniversalDiscriminatoryModel[];
+
   constructor(private bankruptcyService: BankruptcyService, private companyService: CompanyService, private userService: UserService) {
     this.currentUser = userService.getCurrentUser();
   }
 
   ngOnInit() {
+    this.companyService.getOwnersCompanies(this.currentUser.userId).subscribe(data => (this.ownersCompanies=data));
   }
-  //В доработке
 
   public getOwnersCompanies(): Company[] {
-    var ownersCompanies = [];
-    this.companyService.getOwnersCompanies(this.currentUser.userId).subscribe(data => (ownersCompanies=data));
-    return ownersCompanies;
+    if(this.ownersCompanies!=null){
+      if(this.ownersCompanies.length == 0)
+        this.ownersCompanies=null;
+    }
+    return this.ownersCompanies;
   }
 
-  public getNedosekinModelIndicatorsForCompany(company: Company): CompanyFactor[]{
-    var nedosekinModelIndicators = [];
-    this.bankruptcyService.getNedosekinModelIndicatorsForCompany(company.companyId).subscribe(data => nedosekinModelIndicators=data);
-    return nedosekinModelIndicators;
+  public getStatistics(company: Company){
+    this.bankruptcyService.getNedosekinModelIndicatorsForCompany(company.companyId).subscribe(data => this.nedosekinModelIndicators = data);
+      this.bankruptcyService.getLissModelIndicatorsForCompany(company.companyId).subscribe(data => this.lissModelIndicators = data);
+      this.bankruptcyService.getDavidBelikovModelIndicatorsForCompany(company.companyId).subscribe(data => this.davidBelikovModelIndicators = data);
+      this.bankruptcyService.getMultiFactorModelOfAltmanIndicatorsForCompany(company.companyId).subscribe(data => this.multiFactorModelOfAltmanIndicators = data);
+      this.bankruptcyService.getSpringateModelIndicatorsForCompany(company.companyId).subscribe(data => this.springateModelIndicators = data);
+      this.bankruptcyService.getUniversalDiscriminatoryModelIndicatorsForCompany(company.companyId).subscribe(data => this.universalDiscriminatoryModelIndicators = data);
   }
 
-  public getLissModelIndicatorsForCompany(company: Company): LissModel[]{
-    var lissModelIndicators = [];
-    this.bankruptcyService.getLissModelIndicatorsForCompany(company.companyId).subscribe(data => lissModelIndicators=data);
-    return lissModelIndicators;
+  public getNedosekinModelIndicatorsForCompany(): CompanyFactor[]{
+    if(this.nedosekinModelIndicators!=null){
+      if(this.nedosekinModelIndicators.length == 0)
+        this.nedosekinModelIndicators=null;
+    }
+    return this.nedosekinModelIndicators;
+    }
+
+  public getLissModelIndicatorsForCompany(): LissModel[]{
+    if(this.lissModelIndicators!=null){
+      if(this.lissModelIndicators.length == 0)
+        this.lissModelIndicators=null;
+    }
+    return this.lissModelIndicators;
   }
 
-  public getDavidBelikovModelIndicatorsForCompany(company: Company): DavidBelikovModel[]{
-    var davidBelikovModelIndicators = [];
-    this.bankruptcyService.getDavidBelikovModelIndicatorsForCompany(company.companyId).subscribe(data => davidBelikovModelIndicators=data);
-    return davidBelikovModelIndicators;
+  public getDavidBelikovModelIndicatorsForCompany(): DavidBelikovModel[]{
+    if(this.davidBelikovModelIndicators!=null){
+      if(this.davidBelikovModelIndicators.length == 0)
+        this.davidBelikovModelIndicators=null;
+    }
+    return this.davidBelikovModelIndicators;
   }
 
-  public getMultiFactorModelOfAltmanIndicatorsForCompany(company: Company): MultiFactorModelOfAltman[]{
-    var multiFactorModelOfAltmanIndicators = [];
-    this.bankruptcyService.getMultiFactorModelOfAltmanIndicatorsForCompany(company.companyId).subscribe(data => multiFactorModelOfAltmanIndicators=data);
-    return multiFactorModelOfAltmanIndicators;
+  public getMultiFactorModelOfAltmanIndicatorsForCompany(): MultiFactorModelOfAltman[]{
+    if(this.multiFactorModelOfAltmanIndicators!=null){
+      if(this.multiFactorModelOfAltmanIndicators.length == 0)
+        this.multiFactorModelOfAltmanIndicators=null;
+    }
+    return this.multiFactorModelOfAltmanIndicators;
   }
 
-  public getSpringateModelIndicatorsForCompany(company: Company): SpringateModel[]{
-    var springateModelIndicators = [];
-    this.bankruptcyService.getSpringateModelIndicatorsForCompany(company.companyId).subscribe(data => springateModelIndicators=data);
-    return springateModelIndicators;
+  public getSpringateModelIndicatorsForCompany(): SpringateModel[]{
+    if(this.springateModelIndicators!=null){
+      if(this.springateModelIndicators.length == 0)
+        this.springateModelIndicators=null;
+    }
+    return this.springateModelIndicators;
   }
 
-  public getUniversalDiscriminatoryModelIndicatorsForCompany(company: Company): UniversalDiscriminatoryModel[]{
-    var universalDiscriminatoryModelIndicators = [];
-    this.bankruptcyService.getUniversalDiscriminatoryModelIndicatorsForCompany(company.companyId).subscribe(data => universalDiscriminatoryModelIndicators=data);
-    return universalDiscriminatoryModelIndicators;
+  public getUniversalDiscriminatoryModelIndicatorsForCompany(): UniversalDiscriminatoryModel[]{
+    if(this.universalDiscriminatoryModelIndicators!=null){
+      if(this.universalDiscriminatoryModelIndicators.length == 0)
+        this.universalDiscriminatoryModelIndicators=null;
+    }
+    return this.universalDiscriminatoryModelIndicators;
+  }
+
+  public timestampToDate(timestamp) {
+    return new Date(timestamp);
   }
 
 }
