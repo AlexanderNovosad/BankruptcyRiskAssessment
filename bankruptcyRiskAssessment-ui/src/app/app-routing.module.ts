@@ -59,6 +59,7 @@ const routes: Routes = [
           {path: 'recommendations', component: RecommendationsComponent},
           {path: 'admin-panel', component: AdminPanelComponent},
         ]},
+      {path: 'statistics', component: StatisticsComponent},
       {path: 'testing-employees', component: TestingEmployeesComponent}
     ]},
 

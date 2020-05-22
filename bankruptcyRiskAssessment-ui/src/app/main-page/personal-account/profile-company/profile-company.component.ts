@@ -18,7 +18,10 @@ export class ProfileCompanyComponent implements OnInit {
   selectedCompany = 0;
   selectedExpert = 0;
   mainBlockOpen: boolean;
+  private currentUser: User;
+
   constructor(private companyService: CompanyService, private userService: UserService) {
+    this.currentUser = userService.getCurrentUser();
   }
 
   ngOnInit() {
@@ -36,7 +39,7 @@ export class ProfileCompanyComponent implements OnInit {
   public getOwnCompanyList(): Company[] {
     var ownCompanyList = [];
     for(var i=0;i<this.companyList.length;i++){
-      if(this.companyList[i].headOfCompany==this.getCurrentUser()){
+      if(this.companyList[i].headOfCompany.userId==this.getCurrentUser().userId){
         ownCompanyList.push(this.companyList[i]);
       }
     }
@@ -44,7 +47,7 @@ export class ProfileCompanyComponent implements OnInit {
   }
 
   public getCurrentUser(): User{
-    return this.userService.getCurrentUser();
+    return this.currentUser;
   }
 
   public getExpertList(): User[]{

@@ -13,15 +13,14 @@
 
   <div id="main-page">
     <ul id="userMenu">
+      <a routerLink="/main-page">
+        <li><div>Головна</div></li>
+      </a>
+
       <a routerLink="/main-page/personal-account/">
         <li><div>Персональний кабінет</div></li>
       </a>
 
-      <a *ngIf="currentUser.login=='admin'" routerLink="/main-page/admin-panel/">
-        <li><div>Управління</div></li>
-      </a>
-
-      <!-- Место для отдельных меню -->
       <a routerLink="/main-page/bancruptcy-analysis">
         <li>Аналіз ризику банкрутства</li>
       </a>
@@ -30,7 +29,7 @@
         <li>Статистика</li>
       </a>
 
-      <a routerLink="/main-page/personal-cabinet/profile-settings">
+      <a routerLink="/main-page/personal-account/profile-settings">
         <li style="border-right: none"><div>Налаштування</div></li>
       </a>
 

@@ -1,18 +1,16 @@
 <div id="personal-cabinet">
   <ul id="userMenu">
+    <a routerLink="/main-page">
+      <li><div>Головна</div></li>
+    </a>
+
     <a routerLink="/main-page/personal-account/messages">
       <li><div>Повідомленння</div></li>
     </a>
 
-    <!-- Место для отдельных меню -->
-
     <a routerLink="/main-page/personal-account/profile-settings">
-      <li style="border-right: none"><div>Редактировать профиль</div></li>
+      <li style="border-right: none"><div>Редагувати профіль</div></li>
     </a>
-
-    <!--<a routerLink="/main-page/personal-account/company-employess">-->
-      <!--<li>робітники компаніїї</li>-->
-    <!--</a>-->
 
     <a routerLink="/main-page/personal-account/profile-company">
       <li>Профіль компанії</li>
@@ -31,8 +29,7 @@
     </a>
 
   </ul>
-
-  <div id="routingCounter">
-    <router-outlet></router-outlet>
-  </div>
+</div>
+<div id="routingCounter">
+  <router-outlet></router-outlet>
 </div>
