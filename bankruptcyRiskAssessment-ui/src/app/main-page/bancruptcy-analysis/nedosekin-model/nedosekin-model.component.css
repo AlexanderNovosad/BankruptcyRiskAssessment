@@ -1,24 +1,24 @@
-#productionFactorIndicatorsDependence :last-child{
+.productionFactorIndicatorsDependence :last-child{
   display: none;
   visibility: hidden;
 }
-#managementFactorIndicatorsDependence :last-child{
+.managementFactorIndicatorsDependence :last-child{
   display: none;
   visibility: hidden;
 }
-#financialFactorIndicatorsDependence :last-child{
+.financialFactorIndicatorsDependence :last-child{
   display: none;
   visibility: hidden;
 }
-#personnelFactorIndicatorsDependence :last-child{
+.personnelFactorIndicatorsDependence :last-child{
   display: none;
   visibility: hidden;
 }
-#marketingFactorIndicatorsDependence :last-child{
+.marketingFactorIndicatorsDependence :last-child{
   display: none;
   visibility: hidden;
 }
-#innovationFactorIndicatorsDependence :last-child{
+.innovationFactorIndicatorsDependence :last-child{
   display: none;
   visibility: hidden;
 }

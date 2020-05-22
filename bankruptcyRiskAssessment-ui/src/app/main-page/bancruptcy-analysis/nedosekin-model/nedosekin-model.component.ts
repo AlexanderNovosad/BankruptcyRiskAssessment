@@ -63,7 +63,6 @@ export class NedosekinModelComponent implements OnInit {
     this.companyService.getCompanies(this.userService.getCurrentUser().userId).then(expertAccessList=>this.expertAccessList=expertAccessList);
     this.openCompanySelection = true;
     this.assessments = assessments;
-    // this.companyService.getAllCompanies().then(companyList=>this.companyList=companyList);
   }
 
   public getCompanyList(): Company[] {
@@ -73,6 +72,9 @@ export class NedosekinModelComponent implements OnInit {
   }
 
   public getSelectedCompany(): Company{
+    if(this.selectedCompany==0 && this.companyList != []){
+      this.selectedCompany = 1;
+    }
     this.companyService.getCompanyById(this.selectedCompany).then(company=>this.company=company);
     console.log(this.company);
     this.bancruptcyService.getFactors().then(factorList=>this.factorList=factorList);
@@ -178,6 +180,16 @@ export class NedosekinModelComponent implements OnInit {
     }
     this.risk = risk;
     return this.risk;
+  }
+
+  public getFinalAssessmentPoin(): number {
+    var finalAssessmentPoin = 0;
+    for (var i = 0; i < this.finalResult.length; i++) {
+      if (this.finalResult[i].name.startsWith("Стан підприємства")) {
+        finalAssessmentPoin = this.finalResult[i].assessmentPoint * 100;
+      }
+    }
+    return finalAssessmentPoin;
   }
 
   public getFinalResults(): Factor[]{

@@ -125,7 +125,7 @@
       <div class="bancruptcyIndicatorsListElement" *ngIf="bancruptcyIndicator.indicator.factor.name == 'Виробничий фактор'">
         <span style="text-align: left">{{bancruptcyIndicator.indicator.name}}</span><br>
         <label>
-          <input type="text" name="productionFactorIndicatorsDependence" *ngIf="bancruptcyIndicator.dependence!=='пуст'" [(ngModel)]="bancruptcyIndicator.dependence">
+          <input class="productionFactorIndicatorsDependence" type="text" name="productionFactorIndicatorsDependence" *ngIf="bancruptcyIndicator.dependence!=='пуст'" [(ngModel)]="bancruptcyIndicator.dependence">
         </label>
       </div>
     </div>
@@ -134,7 +134,7 @@
       <div class="bancruptcyIndicatorsListElement" *ngIf="bancruptcyIndicator.indicator.factor.name=='Управлінський фактор'">
         <span style="text-align: left">{{bancruptcyIndicator.indicator.name}}</span><br>
         <label>
-          <input type="text" name="managementFactorIndicatorsDependence" *ngIf="bancruptcyIndicator.dependence!=='пуст'" [(ngModel)]="bancruptcyIndicator.dependence">
+          <input class="managementFactorIndicatorsDependence" type="text" name="managementFactorIndicatorsDependence" *ngIf="bancruptcyIndicator.dependence!=='пуст'" [(ngModel)]="bancruptcyIndicator.dependence">
         </label>
       </div>
     </div>
@@ -143,7 +143,7 @@
       <div class="bancruptcyIndicatorsListElement" *ngIf="bancruptcyIndicator.indicator.factor.name=='Фінансовий фактор'">
         <span style="text-align: left">{{bancruptcyIndicator.indicator.name}}</span><br>
         <label>
-          <input type="text" name="financialFactorIndicatorsDependence" *ngIf="bancruptcyIndicator.dependence!=='пуст'" [(ngModel)]="bancruptcyIndicator.dependence">
+          <input class="financialFactorIndicatorsDependence" type="text" name="financialFactorIndicatorsDependence" *ngIf="bancruptcyIndicator.dependence!=='пуст'" [(ngModel)]="bancruptcyIndicator.dependence">
         </label>
       </div>
     </div>
@@ -152,7 +152,7 @@
       <div class="bancruptcyIndicatorsListElement" *ngIf="bancruptcyIndicator.indicator.factor.name=='Кадровий фактор'">
         <span style="text-align: left">{{bancruptcyIndicator.indicator.name}}</span><br>
         <label>
-          <input type="text" name="personnelFactorIndicatorsDependence" *ngIf="bancruptcyIndicator.dependence!=='пуст'" [(ngModel)]="bancruptcyIndicator.dependence">
+          <input class="personnelFactorIndicatorsDependence" type="text" name="personnelFactorIndicatorsDependence" *ngIf="bancruptcyIndicator.dependence!=='пуст'" [(ngModel)]="bancruptcyIndicator.dependence">
         </label>
       </div>
     </div>
@@ -161,7 +161,7 @@
       <div class="bancruptcyIndicatorsListElement" *ngIf="bancruptcyIndicator.indicator.factor.name=='Маркетинговий фактор'">
         <span style="text-align: left">{{bancruptcyIndicator.indicator.name}}</span><br>
         <label>
-          <input type="text" name="marketingFactorIndicatorsDependence" *ngIf="bancruptcyIndicator.dependence!=='пуст'" [(ngModel)]="bancruptcyIndicator.dependence">
+          <input class="marketingFactorIndicatorsDependence" type="text" name="marketingFactorIndicatorsDependence" *ngIf="bancruptcyIndicator.dependence!=='пуст'" [(ngModel)]="bancruptcyIndicator.dependence">
         </label>
       </div>
     </div>
@@ -170,7 +170,7 @@
       <div class="bancruptcyIndicatorsListElement" *ngIf="bancruptcyIndicator.indicator.factor.name=='Інноваційний фактор'">
         <span style="text-align: left">{{bancruptcyIndicator.indicator.name}}</span><br>
         <label>
-          <input type="text" name="innovationFactorIndicatorsDependence" *ngIf="bancruptcyIndicator.dependence!=='пуст'" [(ngModel)]="bancruptcyIndicator.dependence">
+          <input class="innovationFactorIndicatorsDependence" type="text" name="innovationFactorIndicatorsDependence" *ngIf="bancruptcyIndicator.dependence!=='пуст'" [(ngModel)]="bancruptcyIndicator.dependence">
         </label>
       </div>
     </div>
@@ -204,7 +204,7 @@
       <!--<span> {{factor.assessment.name}} </span>-->
     <!--</div>-->
   <!--</div>-->
-  <p>Ступінь ризику банкрутства підприємства становить  {{getRisk()}}</p>
+  <p>Ступінь ризику банкрутства підприємства становить  {{getFinalAssessmentPoin()}}</p>
   <button type="button" (click)="backToIndicatorsPointsSets()">Назад</button> <a routerLink="/main-page"><button type="button">Закінчити</button></a>
 </div>
 <router-outlet></router-outlet>

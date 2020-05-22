@@ -47,7 +47,7 @@ export class AuthService {
     promise.then(
       value => {
         this.userService.loginUserEvent.next(null);
-        this._router.navigateByUrl('/auth/login');
+        this._router.navigateByUrl('home/auth/login');
       }, error => console.log(error));
     return promise;
   }
