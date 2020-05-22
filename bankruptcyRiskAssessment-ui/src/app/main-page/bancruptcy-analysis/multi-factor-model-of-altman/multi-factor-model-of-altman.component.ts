@@ -34,7 +34,7 @@ export class MultiFactorModelOfAltmanComponent implements OnInit {
 
 
   ngOnInit() {
-    this.companyService.getCompanies(this.userService.getCurrentUser().userId).then(expertAccessList=>this.expertAccessList=expertAccessList);
+    this.companyService.getExpertCompanies(this.userService.getCurrentUser().userId).then(expertAccessList=>this.expertAccessList=expertAccessList);
     // this.companyService.getAllCompanies().then(companyList=>this.companyList=companyList);
   }
 

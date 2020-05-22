@@ -26,6 +26,8 @@ public class CompanyEfficiencyFactor implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
+    public CompanyEfficiencyFactor(){}
+
     public Long getCompanyEfficiencyFactorId() {
         return companyEfficiencyFactorId;
     }

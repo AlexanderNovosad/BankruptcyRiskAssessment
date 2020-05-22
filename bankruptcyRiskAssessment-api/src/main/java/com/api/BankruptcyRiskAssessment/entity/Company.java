@@ -46,6 +46,8 @@ public class Company implements Serializable {
     @JoinColumn(name="userId", nullable = false)
     private User headOfCompany;
 
+    public Company(){ }
+
     public Long getCompanyId() {
         return companyId;
     }

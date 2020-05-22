@@ -31,6 +31,8 @@ public class UserEfficiencyFactor implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
+    public UserEfficiencyFactor(){}
+
     public Long getUserEfficiencyFactorId() {
         return userEfficiencyFactorId;
     }

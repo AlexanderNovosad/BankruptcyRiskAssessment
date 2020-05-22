@@ -60,7 +60,7 @@ export class NedosekinModelComponent implements OnInit {
 
 
   ngOnInit() {
-    this.companyService.getCompanies(this.userService.getCurrentUser().userId).then(expertAccessList=>this.expertAccessList=expertAccessList);
+    this.companyService.getExpertCompanies(this.userService.getCurrentUser().userId).then(expertAccessList=>this.expertAccessList=expertAccessList);
     this.openCompanySelection = true;
     this.assessments = assessments;
   }
@@ -73,7 +73,7 @@ export class NedosekinModelComponent implements OnInit {
 
   public getSelectedCompany(): Company{
     if(this.selectedCompany==0 && this.companyList != []){
-      this.selectedCompany = 1;
+      this.selectedCompany = this.getCompanyList()[0].companyId;
     }
     this.companyService.getCompanyById(this.selectedCompany).then(company=>this.company=company);
     console.log(this.company);

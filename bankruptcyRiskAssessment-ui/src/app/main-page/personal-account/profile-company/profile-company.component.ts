@@ -25,7 +25,7 @@ export class ProfileCompanyComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.companyService.getCompanies(this.getCurrentUser().userId).then(expertAccessList=>this.expertAccessList=expertAccessList);
+    this.companyService.getExpertCompanies(this.getCurrentUser().userId).then(expertAccessList=>this.expertAccessList=expertAccessList);
     this.userService.getExperts().subscribe((experts:User[]) => this.expertsList = experts, error => {console.log(error);});
     this.mainBlockOpen = true;
   }

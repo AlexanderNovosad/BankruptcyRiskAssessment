@@ -26,6 +26,8 @@ public class DepartmentEfficiencyFactor implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
+    public DepartmentEfficiencyFactor(){}
+
     public Long getDepartmentEfficiencyFactorId() {
         return departmentEfficiencyFactorId;
     }

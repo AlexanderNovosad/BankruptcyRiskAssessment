@@ -21,6 +21,8 @@ public class Test implements Serializable {
     @Column(nullable = false)
     private String name;
 
+    public Test(){}
+
     public Long getTestId() {
         return testId;
     }

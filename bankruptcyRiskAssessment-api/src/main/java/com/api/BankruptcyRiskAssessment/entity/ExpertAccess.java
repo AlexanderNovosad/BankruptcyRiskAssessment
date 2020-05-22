@@ -23,6 +23,8 @@ public class ExpertAccess implements Serializable {
     @JoinColumn(name = "companyId", nullable = false)
     private Company company;
 
+    ExpertAccess(){}
+
     public User getExpert() {
         return expert;
     }

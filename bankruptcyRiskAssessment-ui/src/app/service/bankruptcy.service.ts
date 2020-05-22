@@ -16,10 +16,12 @@ import {UniversalDiscriminatoryModel} from "../model/UniversalDiscriminatoryMode
 import {DavidBelikovModelData} from "../model/DavidBelikovModelData";
 import {SpringateModelData} from "../model/SpringateModelData";
 import {UniversalDiscriminatoryModelData} from "../model/UniversalDiscriminatoryModelData";
+import {Recommendation} from "../model/Recommendation";
+import {Router} from "@angular/router";
 
 @Injectable()
 export class BankruptcyService{
-  constructor(private httpClient: HttpClient) {}
+  constructor(private _router: Router, private httpClient: HttpClient) {}
 
   public getFactors(): Promise<Factor[]>{
     return this.httpClient.get<Factor[]>(`/api/bankruptcy/factors`).toPromise();
@@ -97,6 +99,15 @@ export class BankruptcyService{
     return this.httpClient.get<UniversalDiscriminatoryModel[]>(`/api/bankruptcy/universalDiscriminatoryModelIndicators?companyId=${companyId}`);
   }
 
-
+  public sendRecommendation(newRecommendation: Recommendation){
+    return this.httpClient.post<Recommendation>(`/api/expert/recommendation`, newRecommendation).subscribe(
+      res => {
+        this._router.navigateByUrl('');
+      },
+      err => {
+        console.log('Error occured');
+      }
+    );
+  }
 
 }

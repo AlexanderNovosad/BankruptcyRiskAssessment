@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Message} from '../model/message';
 import {promise} from 'selenium-webdriver';
+import {Company} from "../model/Company";
 
 @Injectable()
 export class MessageService {
@@ -19,4 +20,5 @@ export class MessageService {
       return this.httpClient.post(`/api/message`, message)
         .toPromise().then(data => data as Message);
     }
+
 }

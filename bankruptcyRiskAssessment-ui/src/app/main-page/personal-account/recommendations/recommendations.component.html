@@ -1,3 +1,79 @@
-<p>
-  recommendations works!
-</p>
+<div class="expertBlock">
+  <h2>Виберіть підприємство</h2>
+  <p></p>
+
+  <select name="company" id="selectedCompanyId" [value]="selectedCompany" (change)="selectedCompany=$event.target.value">
+    <option *ngFor="let company of getExpertCompanies()"
+            [value]="company.companyId">
+      {{company.companyName}}
+    </option>
+  </select>
+
+  <div class="statisticsBlock">
+    <h3>Показники рівня ризику банкрутства підприємства</h3>
+    <button class="showButton" (click)="getStatistics(selectedCompany)">Показати</button>
+
+    <p *ngIf="getNedosekinModelIndicatorsForCompany()!=null">За моделлю Недосєкіна</p>
+    <div *ngFor="let nedosekinModelIndicator of getNedosekinModelIndicatorsForCompany()">
+      Назва: {{nedosekinModelIndicator.name}} --- Значення: {{nedosekinModelIndicator.linguisticAssessment}} --- Дата оцінювання: {{timestampToDate(nedosekinModelIndicator.date).toLocaleDateString()}}
+    </div>
+    <p></p>
+
+    <p *ngIf="getLissModelIndicatorsForCompany()!=null">За моделлю Ліса</p>
+    <div *ngFor="let lissModelIndicator of getLissModelIndicatorsForCompany()">
+      Значення 1: {{lissModelIndicator.x1}} --- Значення 2: {{lissModelIndicator.x2}} --- Значення 3: {{lissModelIndicator.x3}} --- Значення 4: {{lissModelIndicator.x4}} --- Загальне значення: {{lissModelIndicator.z}} --- Дата оцінювання: {{timestampToDate(lissModelIndicator.date).toLocaleDateString()}}
+    </div>
+    <p></p>
+
+    <p *ngIf="getDavidBelikovModelIndicatorsForCompany()!=null">За моделлю Девідової-Белікова</p>
+    <div *ngFor="let davidBelikovModelIndicator of getDavidBelikovModelIndicatorsForCompany()">
+      Значення 1: {{davidBelikovModelIndicator.x1}} --- Значення 2: {{davidBelikovModelIndicator.x2}} --- Значення 3: {{davidBelikovModelIndicator.x3}} --- Значення 4: {{davidBelikovModelIndicator.x4}} --- Загальне значення: {{davidBelikovModelIndicator.z}} --- Дата оцінювання: {{timestampToDate(davidBelikovModelIndicator.date).toLocaleDateString()}}
+    </div>
+    <p></p>
+
+    <p *ngIf="getMultiFactorModelOfAltmanIndicatorsForCompany()!=null">За мультифакторною моделлю Альтмана</p>
+    <div *ngFor="let multiFactorModelOfAltmanIndicator of getMultiFactorModelOfAltmanIndicatorsForCompany()">
+      Значення 1: {{multiFactorModelOfAltmanIndicator.x1}} --- Значення 2: {{multiFactorModelOfAltmanIndicator.x2}} --- Значення 3: {{multiFactorModelOfAltmanIndicator.x3}} --- Значення 4: {{multiFactorModelOfAltmanIndicator.x4}} --- Значення 5 {{multiFactorModelOfAltmanIndicator.x5}} --- Загальне значення: {{multiFactorModelOfAltmanIndicator.z}} --- Дата оцінювання: {{timestampToDate(multiFactorModelOfAltmanIndicator.date).toLocaleDateString()}}
+    </div>
+    <p></p>
+
+    <p *ngIf="getSpringateModelIndicatorsForCompany()!=null">За моделлю Спрінгейта</p>
+    <div *ngFor="let springateModelIndicator of getSpringateModelIndicatorsForCompany()">
+      Значення 1: {{springateModelIndicator.x1}} --- Значення 2: {{springateModelIndicator.x2}} --- Значення 3: {{springateModelIndicator.x3}} --- Значення 4: {{springateModelIndicator.x4}} --- Загальне значення: {{springateModelIndicator.z}} --- Дата оцінювання: {{timestampToDate(springateModelIndicator.date).toLocaleDateString()}}
+    </div>
+    <p></p>
+
+    <p *ngIf="getUniversalDiscriminatoryModelIndicatorsForCompany()!=null">За універсальною дискримінантною моделлю</p>
+    <div *ngFor="let universalDiscriminatoryModelIndicator of getUniversalDiscriminatoryModelIndicatorsForCompany()">
+      Значення 1: {{universalDiscriminatoryModelIndicator.x1}} --- Значення 2: {{universalDiscriminatoryModelIndicator.x2}} --- Значення 3: {{universalDiscriminatoryModelIndicator.x3}} --- Значення 4: {{universalDiscriminatoryModelIndicator.x4}} --- Значення 5: {{universalDiscriminatoryModelIndicator.x5}} --- Значення 6: {{universalDiscriminatoryModelIndicator.x6}} --- Загальне значення: {{universalDiscriminatoryModelIndicator.z}} --- Дата оцінювання: {{timestampToDate(universalDiscriminatoryModelIndicator.date).toLocaleDateString()}}
+    </div>
+    <p></p>
+
+  </div>
+  <div class="recommendation">
+    <form class="recommendation-form">
+
+      <div>
+        <span>Опишіть ситуацію на підприємстві</span>
+        <label>
+          <textarea type="text" name="problemDescription" #problemDescription></textarea>
+        </label>
+      </div>
+
+      <div>
+        <span>Опишіть рекомендаційні заходи</span>
+        <label>
+          <textarea type="text" name="recommendationDescription" #recommendationDescription></textarea>
+        </label>
+      </div>
+      <p>
+      <div>
+        <button name="recommendationSandButton" type="button" class="recommendationSandButton" (click)="sandRecommendation(
+      problemDescription.value, recommendationDescription.value)">Надіслати</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="userBlock">
+</div>

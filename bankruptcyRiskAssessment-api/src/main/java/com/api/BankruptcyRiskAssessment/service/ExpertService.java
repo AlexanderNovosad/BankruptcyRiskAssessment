@@ -1,9 +1,11 @@
 package com.api.BankruptcyRiskAssessment.service;
 
 import com.api.BankruptcyRiskAssessment.entity.ExpertAccess;
+import com.api.BankruptcyRiskAssessment.entity.Recommendation;
 import com.api.BankruptcyRiskAssessment.entity.Role;
 import com.api.BankruptcyRiskAssessment.entity.User;
 import com.api.BankruptcyRiskAssessment.repository.ExpertAccessRepository;
+import com.api.BankruptcyRiskAssessment.repository.RecommendationRepository;
 import com.api.BankruptcyRiskAssessment.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,8 @@ public class ExpertService implements IExpertService {
     private ExpertAccessRepository expertAccessRepository;
     @Autowired
     private IRoleService roleService;
+    @Autowired
+    private RecommendationRepository recommendationRepository;
 
     @Override
     public List<ExpertAccess> getCompaniesByExpert(Long userId) {
@@ -30,8 +34,6 @@ public class ExpertService implements IExpertService {
         if (expertAccesses == null) {
             return null;
         }
-//        ArrayList<Company> companies = new ArrayList<Company>();
-//        expertAccesses.forEach(expertAccess -> companies.add(expertAccess.getCompany()));
         return expertAccesses;
     }
 
@@ -88,6 +90,11 @@ public class ExpertService implements IExpertService {
     public User putUserIntoExpert (User user){
         user.setRole(roleService.getRoleByName("Expert"));
         return userRepository.saveAndFlush(user);
+    }
+
+    @Override
+    public Recommendation sendRecommendation(Recommendation recommendation){
+        return recommendationRepository.saveAndFlush(recommendation);
     }
 
 }

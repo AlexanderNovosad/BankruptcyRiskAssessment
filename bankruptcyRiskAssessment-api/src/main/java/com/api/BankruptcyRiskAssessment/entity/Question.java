@@ -24,6 +24,8 @@ public class Question implements Serializable {
     @Column(nullable = false)
     private int points;
 
+    public Question(){}
+
     public Long getQuestionId() {
         return questionId;
     }

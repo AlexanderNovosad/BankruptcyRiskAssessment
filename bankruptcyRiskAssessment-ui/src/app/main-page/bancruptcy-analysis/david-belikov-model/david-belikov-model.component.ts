@@ -28,7 +28,7 @@ export class  DavidBelikovModelComponent implements OnInit {
 
 
   ngOnInit() {
-    this.companyService.getCompanies(this.userService.getCurrentUser().userId).then(expertAccessList=>this.expertAccessList=expertAccessList);
+    this.companyService.getExpertCompanies(this.userService.getCurrentUser().userId).then(expertAccessList=>this.expertAccessList=expertAccessList);
   }
 
   public getCompanyList(): Company[] {

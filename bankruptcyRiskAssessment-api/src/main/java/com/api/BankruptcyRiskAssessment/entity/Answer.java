@@ -31,6 +31,8 @@ public class Answer implements Serializable {
     @Column(nullable = false)
     private Boolean confirmed;
 
+    public Answer(){}
+
     public Long getAnswerId() {
         return answerId;
     }

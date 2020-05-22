@@ -34,6 +34,8 @@ public class Department implements Serializable {
     @Size(min = 6, max = 15)
     private String phone;
 
+    public Department(){}
+
     public Long getDepartmentId() {
         return departmentId;
     }
