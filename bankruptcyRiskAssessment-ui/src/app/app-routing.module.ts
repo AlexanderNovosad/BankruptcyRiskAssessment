@@ -12,7 +12,6 @@ import {FinancialEnterpriseAnalysisComponent} from "./main-page/financial-enterp
 import {OverallRatingOfEnterprisesComponent} from "./main-page/overall-rating-of-enterprises/overall-rating-of-enterprises.component";
 import {PersonalAccountComponent} from "./main-page/personal-account/personal-account.component";
 import {StatisticsComponent} from "./main-page/personal-account/statistics/statistics.component";
-import {TestingEmployeesComponent} from "./main-page/testing-employees/testing-employees.component";
 import {NedosekinModelComponent} from "./main-page/bancruptcy-analysis/nedosekin-model/nedosekin-model.component";
 import {MultiFactorModelOfAltmanComponent} from "./main-page/bancruptcy-analysis/multi-factor-model-of-altman/multi-factor-model-of-altman.component";
 import {LissModelComponent} from "./main-page/bancruptcy-analysis/liss-model/liss-model.component";
@@ -25,6 +24,7 @@ import {AdminPanelComponent} from "./main-page/personal-account/admin-panel/admi
 import {DavidBelikovModelComponent} from './main-page/bancruptcy-analysis/david-belikov-model/david-belikov-model.component';
 import {SpringateModelComponent} from './main-page/bancruptcy-analysis/springate-model/springate-model.component';
 import {UniversalDiscriminatoryModelComponent} from './main-page/bancruptcy-analysis/universal-discriminatory-model/universal-discriminatory-model.component';
+import {ChoiceOfMinimizationMethodComponent} from './main-page/choice-of-minimization-method/choice-of-minimization-method.component';
 
 
 const routes: Routes = [
@@ -47,6 +47,7 @@ const routes: Routes = [
           {path: 'universal-discriminatory-model', component: UniversalDiscriminatoryModelComponent},
           {path: 'statistics', component: StatisticsComponent},
         ]},
+      {path: 'choice-of-minimization-method', component: ChoiceOfMinimizationMethodComponent},
       {path: 'financial-enterprise-analysis', component: FinancialEnterpriseAnalysisComponent},
       {path: 'overall-rating-of-enterprises', component: OverallRatingOfEnterprisesComponent},
       {path: 'personal-account', component: PersonalAccountComponent, children:[
@@ -59,8 +60,7 @@ const routes: Routes = [
           {path: 'recommendations', component: RecommendationsComponent},
           {path: 'admin-panel', component: AdminPanelComponent},
         ]},
-      {path: 'statistics', component: StatisticsComponent},
-      {path: 'testing-employees', component: TestingEmployeesComponent}
+      {path: 'statistics', component: StatisticsComponent}
     ]},
 
 ];

@@ -41,6 +41,7 @@ export class  SpringateModelComponent implements OnInit {
     this.companyService.getCompanyById(this.selectedCompany).then(company=>this.company=company);
     console.log(this.company);
     this.springateModelData = new SpringateModelData();
+    this.openResults=false;
     this.openCalculation = true;
     return this.company;
   }

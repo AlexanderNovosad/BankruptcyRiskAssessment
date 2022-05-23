@@ -10,7 +10,7 @@ import {AuthService} from "./service/auth.service";
 export class AppComponent {
   test
 
-  title = 'bankruptcyRiskAssessment-ui';
+  title = 'bankruptcyRiskAssessment';
 
   constructor(private http: HttpClient, private authService: AuthService){
 

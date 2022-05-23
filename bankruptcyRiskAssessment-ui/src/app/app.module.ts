@@ -4,7 +4,6 @@ import { HttpModule } from '@angular/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from "@angular/common/http";
-import { TestServiceService } from "./test-service.service";
 import { FormsModule } from "@angular/forms";
 
 import { UserService } from './service/user.service';
@@ -21,15 +20,9 @@ import { MainPageComponent } from './main-page/main-page.component';
 import { PersonalAccountComponent } from './main-page/personal-account/personal-account.component';
 import { ProfileSettingsComponent } from './main-page/personal-account/profile-settings/profile-settings.component';
 import { MessagesComponent } from './main-page/personal-account/messages/messages.component';
-import { CompanyEmployeesComponent } from './main-page/personal-account/company-employees/company-employees.component';
 import { ProfileCompanyComponent } from './main-page/personal-account/profile-company/profile-company.component';
 import { CompanyRegistrationComponent } from './main-page/personal-account/profile-company/company-registration/company-registration.component';
 import { RecommendationsComponent } from './main-page/personal-account/recommendations/recommendations.component';
-import { TestingEmployeesComponent } from './main-page/testing-employees/testing-employees.component';
-import { TestingFormComponent } from './main-page/testing-employees/testing-form/testing-form.component';
-import { TestComponent } from './main-page/testing-employees/testing-form/test/test.component';
-import { TestResultComponent } from './main-page/testing-employees/test-result/test-result.component';
-import { TestReviewComponent } from './main-page/testing-employees/test-review/test-review.component';
 import { BancruptcyAnalysisComponent } from './main-page/bancruptcy-analysis/bancruptcy-analysis.component';
 import {NedosekinModelComponent} from "./main-page/bancruptcy-analysis/nedosekin-model/nedosekin-model.component";
 import { ManualInputFormComponent } from './main-page/bancruptcy-analysis/manual-input-form/manual-input-form.component';
@@ -47,6 +40,7 @@ import {AdminPanelComponent} from './main-page/personal-account/admin-panel/admi
 import {DavidBelikovModelComponent} from './main-page/bancruptcy-analysis/david-belikov-model/david-belikov-model.component';
 import {SpringateModelComponent} from './main-page/bancruptcy-analysis/springate-model/springate-model.component';
 import {UniversalDiscriminatoryModelComponent} from './main-page/bancruptcy-analysis/universal-discriminatory-model/universal-discriminatory-model.component';
+import {ChoiceOfMinimizationMethodComponent} from './main-page/choice-of-minimization-method/choice-of-minimization-method.component';
 import { FilterUserListPipe } from './service/filters/filter-user-list.pipe';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -59,14 +53,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     PersonalAccountComponent,
     ProfileSettingsComponent,
     MessagesComponent,
-    CompanyEmployeesComponent,
     ProfileCompanyComponent,
     RecommendationsComponent,
-    TestingEmployeesComponent,
-    TestingFormComponent,
-    TestComponent,
-    TestResultComponent,
-    TestReviewComponent,
     BancruptcyAnalysisComponent,
     ManualInputFormComponent,
     DocumentFormComponent,
@@ -88,6 +76,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     DavidBelikovModelComponent,
     SpringateModelComponent,
     UniversalDiscriminatoryModelComponent,
+    ChoiceOfMinimizationMethodComponent,
     FilterUserListPipe
   ],
   imports: [
@@ -99,7 +88,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     NgbModule
   ],
   providers: [
-    TestServiceService,
     UserService,
     AuthAccessService,
     UserAccessService,

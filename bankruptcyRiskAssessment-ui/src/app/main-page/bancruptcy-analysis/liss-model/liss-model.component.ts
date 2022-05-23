@@ -41,6 +41,7 @@ export class  LissModelComponent implements OnInit {
     this.companyService.getCompanyById(this.selectedCompany).then(company=>this.company=company);
     console.log(this.company);
     this.lissModelData = new LissModelData();
+    this.openResults=false;
     this.openCalculation = true;
     return this.company;
   }

@@ -48,6 +48,7 @@ export class MultiFactorModelOfAltmanComponent implements OnInit {
     this.companyService.getCompanyById(this.selectedCompany).then(company=>this.company=company);
     console.log(this.company);
     this.multiFactorModelOfAltmanData = new MultiFactorModelOfAltmanData();
+    this.openResults=false;
     this.openCalculation = true;
     return this.company;
   }

@@ -1,0 +1,194 @@
+<div class="expertBlock" *ngIf="openCompanySelection">
+  <h2>Виберіть підприємство</h2>
+  <p></p>
+
+  <select name="company" id="selectedCompanyId" [value]="selectedCompany" (change)="selectedCompany=$event.target.value">
+    <option *ngFor="let company of getExpertCompanies()"
+            [value]="company.companyId">
+      {{company.companyName}}
+    </option>
+  </select>
+
+  <div class="statisticsBlock">
+    <h3>Показники рівня ризику банкрутства підприємства</h3>
+    <button class="showButton" (click)="getStatistics(selectedCompany)">Показати</button>
+
+    <p *ngIf="getNedosekinModelIndicatorsForCompany()!=null">За моделлю Недосєкіна</p>
+    <div *ngFor="let nedosekinModelIndicator of getNedosekinModelIndicatorsForCompany()">
+      Назва: {{nedosekinModelIndicator.name}} --- Значення: {{nedosekinModelIndicator.linguisticAssessment}} --- Дата оцінювання: {{timestampToDate(nedosekinModelIndicator.date).toLocaleDateString()}}
+    </div>
+    <p></p>
+
+    <p *ngIf="getLissModelIndicatorsForCompany()!=null">За моделлю Ліса</p>
+    <div *ngFor="let lissModelIndicator of getLissModelIndicatorsForCompany()">
+      Значення 1: {{lissModelIndicator.x1}} --- Значення 2: {{lissModelIndicator.x2}} --- Значення 3: {{lissModelIndicator.x3}} --- Значення 4: {{lissModelIndicator.x4}} --- Загальне значення: {{lissModelIndicator.z}} --- Дата оцінювання: {{timestampToDate(lissModelIndicator.date).toLocaleDateString()}}
+    </div>
+    <p></p>
+
+    <p *ngIf="getDavidBelikovModelIndicatorsForCompany()!=null">За моделлю Девідової-Белікова</p>
+    <div *ngFor="let davidBelikovModelIndicator of getDavidBelikovModelIndicatorsForCompany()">
+      Значення 1: {{davidBelikovModelIndicator.x1}} --- Значення 2: {{davidBelikovModelIndicator.x2}} --- Значення 3: {{davidBelikovModelIndicator.x3}} --- Значення 4: {{davidBelikovModelIndicator.x4}} --- Загальне значення: {{davidBelikovModelIndicator.z}} --- Дата оцінювання: {{timestampToDate(davidBelikovModelIndicator.date).toLocaleDateString()}}
+    </div>
+    <p></p>
+
+    <p *ngIf="getMultiFactorModelOfAltmanIndicatorsForCompany()!=null">За мультифакторною моделлю Альтмана</p>
+    <div *ngFor="let multiFactorModelOfAltmanIndicator of getMultiFactorModelOfAltmanIndicatorsForCompany()">
+      Значення 1: {{multiFactorModelOfAltmanIndicator.x1}} --- Значення 2: {{multiFactorModelOfAltmanIndicator.x2}} --- Значення 3: {{multiFactorModelOfAltmanIndicator.x3}} --- Значення 4: {{multiFactorModelOfAltmanIndicator.x4}} --- Значення 5 {{multiFactorModelOfAltmanIndicator.x5}} --- Загальне значення: {{multiFactorModelOfAltmanIndicator.z}} --- Дата оцінювання: {{timestampToDate(multiFactorModelOfAltmanIndicator.date).toLocaleDateString()}}
+    </div>
+    <p></p>
+
+    <p *ngIf="getSpringateModelIndicatorsForCompany()!=null">За моделлю Спрінгейта</p>
+    <div *ngFor="let springateModelIndicator of getSpringateModelIndicatorsForCompany()">
+      Значення 1: {{springateModelIndicator.x1}} --- Значення 2: {{springateModelIndicator.x2}} --- Значення 3: {{springateModelIndicator.x3}} --- Значення 4: {{springateModelIndicator.x4}} --- Загальне значення: {{springateModelIndicator.z}} --- Дата оцінювання: {{timestampToDate(springateModelIndicator.date).toLocaleDateString()}}
+    </div>
+    <p></p>
+
+    <p *ngIf="getUniversalDiscriminatoryModelIndicatorsForCompany()!=null">За універсальною дискримінантною моделлю</p>
+    <div *ngFor="let universalDiscriminatoryModelIndicator of getUniversalDiscriminatoryModelIndicatorsForCompany()">
+      Значення 1: {{universalDiscriminatoryModelIndicator.x1}} --- Значення 2: {{universalDiscriminatoryModelIndicator.x2}} --- Значення 3: {{universalDiscriminatoryModelIndicator.x3}} --- Значення 4: {{universalDiscriminatoryModelIndicator.x4}} --- Значення 5: {{universalDiscriminatoryModelIndicator.x5}} --- Значення 6: {{universalDiscriminatoryModelIndicator.x6}} --- Загальне значення: {{universalDiscriminatoryModelIndicator.z}} --- Дата оцінювання: {{timestampToDate(universalDiscriminatoryModelIndicator.date).toLocaleDateString()}}
+    </div>
+    <p></p>
+  </div>
+</div>
+
+<div class="stage1" *ngIf="openStage1">
+  <p></p>
+  <p></p>
+  <p>Добавити новий фактор:   </p><input type="text" name="factor" #factor> <button name="createFactor" type="button" class="darkButton" (click)="createFactor(factor.value)">Добавити</button>
+  <p></p>
+  <p>Список факторів:</p>
+  <p *ngFor="let factor of getFactors()">
+  {{factor.name}}</p>
+
+  <button name="Next" type="button" class="darkButton" (click)="toStage2()">Далі</button>
+
+</div>
+
+<div class="stage2" *ngIf="openStage2">
+  <h2>Виберіть Фактор</h2>
+  <p></p>
+
+  <select name="factorSelected" id="selectedFactorId" [value]="selectedFactor" (change)="selectedFactor=$event.target.value">
+    <option *ngFor="let factor of getFactors()"
+            [value]="factor">
+      {{factor.name}}
+    </option>
+  </select>
+
+  <p></p>
+  <p></p>
+  <p>Добавити нову ціль:   </p><input type="text" name="factorGoal" #factorGoal> <button name="createFactorGoal" type="button" class="darkButton" (click)="createFactorGoal(factorGoal.value, selectedFactor)">Добавити</button>
+  <p></p>
+  <p>Цілі фактора:</p>
+  <div *ngFor="let factorGoal of getFactorGoals()">
+    <p *ngIf="factorGoal.factor === selectedFactor">{{factorGoal.name}}</p></div>
+
+  <button name="Next" type="button" class="darkButton" (click)="toStage3()">Далі</button>
+
+</div>
+
+<div class="stage3" *ngIf="openStage3">
+  <p></p>
+  <p></p>
+  <p>Добавити новий сценарій:   </p><input type="text" name="courseOfEvents" #courseOfEvents> <button name="createCourseOfEvents" type="button" class="darkButton" (click)="createCourseOfEvents(courseOfEvents.value)">Добавити</button>
+  <p></p>
+  <p>Можливі сценарії:</p>
+  <p *ngFor="let courseOfEvents of getCoursesOfEvents()">
+    {{courseOfEvents.name}}</p>
+
+  <button name="Next" type="button" class="darkButton" (click)="toStage4()">Далі</button>
+
+</div>
+
+<div class="stage4" *ngIf="openStage4">
+  <h1>Порівняння факторів</h1>
+  <div class="CalculateBox">
+
+    <div class="itemList">
+      <p *ngFor="let factor of getFactors()">
+      {{factor.name}}</p>
+    </div>
+
+    <div class="matrix">
+      <p>матриця порівнянь</p>
+      <table class="Indicators table" style="border: #f6f1ed">
+        <tr style="border-bottom: 2px solid #6a5750; margin-bottom: 0;">
+          <th></th>
+          <th *ngFor="let factor of getFactors()">{{factor.name}}</th>
+        </tr>
+        <tr *ngFor="let factori of getFactors()">
+          <td>{{factori.name}}</td><td *ngFor="let factorj of getFactors()">
+          <input type="number" name = "data" [(ngModel)] = "newPairwiseComparisonMatrix.comparisonItemsMatrix[factori.factorId-1][factorj.factorId-1]" placeholder="0"></td>
+        </tr>
+      </table>
+      <p></p>
+      <p></p>
+      <button name="calculate" type="button" class="darkButton" (click)="calculateFactorMatrix()">Розрахувати</button>
+    </div>
+    <div class="vector">
+      <p>вектор пріорітетів</p>
+      <table class="Indicators table" style="border: #f6f1ed">
+        <tr style="border-bottom: 2px solid #6a5750; margin-bottom: 0;">
+          <th>W1</th>
+        </tr>
+        <tr *ngFor="let comparisonItemsVector of newPairwiseComparisonMatrix.comparisonItemsVector">
+          <td>{{comparisonItemsVector}}</td>
+        </tr>
+      </table>
+      <p></p>
+      <p></p>
+      <p>Однорідність</p>
+      <p>Власне число матриці: {{newPairwiseComparisonMatrix.matrixEigenvalue}}</p>
+      <p>Індекс однорідності: {{newPairwiseComparisonMatrix.uniformityIndex}}</p>
+      <p>Відношення однорідності: {{newPairwiseComparisonMatrix.uniformityRatio}}</p>
+    </div>
+
+  </div>
+
+
+  <button name="Next" type="button" class="darkButton" (click)="toStage5()">Далі</button>
+
+</div>
+
+<div class="stage5" *ngIf="openStage5">
+  <h2>Виберіть підприємство</h2>
+  <p></p>
+
+
+  <button name="Next" type="button" class="darkButton" (click)="toStage6()">Далі</button>
+
+</div>
+
+<div class="stage6" *ngIf="openStage6">
+  <h2>Виберіть підприємство</h2>
+  <p></p>
+
+
+  <button name="Next" type="button" class="darkButton" (click)="toStage7()">Далі</button>
+
+</div>
+
+<div class="stage7" *ngIf="openStage7">
+  <h2>Виберіть підприємство</h2>
+  <p></p>
+
+
+
+  <button name="Next" type="button" class="darkButton" (click)="toStage8()">Далі</button>
+
+</div>
+
+<div class="stage8" *ngIf="openStage8">
+  <h2>Виберіть підприємство</h2>
+  <p></p>
+
+
+  <button name="Next" type="button" class="darkButton" (click)="toStage9()">Закінчити</button>
+
+</div>
+
+<div class="stage9" *ngIf="openStage9">
+  <h2>Виберіть підприємство</h2>
+  <p></p>
+
+</div>
