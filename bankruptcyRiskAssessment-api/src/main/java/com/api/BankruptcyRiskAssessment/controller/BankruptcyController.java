@@ -95,7 +95,7 @@ public class BankruptcyController {
     public ResponseEntity<MultiFactorModelOfAltman> multiFactorModelOfAltmanCalculation(@RequestParam(value = "companyId") Long companyId, @RequestBody MultiFactorModelOfAltmanData multiFactorModelOfAltmanData){
         Company company = companyService.getCompanyById(companyId);
         if(isNull(multiFactorModelOfAltmanData) || isNull(company)){
-            ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(bankruptcyService.multiFactorModelOfAltmanResult(company, multiFactorModelOfAltmanData));
     }
@@ -104,7 +104,7 @@ public class BankruptcyController {
     public ResponseEntity<LissModel> lissModelCalculation(@RequestParam(value = "companyId") Long companyId, @RequestBody LissModelData lissModelData){
         Company company = companyService.getCompanyById(companyId);
         if(isNull(lissModelData) || isNull(company)){
-            ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(bankruptcyService.lissModelResult(company, lissModelData));
     }
@@ -113,7 +113,7 @@ public class BankruptcyController {
     public ResponseEntity<DavidBelikovModel> davidBelikovModelCalculation(@RequestParam(value = "companyId") Long companyId, @RequestBody DavidBelikovModelData davidBelikovModelData){
         Company company = companyService.getCompanyById(companyId);
         if(isNull(davidBelikovModelData) || isNull(company)){
-            ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(bankruptcyService.davidBelikovModelResult(company, davidBelikovModelData));
     }
@@ -122,7 +122,7 @@ public class BankruptcyController {
     public ResponseEntity<SpringateModel> springateModelCalculation(@RequestParam(value = "companyId") Long companyId, @RequestBody SpringateModelData springateModelData){
         Company company = companyService.getCompanyById(companyId);
         if(isNull(springateModelData) || isNull(company)){
-            ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(bankruptcyService.springateModelResult(company, springateModelData));
     }
@@ -131,7 +131,7 @@ public class BankruptcyController {
     public ResponseEntity<UniversalDiscriminatoryModel> universalDiscriminatoryModelCalculation(@RequestParam(value = "companyId") Long companyId, @RequestBody UniversalDiscriminatoryModelData universalDiscriminatoryModelData){
         Company company = companyService.getCompanyById(companyId);
         if(isNull(universalDiscriminatoryModelData) || isNull(company)){
-            ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(bankruptcyService.universalDiscriminatoryModelResult(company, universalDiscriminatoryModelData));
     }
@@ -140,7 +140,7 @@ public class BankruptcyController {
     public ResponseEntity<List<CompanyFactor>> getNedosekinModelIndicatorsForCompany(@RequestParam(value = "companyId") Long companyId){
         Company company = companyService.getCompanyById(companyId);
         if(isNull(company)){
-            ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(bankruptcyService.getNedosekinModelIndicatorsForCompany(company));
     }
@@ -149,7 +149,7 @@ public class BankruptcyController {
     public ResponseEntity<List<LissModel>> getLissModelIndicatorsForCompany(@RequestParam(value = "companyId") Long companyId){
         Company company = companyService.getCompanyById(companyId);
         if(isNull(company)){
-            ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(bankruptcyService.getLissModelIndicatorsForCompany(company));
     }
@@ -158,7 +158,7 @@ public class BankruptcyController {
     public ResponseEntity<List<DavidBelikovModel>> getDavidBelikovModelIndicatorsForCompany(@RequestParam(value = "companyId") Long companyId){
         Company company = companyService.getCompanyById(companyId);
         if(isNull(company)){
-            ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(bankruptcyService.getDavidBelikovModelIndicatorsForCompany(company));
     }
@@ -167,7 +167,7 @@ public class BankruptcyController {
     public ResponseEntity<List<MultiFactorModelOfAltman>> getMultiFactorModelOfAltmanIndicatorsForCompany(@RequestParam(value = "companyId") Long companyId){
         Company company = companyService.getCompanyById(companyId);
         if(isNull(company)){
-            ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(bankruptcyService.getMultiFactorModelOfAltmanIndicatorsForCompany(company));
     }
@@ -176,7 +176,7 @@ public class BankruptcyController {
     public ResponseEntity<List<SpringateModel>> getSpringateModelIndicatorsForCompany(@RequestParam(value = "companyId") Long companyId){
         Company company = companyService.getCompanyById(companyId);
         if(isNull(company)){
-            ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(bankruptcyService.getSpringateModelIndicatorsForCompany(company));
     }
@@ -185,7 +185,7 @@ public class BankruptcyController {
     public ResponseEntity<List<UniversalDiscriminatoryModel>> getUniversalDiscriminatoryModelIndicatorsForCompany(@RequestParam(value = "companyId") Long companyId){
         Company company = companyService.getCompanyById(companyId);
         if(isNull(company)){
-            ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(bankruptcyService.getUniversalDiscriminatoryModelIndicatorsForCompany(company));
     }

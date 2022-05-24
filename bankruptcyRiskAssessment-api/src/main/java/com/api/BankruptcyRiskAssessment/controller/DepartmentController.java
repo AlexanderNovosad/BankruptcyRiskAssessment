@@ -47,7 +47,7 @@ public class DepartmentController {
     public ResponseEntity<Department> deleteDepartment(@RequestParam(value = "departmentId") Long departmentId) {
         Department department = departmentService.deleteDepartment(departmentId);
         if (isNull(department)) {
-            ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(department);
     }
