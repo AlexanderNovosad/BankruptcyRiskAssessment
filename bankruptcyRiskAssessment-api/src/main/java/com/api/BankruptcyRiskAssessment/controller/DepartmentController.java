@@ -4,56 +4,46 @@ package com.api.BankruptcyRiskAssessment.controller;
 import com.api.BankruptcyRiskAssessment.entity.Department;
 import com.api.BankruptcyRiskAssessment.service.IDepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
-
-import static java.util.Objects.isNull;
 
 @RestController
 @RequestMapping("/api/departments")
 public class DepartmentController {
+    private final IDepartmentService departmentService;
 
     @Autowired
-    private IDepartmentService departmentService;
+    public DepartmentController(IDepartmentService departmentService){
+        this.departmentService = departmentService;
+    }
 
     @PostMapping(value = "/department")
-    public ResponseEntity<Department> addDepartment(@RequestBody Department department) {
-        if (isNull(department)) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(departmentService.addDepartment(department));
+    public ResponseEntity<Department> addDepartment(@Valid @RequestBody Department department) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(departmentService.addDepartment(department));
     }
 
     @PutMapping(value = "/department")
     public ResponseEntity<Department> updateDepartment(@RequestBody Department department) {
-        if (isNull(department)) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(departmentService.updateDepartment(department));
+        return ResponseEntity.status(HttpStatus.OK).body(departmentService.updateDepartment(department));
     }
 
     @GetMapping(value = "/department")
     public ResponseEntity<Department> getDepartment(@RequestParam(value = "departmentId") Long departmentId) {
-        Department department = departmentService.getDepartment(departmentId);
-        if (isNull(department)) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(department);
+        return ResponseEntity.status(HttpStatus.OK).body(departmentService.getDepartment(departmentId));
     }
 
     @DeleteMapping(value = "/department")
-    public ResponseEntity<Department> deleteDepartment(@RequestParam(value = "departmentId") Long departmentId) {
-        Department department = departmentService.deleteDepartment(departmentId);
-        if (isNull(department)) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(department);
+    public ResponseEntity deleteDepartment(@RequestParam(value = "departmentId") Long departmentId) {
+        departmentService.deleteDepartment(departmentId);
+        return ResponseEntity.status(HttpStatus.OK).body("delete completed successfully");
     }
 
     @GetMapping(value = "/department_list")
     public ResponseEntity<List<Department>> getAllDepartment() {
-        return ResponseEntity.ok(departmentService.allDepartment());
+        return ResponseEntity.status(HttpStatus.OK).body(departmentService.getAllDepartments());
     }
 }

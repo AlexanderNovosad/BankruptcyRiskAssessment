@@ -11,6 +11,7 @@ import org.springframework.security.web.authentication.rememberme.JdbcTokenRepos
 import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.unit.DataSize;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 
@@ -52,7 +53,6 @@ public class BeanGenerator {
 
     }
 
-
     @Bean
     public RememberMeAuthenticationFilter rememberMeAuthenticationFilter() {
         return new RememberMeAuthenticationFilter(authenticationManager, tokenBasedRememberMeServices);
@@ -90,8 +90,8 @@ public class BeanGenerator {
     public MultipartConfigElement multipartConfigElement() {
         MultipartConfigFactory factory = new MultipartConfigFactory();
 
-        factory.setMaxFileSize("10MB");
-        factory.setMaxRequestSize("10MB");
+        factory.setMaxFileSize(DataSize.ofMegabytes(10));
+        factory.setMaxRequestSize(DataSize.ofMegabytes(10));
 
         return factory.createMultipartConfig();
     }

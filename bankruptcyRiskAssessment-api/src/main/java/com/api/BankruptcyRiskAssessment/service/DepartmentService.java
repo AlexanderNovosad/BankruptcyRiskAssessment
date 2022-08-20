@@ -7,76 +7,77 @@ import com.api.BankruptcyRiskAssessment.repository.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 import static java.util.Objects.isNull;
 
 @Service
 public class DepartmentService implements IDepartmentService {
+    private final DepartmentRepository departmentRepository;
 
     @Autowired
-    private DepartmentRepository departmentRepository;
+    public DepartmentService(DepartmentRepository departmentRepository){
+        this.departmentRepository = departmentRepository;
+    }
 
     @Override
     public Department addDepartment(Department department) {
+        if (isNull(department)) {
+            throw new EntityNotFoundException("Department is empty");
+        }
         return departmentRepository.saveAndFlush(department);
     }
 
     @Override
     public Department getDepartment(Long departmentId) {
-        Department department = departmentRepository.getOne(departmentId);
-        if (isNull(department)) {
-            return null;
-        }
-        return department;
+        return departmentRepository.findById(departmentId).orElseThrow(() -> new EntityNotFoundException("Department not found"));
     }
 
     @Override
     public Department updateDepartment(Department department) {
+        if (isNull(department)) {
+            throw new EntityNotFoundException("Requested update is empty");
+        }
         return departmentRepository.save(department);
     }
 
     @Override
-    public Department deleteDepartment(Long departmentId) {
-        Department department = departmentRepository.getOne(departmentId);
-        if (isNull(department)) {
-            return null;
-        }
-        // add func for delete of all department in company (except dependency of reg user)
+    public void deleteDepartment(Long departmentId) {
+        Department department = this.getDepartment(departmentId);
         departmentRepository.delete(department);
-        return department;
     }
 
     @Override
-    public List<Department> allDepartment() {
-        return departmentRepository.findAll();
+    public void deleteDepartmentsByCompany(Company company) {
+        List<Department> departments = departmentRepository.findAllByCompany(company);
+        if (!departments.isEmpty()) {
+            departmentRepository.deleteAll(departments);
+        }
     }
 
     @Override
-    public Department getDepartmentForCompany(Long departmentId, Long companyId) {
-        return null;
+    public List<Department> getAllDepartments() {
+        List<Department> allDepartments = departmentRepository.findAll();
+        if (allDepartments.isEmpty())
+            throw new EntityNotFoundException("No departments found in DB");
+        return allDepartments;
     }
 
     @Override
     public List<Department> allDepartmentForCompany(Company company) {
-        return departmentRepository.findAllByCompany(company);
-    }
-
-    @Override
-    public Department updateDepartmentForCompany(Department department, Long companyId) {
-        return null;
-    }
-
-    @Override
-    public Department deleteDepartmentForCompany(Long departmentId, Long companyId) {
-        return null;
+        List<Department> departments = departmentRepository.findAllByCompany(company);
+        if (departments.isEmpty()) {
+            throw new EntityNotFoundException("No departments found by this company");
+        }
+        return departments;
     }
 
     @Override
     public Department getDepartmentByHeadOfDepartment(User headOfDepartment) {
         Department departmentByHeadOfDepartment = departmentRepository.findDepartmentByHeadOfDepartment(headOfDepartment);
         if (isNull(departmentByHeadOfDepartment)) {
-            return null;
+            throw new EntityNotFoundException("This user doesn't manage any department");
         }
         return departmentByHeadOfDepartment;
     }

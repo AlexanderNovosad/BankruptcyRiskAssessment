@@ -40,4 +40,8 @@ public class ExpertAccess implements Serializable {
     public void setCompany(Company company) {
         this.company = company;
     }
+
+    public Long getExpertAccessId() { return expertAccessId; }
+
+    public void setExpertAccessId(Long expertAccessId) { this.expertAccessId = expertAccessId; }
 }

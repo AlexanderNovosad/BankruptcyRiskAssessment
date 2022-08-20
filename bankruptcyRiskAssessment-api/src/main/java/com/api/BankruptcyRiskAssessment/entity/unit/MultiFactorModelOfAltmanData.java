@@ -2,7 +2,7 @@ package com.api.BankruptcyRiskAssessment.entity.unit;
 
 public class MultiFactorModelOfAltmanData {
     private double currentAssets;
-    private double сurrentLiabilities;
+    private double currentLiabilities;
     private double totalValueOfAssets;
     private double netProfit;
     private double profitBeforePayments;
@@ -20,12 +20,12 @@ public class MultiFactorModelOfAltmanData {
         this.currentAssets = currentAssets;
     }
 
-    public double getСurrentLiabilities() {
-        return сurrentLiabilities;
+    public double getCurrentLiabilities() {
+        return currentLiabilities;
     }
 
-    public void setСurrentLiabilities(double сurrentLiabilities) {
-        this.сurrentLiabilities = сurrentLiabilities;
+    public void setCurrentLiabilities(double currentLiabilities) {
+        this.currentLiabilities = currentLiabilities;
     }
 
     public double getTotalValueOfAssets() {

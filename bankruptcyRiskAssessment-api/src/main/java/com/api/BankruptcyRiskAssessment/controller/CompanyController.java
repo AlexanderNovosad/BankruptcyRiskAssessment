@@ -1,99 +1,65 @@
 package com.api.BankruptcyRiskAssessment.controller;
 
 import com.api.BankruptcyRiskAssessment.entity.Company;
-import com.api.BankruptcyRiskAssessment.entity.ExpertAccess;
 import com.api.BankruptcyRiskAssessment.service.ICompanyService;
-import com.api.BankruptcyRiskAssessment.service.IExpertService;
-import com.api.BankruptcyRiskAssessment.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
-
-import static java.util.Objects.isNull;
 
 @RestController
 @RequestMapping("/api/companies")
 public class CompanyController {
+    private final ICompanyService companyService;
 
     @Autowired
-    public ICompanyService companyService;
-    @Autowired
-    public IExpertService expertService;
-    @Autowired
-    public IUserService userService;
+    public CompanyController(ICompanyService companyService){
+        this.companyService = companyService;
+    }
 
     @PostMapping(value = "/company")
-    public ResponseEntity<Company> addCompany(@RequestBody Company company) {
-        if (isNull(company)) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(companyService.addCompany(company));
+    public ResponseEntity<Company> addCompany(@Valid @RequestBody Company company) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(companyService.addCompany(company));
     }
 
     @DeleteMapping(value = "/company")
-    public ResponseEntity<Company> deleteCompany(@RequestParam(value = "companyId") Long companyId) {
-        Company company = companyService.deleteCompany(companyId);
-        if (isNull(company)) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(company);
+    public ResponseEntity deleteCompany(@RequestParam(value = "companyId") Long companyId) {
+        companyService.deleteCompany(companyId);
+        return ResponseEntity.status(HttpStatus.OK).body("delete completed successfully");
     }
 
     @GetMapping(value = "/company")
     public ResponseEntity<Company> getCompanyById(@RequestParam(value = "companyId") Long companyId) {
-        Company companyById = companyService.getCompanyById(companyId);
-        if (isNull(companyById)) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(companyById);
-    }
-
-    @GetMapping(value = "/company/expert")
-    public ResponseEntity<List<ExpertAccess>> getCompanyByExpert(@RequestParam(value = "userId") Long userId) {
-        List<ExpertAccess> companies = expertService.getCompaniesByExpert(userId);
-        if (isNull(companies)) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(companies);
+        return ResponseEntity.status(HttpStatus.OK).body(companyService.getCompanyById(companyId));
     }
 
     @GetMapping(value = "/")
     public ResponseEntity<List<Company>> getCompanies() {
-        return ResponseEntity.ok(companyService.getAllCompany());
+        return ResponseEntity.status(HttpStatus.OK).body(companyService.getAllCompany());
     }
 
     @PutMapping(value = "/company")
-    public ResponseEntity<Company> updateCompany(@RequestBody Company company) {
-        if (isNull(company)) {
-            return ResponseEntity.notFound().build();
-        }
-        Company updatedCompany = companyService.updateCompany(company);
-        return ResponseEntity.ok(updatedCompany);
+    public ResponseEntity<Company> updateCompany(@Valid @RequestBody Company company) {
+        return ResponseEntity.status(HttpStatus.OK).body(companyService.updateCompany(company));
     }
 
     @GetMapping(value = "/confirm")
     public ResponseEntity<List<Company>> getCompaniesThatNotConfirmation(){
-        return ResponseEntity.ok(companyService.getCompaniesThatNotConfirm());
+        return ResponseEntity.status(HttpStatus.OK).body(companyService.getCompaniesThatNotConfirm());
     }
 
-    @PatchMapping(value = "/confirm")
+    @PutMapping(value = "/confirm")
     public ResponseEntity confirmCompany(@RequestBody Long companyId){
-        Company company = companyService.getCompanyById(companyId);
-        if(isNull(company)){
-            return ResponseEntity.notFound().build();
-        }
-        companyService.confirmCompany(company);
-        return ResponseEntity.ok().build();
+        companyService.confirmCompany(companyId);
+        return ResponseEntity.status(HttpStatus.OK).body("Company confirmed");
     }
 
     @GetMapping(value = "/user")
     public ResponseEntity<List<Company>> getOwnersCompanies(@RequestParam(value = "userId") Long userId) {
-        if (isNull(userService.getUser(userId))) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(companyService.getOwnersCompanies(userId));
+        return ResponseEntity.status(HttpStatus.OK).body(companyService.getOwnersCompanies(userId));
     }
 
 }

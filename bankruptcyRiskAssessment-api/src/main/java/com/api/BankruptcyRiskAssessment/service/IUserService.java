@@ -1,5 +1,6 @@
 package com.api.BankruptcyRiskAssessment.service;
 
+import com.api.BankruptcyRiskAssessment.entity.Role;
 import com.api.BankruptcyRiskAssessment.entity.User;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public interface IUserService {
 
     User userUpdate(User user);
 
-    User deleteUser(Long userId);
+    void deleteUser(Long userId);
 
     List<User> getAllUser();
 
@@ -22,5 +23,7 @@ public interface IUserService {
 
     List<User> getUserByLastName(String lastName);
 
-    User setUserAsExpert(User user);
+    User setUserAsExpert(Long userId);
+
+    List<User> getUsersByRole(Role role);
 }

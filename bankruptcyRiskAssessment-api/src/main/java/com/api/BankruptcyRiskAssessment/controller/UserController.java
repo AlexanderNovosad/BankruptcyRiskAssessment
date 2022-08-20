@@ -4,70 +4,52 @@ package com.api.BankruptcyRiskAssessment.controller;
 import com.api.BankruptcyRiskAssessment.entity.User;
 import com.api.BankruptcyRiskAssessment.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
-
-import static java.util.Objects.isNull;
 
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
+    private final IUserService userService;
 
     @Autowired
-    private IUserService userService;
+    public UserController(IUserService userService){
+        this.userService = userService;
+    }
 
     @PostMapping(value = "/user")
-    public ResponseEntity<User> addUser(@RequestBody User user) {
-        if (isNull(user)) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(userService.addUser(user));
+    public ResponseEntity<User> addUser(@Valid @RequestBody User user) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.addUser(user));
     }
 
     @PutMapping(value = "/user")
-    public ResponseEntity<User> updateUser(@RequestBody User user) {
-        if (isNull(user)) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(userService.userUpdate(user));
+    public ResponseEntity<User> updateUser(@Valid @RequestBody User user) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.userUpdate(user));
     }
 
     @GetMapping(value = "/user")
     public ResponseEntity<User> getUser(@RequestParam(value = "userId") Long userId) {
-        User user = userService.getUser(userId);
-        if (isNull(user)) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(user);
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getUser(userId));
     }
 
     @DeleteMapping(value = "/user")
-    public ResponseEntity<User> deleteUser(@RequestParam(value = "userId") Long userId) {
-        User user = userService.deleteUser(userId);
-        if (isNull(user)) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(user);
+    public ResponseEntity deleteUser(@RequestParam(value = "userId") Long userId) {
+        userService.deleteUser(userId);
+        return ResponseEntity.status(HttpStatus.OK).body("delete completed successfully");
     }
 
     @GetMapping(value = "/user_list")
     public ResponseEntity<List<User>> getAllUser() {
-        List<User> allUser = userService.getAllUser();
-        if (isNull(allUser)) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(allUser);
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getAllUser());
     }
 
     @PostMapping(value = "/expert")
     public ResponseEntity<User> setUserAsExpert(@RequestParam(value = "userId") Long userId){
-        User user = userService.getUser(userId);
-        if(isNull(user)){
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(userService.setUserAsExpert(user));
+        return ResponseEntity.status(HttpStatus.OK).body(userService.setUserAsExpert(userId));
     }
 
 

@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IExpertService {
 
-    List<ExpertAccess> getCompaniesByExpert(Long userId);
+    List<ExpertAccess> getAccessesByExpert(Long userId);
 
     ExpertAccess addExpertAccess(ExpertAccess expertAccess);
 
@@ -16,15 +16,15 @@ public interface IExpertService {
 
     ExpertAccess updateExpertAccess(ExpertAccess expertAccess);
 
-    ExpertAccess deleteExpertAccess(Long expertAccessId);
+    void deleteExpertAccess(Long expertAccessId);
 
     List<ExpertAccess> getAllExpertAccess();
 
     List<User> getAllExperts();
 
-    User excludeExpert(User user);
+    User excludeExpert(Long userId);
 
-    User putUserIntoExpert (User user);
+    User putUserIntoExpert (Long userId);
 
     Recommendation sendRecommendation(Recommendation recommendation);
 

@@ -12,7 +12,7 @@ public interface IRoleService {
 
     Role updateRole(Role role);
 
-    Role deleteRole(Long roleId);
+    void deleteRole(Long roleId);
 
     List<Role> getAllRole();
 

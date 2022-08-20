@@ -1,39 +1,37 @@
 package com.api.BankruptcyRiskAssessment.service;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@Component
-public class AuthService {
-    Logger log = LogManager.getLogger(AuthService.class);
+@Service
+public class AuthService implements IAuthService{
+    private final AuthManager authManager;
+    private final UserDetailsServiceImpl detailsService;
+    private final TokenRememberMeService tokenRememberMeService;
 
     @Autowired
-    private AuthManager authManager;
+    public AuthService(AuthManager authManager, UserDetailsServiceImpl detailsService, TokenRememberMeService tokenRememberMeService){
+        this.authManager = authManager;
+        this.detailsService = detailsService;
+        this.tokenRememberMeService = tokenRememberMeService;
+    }
 
-    @Autowired
-    private UserDetailsServiceImpl detailsService;
-
-    @Autowired
-    private TokenRememberMeService tokenRememberMeService;
-
-
-    public boolean login(String login, String password, HttpServletRequest req, HttpServletResponse res) {
+    @Override
+    public boolean login(String login, String password, HttpServletRequest req, HttpServletResponse res){
         UserDetails userDetails = detailsService.loadUserByUsername(login);
 
-        if (userDetails == null) {
+        if (userDetails == null){
             return false;
         }
 
-        if (!userDetails.getPassword().equals(password)) {
+        if (!userDetails.getPassword().equals(password)){
             return false;
         }
 
@@ -45,15 +43,16 @@ public class AuthService {
 
         tokenRememberMeService.login(req, res, authenticate);
 
-        if (token.isAuthenticated()) {
+        if (token.isAuthenticated()){
             SecurityContextHolder.getContext().setAuthentication(token);
             return true;
-        } else {
+        } else{
             return false;
         }
     }
 
-    public void logout(HttpServletRequest req, HttpServletResponse res) {
+    @Override
+    public void logout(HttpServletRequest req, HttpServletResponse res){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         tokenRememberMeService.logout(req, res, authentication);
         SecurityContextHolder.clearContext();

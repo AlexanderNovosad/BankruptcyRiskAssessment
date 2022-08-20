@@ -19,9 +19,7 @@ public class TokenRememberMeService extends TokenBasedRememberMeServices {
         return super.processAutoLoginCookie(cookieTokens, request, response);
     }
 
-    public void login(HttpServletRequest request,
-                      HttpServletResponse response, Authentication successfulAuthentication) {
-
+    public void login(HttpServletRequest request, HttpServletResponse response, Authentication successfulAuthentication) {
         super.onLoginSuccess(request, response, successfulAuthentication);
     }
 

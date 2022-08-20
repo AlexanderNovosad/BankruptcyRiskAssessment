@@ -1,6 +1,7 @@
 package com.api.BankruptcyRiskAssessment.service;
 
 import com.api.BankruptcyRiskAssessment.entity.Company;
+import com.api.BankruptcyRiskAssessment.entity.Department;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface ICompanyService {
 
     Company updateCompany(Company company);
 
-    Company deleteCompany(Long companyId);
+    void deleteCompany(Long companyId);
 
     List<Company> getAllCompany();
 
@@ -24,9 +25,10 @@ public interface ICompanyService {
 
     List<Company> getCompaniesThatNotConfirm();
 
-    void confirmCompany(Company company);
+    void confirmCompany(Long companyId);
 
     List<Company> getOwnersCompanies(Long userId);
 
+    List<Department> getAllCompanyDepartments(Long companyId);
 
 }

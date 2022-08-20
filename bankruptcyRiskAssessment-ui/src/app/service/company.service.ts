@@ -14,7 +14,7 @@ export class CompanyService {
   constructor(private _router: Router, private httpClient: HttpClient) {}
 
   public getExpertCompanies(userId: number): Promise<ExpertAccess[]> {
-    return this.httpClient.get<ExpertAccess[]>(`/api/companies/company/expert?userId=${userId}`).toPromise();
+    return this.httpClient.get<ExpertAccess[]>(`/api/expert/expert?userId=${userId}/companies`).toPromise();
   }
 
   public getAllCompanies(): Promise<Company[]> {

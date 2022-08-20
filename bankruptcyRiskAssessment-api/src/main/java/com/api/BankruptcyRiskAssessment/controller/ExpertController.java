@@ -4,64 +4,51 @@ import com.api.BankruptcyRiskAssessment.entity.ExpertAccess;
 import com.api.BankruptcyRiskAssessment.entity.Recommendation;
 import com.api.BankruptcyRiskAssessment.entity.User;
 import com.api.BankruptcyRiskAssessment.service.IExpertService;
-import com.api.BankruptcyRiskAssessment.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import javax.validation.Valid;
 import java.util.List;
-
-import static java.util.Objects.isNull;
 
 @RestController
 @RequestMapping("/api/expert")
 public class ExpertController {
+    private final IExpertService expertService;
 
     @Autowired
-    private IUserService userService;
-    @Autowired
-    private IExpertService expertService;
+    public ExpertController(IExpertService expertService){
+        this.expertService = expertService;
+    }
 
     @GetMapping(value = "/experts")
     public ResponseEntity<List<User>> getAllExperts(){
-        List<User> users = expertService.getAllExperts();
-        return ResponseEntity.ok(users);
+        return ResponseEntity.status(HttpStatus.OK).body(expertService.getAllExperts());
     }
 
     @PostMapping(value = "/add")
-    public ResponseEntity<ExpertAccess> addExpertAccess(@RequestBody ExpertAccess expertAccess) {
-        if (isNull(expertAccess)) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(expertService.addExpertAccess(expertAccess));
+    public ResponseEntity<ExpertAccess> addExpertAccess(@Valid @RequestBody ExpertAccess expertAccess) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(expertService.addExpertAccess(expertAccess));
     }
 
     @PutMapping(value = "/user")
     public ResponseEntity<User> excludeExpert(@RequestBody Long userId){
-        User user = userService.getUser(userId);
-        if (isNull(user)) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(expertService.excludeExpert(user));
+        return ResponseEntity.status(HttpStatus.OK).body(expertService.excludeExpert(userId));
     }
 
     @PutMapping(value = "/notUser")
     public ResponseEntity<User> putUserIntoExpert(@RequestBody Long userId){
-        User user = userService.getUser(userId);
-        if (isNull(user)) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(expertService.putUserIntoExpert(user));
+        return ResponseEntity.status(HttpStatus.OK).body(expertService.putUserIntoExpert(userId));
     }
 
     @PostMapping(value = "/recommendation")
-    public ResponseEntity<Recommendation> sendRecommendation(@RequestBody Recommendation recommendation) {
-        if (isNull(recommendation)) {
-            return ResponseEntity.notFound().build();
-        }
-        recommendation.setDate(new Date(System.currentTimeMillis()));
-        return ResponseEntity.ok(expertService.sendRecommendation(recommendation));
+    public ResponseEntity<Recommendation> sendRecommendation(@Valid @RequestBody Recommendation recommendation) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(expertService.sendRecommendation(recommendation));
     }
 
+    @GetMapping(value = "/expert/companies")
+    public ResponseEntity<List<ExpertAccess>> getAccessesByExpert(@RequestParam(value = "userId") Long userId) {
+        return ResponseEntity.status(HttpStatus.OK).body(expertService.getAccessesByExpert(userId));
+    }
 }

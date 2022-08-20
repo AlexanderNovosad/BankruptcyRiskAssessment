@@ -14,17 +14,13 @@ public interface IDepartmentService {
 
     Department updateDepartment(Department department);
 
-    Department deleteDepartment(Long departmentId);
+    void deleteDepartment(Long departmentId);
 
-    List<Department> allDepartment();
+    void deleteDepartmentsByCompany(Company company);
 
-    Department getDepartmentForCompany(Long departmentId, Long companyId);
+    List<Department> getAllDepartments();
 
     List<Department> allDepartmentForCompany(Company company);
-
-    Department updateDepartmentForCompany(Department department, Long companyId);
-
-    Department deleteDepartmentForCompany(Long departmentId, Long companyId);
 
     Department getDepartmentByHeadOfDepartment (User headOfDepartment);
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IBankruptcyService {
 
-    List<Indicator> setThePointsForIndicators(List<Indicator> indicators, List<LinguisticAssessment> assessments);
+    List<Indicator> setThePointsForIndicators(InDataForSetTheAssessments inDataForSetTheAssessments);
 
     List<Indicator> getQualitativeIndicators();
 
@@ -15,11 +15,11 @@ public interface IBankruptcyService {
 
     List<PreQuantitativeIndicator> getPreQuantitativeIndicators(List<QuantitativeIndicator> quantitativeIndicators);
 
-    List<QuantitativeIndicator> calculateAmountOfQuantitativeIndicators(List<QuantitativeIndicator> quantitativeIndicators, List<PreQuantitativeIndicator> preQuantitativeIndicators);
+    List<QuantitativeIndicator> calculateAmountOfQuantitativeIndicators(InDataForCalculationQuantitativeIndicatorAmount inDataForCalculationQuantitativeIndicatorAmount);
 
     List<Factor> getFactors();
 
-    Factor calculateFactorPoints(Company company, List<Indicator> factorIndicators, List<String> factorDependencies);
+    List<Factor> calculateFactorsPoints(Company company, List<List<Indicator>> factorIndicators, List<List<String>> dependencies);
 
     Factor calculateCompanyPoints(Company company, List<Factor> factors, List<String> factorsDependencies);
 

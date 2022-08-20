@@ -6,25 +6,37 @@ import com.api.BankruptcyRiskAssessment.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+
+import static java.util.Objects.isNull;
 
 @Service
 public class BankruptcyService implements IBankruptcyService {
+    private final CompanyFactorRepository companyFactorRepository;
+    private final LissModelRepository lissModelRepository;
+    private final DavidBelikovModelRepository davidBelikovModelRepository;
+    private final MultiFactorModelOfAltmanRepository multiFactorModelOfAltmanRepository;
+    private final SpringateModelRepository springateModelRepository;
+    private final UniversalDiscriminatoryModelRepository universalDiscriminatoryModelRepository;
 
     @Autowired
-    CompanyFactorRepository companyFactorRepository;
-    @Autowired
-    LissModelRepository lissModelRepository;
-    @Autowired
-    DavidBelikovModelRepository davidBelikovModelRepository;
-    @Autowired
-    MultiFactorModelOfAltmanRepository multiFactorModelOfAltmanRepository;
-    @Autowired
-    SpringateModelRepository springateModelRepository;
-    @Autowired
-    UniversalDiscriminatoryModelRepository universalDiscriminatoryModelRepository;
+    public BankruptcyService(CompanyFactorRepository companyFactorRepository,
+                             LissModelRepository lissModelRepository,
+                             DavidBelikovModelRepository davidBelikovModelRepository,
+                             MultiFactorModelOfAltmanRepository multiFactorModelOfAltmanRepository,
+                             SpringateModelRepository springateModelRepository,
+                             UniversalDiscriminatoryModelRepository universalDiscriminatoryModelRepository){
+        this.companyFactorRepository = companyFactorRepository;
+        this.lissModelRepository = lissModelRepository;
+        this.davidBelikovModelRepository = davidBelikovModelRepository;
+        this.multiFactorModelOfAltmanRepository = multiFactorModelOfAltmanRepository;
+        this.springateModelRepository = springateModelRepository;
+        this.universalDiscriminatoryModelRepository = universalDiscriminatoryModelRepository;
+    }
 
     private static final List<Factor> factors = new ArrayList<>();
     private static final List<QuantitativeIndicator> quantitativeIndicators = new ArrayList<>();
@@ -39,7 +51,12 @@ public class BankruptcyService implements IBankruptcyService {
     }
 
     @Override
-    public List<Indicator> setThePointsForIndicators(List<Indicator> indicatorsList, List<LinguisticAssessment> assessments){
+    public List<Indicator> setThePointsForIndicators(InDataForSetTheAssessments inDataForSetTheAssessments){
+        List<Indicator> indicatorsList = inDataForSetTheAssessments.getIndicators();
+        List<LinguisticAssessment> assessments = inDataForSetTheAssessments.getAssessments();
+        if(indicatorsList.isEmpty() || assessments.isEmpty()){
+            throw new EntityNotFoundException("Requested data does not exist or not full");
+        }
         assessments.forEach(assessment -> indicatorsList.forEach(indicator -> indicator.setAssessment(assessment)));
         return indicatorsList;
     }
@@ -47,11 +64,14 @@ public class BankruptcyService implements IBankruptcyService {
     @Override
     public List<Indicator> getQualitativeIndicators(){
         List<Indicator> privateIndicators = new ArrayList<>();
-        privateIndicators = indicators;
+        Collections.copy(privateIndicators,indicators);
+        if (privateIndicators.isEmpty()) {
+            throw new EntityNotFoundException("Qualitative indicators does not exist");
+        }
         return privateIndicators;
     }
 
-    private static List<Indicator> createQualitativeIndicators(){
+    private static void createQualitativeIndicators(){
         Indicator dimensionsAndProductionCapacity = new Indicator("Розміри та потужність виробництва", factors.get(0));
         indicators.add(dimensionsAndProductionCapacity);
         Indicator typeAndAgeOfEquipment = new Indicator("Тип і вік обладнання", factors.get(0));
@@ -137,18 +157,19 @@ public class BankruptcyService implements IBankruptcyService {
         indicators.add(matchingOfSpecificInnovations);
         Indicator attractingOutsourcingCompanies = new Indicator("Залучення аутсорсингових компаній", factors.get(5));
         indicators.add(attractingOutsourcingCompanies);
-
-        return indicators;
     }
 
     @Override
     public List<QuantitativeIndicator> getQuantitativeIndicators(){
         List<QuantitativeIndicator> privateQuantitativeIndicators = new ArrayList<>();
-        privateQuantitativeIndicators = quantitativeIndicators;
+        Collections.copy(privateQuantitativeIndicators, quantitativeIndicators);
+        if (privateQuantitativeIndicators.isEmpty()) {
+            throw new EntityNotFoundException("Quantitative indicators does not exist");
+        }
         return privateQuantitativeIndicators;
     }
 
-    private static List<QuantitativeIndicator> createQuantitativeIndicators(){
+    private static void createQuantitativeIndicators(){
         QuantitativeIndicator rateOfIncreaseInIndustrialProduction = new QuantitativeIndicator("Темп приросту (зниження) промислового обсягу виробництва (%)", factors.get(0));
         quantitativeIndicators.add(rateOfIncreaseInIndustrialProduction);
         QuantitativeIndicator rateOfIncreaseInProductionCosts = new QuantitativeIndicator("Темп приросту (зниження) собівартості продукції (%)", factors.get(0));
@@ -252,18 +273,19 @@ public class BankruptcyService implements IBankruptcyService {
 
         QuantitativeIndicator f61 = new QuantitativeIndicator("Частку приросту продукції за рахунок інтенсифікації виробництва", factors.get(5));
         quantitativeIndicators.add(f61);
-
-        return quantitativeIndicators;
     }
 
     @Override
     public List<Factor> getFactors(){
         List<Factor> privateFactors = new ArrayList<>();
-        privateFactors = factors;
+        Collections.copy(privateFactors, factors);
+        if (privateFactors.isEmpty()) {
+            throw new EntityNotFoundException("Factors does not exist");
+        }
         return privateFactors;
     }
 
-    private static List<Factor> createFactors(){
+    private static void createFactors(){
         Factor productionFactor = new Factor("Виробничий фактор");
         Factor managementFactor = new Factor("Управлінський фактор");
         Factor financialFactor = new Factor("Фінансовий фактор");
@@ -276,75 +298,80 @@ public class BankruptcyService implements IBankruptcyService {
         factors.add(personnelFactor);
         factors.add(marketingFactor);
         factors.add(innovationFactor);
-        return factors;
     }
 
     @Override
     public List<PreQuantitativeIndicator> getPreQuantitativeIndicators(List<QuantitativeIndicator> quantitativeIndicators){
+        if (quantitativeIndicators.isEmpty()) {
+            throw new EntityNotFoundException("This list of quantitative indicators is empty");
+        }
         List<PreQuantitativeIndicator> privatePreQuantitativeIndicators = new ArrayList<>();
-        for(int i=0;i<quantitativeIndicators.size();i++){
-            for(int j=0;j<preQuantitativeIndicators.size();j++){
-                for(int k=0;k<preQuantitativeIndicators.get(j).getQuantitativeIndicators().size();k++){
-                    if(preQuantitativeIndicators.get(j).getQuantitativeIndicators().get(k).getName().equals(quantitativeIndicators.get(i).getName())){
-                        privatePreQuantitativeIndicators.add(preQuantitativeIndicators.get(j));
+        for(QuantitativeIndicator quantitativeIndicator: quantitativeIndicators){
+            for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                for(int k=0; k<preQuantitativeIndicator.getQuantitativeIndicators().size(); k++){
+                    if(preQuantitativeIndicator.getQuantitativeIndicators().get(k).getName().equals(quantitativeIndicator.getName())){
+                        privatePreQuantitativeIndicators.add(preQuantitativeIndicator);
 
                     }
                 }
             }
         }
+        if (privatePreQuantitativeIndicators.isEmpty()) {
+            throw new EntityNotFoundException("Those indicators does not exist");
+        }
         return privatePreQuantitativeIndicators;
     }
 
-    private static List<PreQuantitativeIndicator> createPreQuantitativeIndicators(){
-        PreQuantitativeIndicator finalValueOfProduction = new PreQuantitativeIndicator("Кінцеве значення обсягу виробництва", Arrays.asList(quantitativeIndicators.get(0)));
+    private static void createPreQuantitativeIndicators(){
+        PreQuantitativeIndicator finalValueOfProduction = new PreQuantitativeIndicator("Кінцеве значення обсягу виробництва", Collections.singletonList(quantitativeIndicators.get(0)));
         preQuantitativeIndicators.add(finalValueOfProduction);
-        PreQuantitativeIndicator initialValueOfOutput = new PreQuantitativeIndicator("Початкове значення обсягу виробництва", Arrays.asList(quantitativeIndicators.get(0)));
+        PreQuantitativeIndicator initialValueOfOutput = new PreQuantitativeIndicator("Початкове значення обсягу виробництва", Collections.singletonList(quantitativeIndicators.get(0)));
         preQuantitativeIndicators.add(initialValueOfOutput);
-        PreQuantitativeIndicator theUltimateCostOfProduction = new PreQuantitativeIndicator("Кінцеве значення собівартості продукції", Arrays.asList(quantitativeIndicators.get(1)));
+        PreQuantitativeIndicator theUltimateCostOfProduction = new PreQuantitativeIndicator("Кінцеве значення собівартості продукції", Collections.singletonList(quantitativeIndicators.get(1)));
         preQuantitativeIndicators.add(theUltimateCostOfProduction);
-        PreQuantitativeIndicator initialValueOfProductionCost = new PreQuantitativeIndicator("Початкове значення собівартості продукції", Arrays.asList(quantitativeIndicators.get(1)));
+        PreQuantitativeIndicator initialValueOfProductionCost = new PreQuantitativeIndicator("Початкове значення собівартості продукції", Collections.singletonList(quantitativeIndicators.get(1)));
         preQuantitativeIndicators.add(initialValueOfProductionCost);
-        PreQuantitativeIndicator costOfProductionForThePeriod = new PreQuantitativeIndicator("Собівартість продукції за період", Arrays.asList(quantitativeIndicators.get(2)));
+        PreQuantitativeIndicator costOfProductionForThePeriod = new PreQuantitativeIndicator("Собівартість продукції за період", Collections.singletonList(quantitativeIndicators.get(2)));
         preQuantitativeIndicators.add(costOfProductionForThePeriod);
-        PreQuantitativeIndicator totalAmountOfExpensesForThePeriod = new PreQuantitativeIndicator("Загальна сума витрат за період", Arrays.asList(quantitativeIndicators.get(2)));
+        PreQuantitativeIndicator totalAmountOfExpensesForThePeriod = new PreQuantitativeIndicator("Загальна сума витрат за період", Collections.singletonList(quantitativeIndicators.get(2)));
         preQuantitativeIndicators.add(totalAmountOfExpensesForThePeriod);
-        PreQuantitativeIndicator netIncomeFromSalesOfProducts = new PreQuantitativeIndicator("Чистий дохід від реалізації продукції", Arrays.asList(quantitativeIndicators.get(3)));
+        PreQuantitativeIndicator netIncomeFromSalesOfProducts = new PreQuantitativeIndicator("Чистий дохід від реалізації продукції", Collections.singletonList(quantitativeIndicators.get(3)));
         preQuantitativeIndicators.add(netIncomeFromSalesOfProducts);
         PreQuantitativeIndicator costOfSoldProducts = new PreQuantitativeIndicator("Собівартість реалізованої продукції", Arrays.asList(quantitativeIndicators.get(3),quantitativeIndicators.get(10),quantitativeIndicators.get(21),quantitativeIndicators.get(45)));
         preQuantitativeIndicators.add(costOfSoldProducts);
         PreQuantitativeIndicator netProceeds = new PreQuantitativeIndicator("Чиста виручка", Arrays.asList(quantitativeIndicators.get(4),quantitativeIndicators.get(18),quantitativeIndicators.get(43)));
         preQuantitativeIndicators.add(netProceeds);
-        PreQuantitativeIndicator averageAnnualNumberOfEmployees = new PreQuantitativeIndicator("Середньорічна кількість працівників", Arrays.asList(quantitativeIndicators.get(4)));
+        PreQuantitativeIndicator averageAnnualNumberOfEmployees = new PreQuantitativeIndicator("Середньорічна кількість працівників", Collections.singletonList(quantitativeIndicators.get(4)));
         preQuantitativeIndicators.add(averageAnnualNumberOfEmployees);
-        PreQuantitativeIndicator theFinalValueOfIncome = new PreQuantitativeIndicator("Кінцеве значення доходів", Arrays.asList(quantitativeIndicators.get(5)));
+        PreQuantitativeIndicator theFinalValueOfIncome = new PreQuantitativeIndicator("Кінцеве значення доходів", Collections.singletonList(quantitativeIndicators.get(5)));
         preQuantitativeIndicators.add(theFinalValueOfIncome);
-        PreQuantitativeIndicator initialValueOfRevenues = new PreQuantitativeIndicator("Початкове значення доходів", Arrays.asList(quantitativeIndicators.get(5)));
+        PreQuantitativeIndicator initialValueOfRevenues = new PreQuantitativeIndicator("Початкове значення доходів", Collections.singletonList(quantitativeIndicators.get(5)));
         preQuantitativeIndicators.add(initialValueOfRevenues);
-        PreQuantitativeIndicator finalCostValue = new PreQuantitativeIndicator("Кінцеве значення витрат", Arrays.asList(quantitativeIndicators.get(6)));
+        PreQuantitativeIndicator finalCostValue = new PreQuantitativeIndicator("Кінцеве значення витрат", Collections.singletonList(quantitativeIndicators.get(6)));
         preQuantitativeIndicators.add(finalCostValue);
-        PreQuantitativeIndicator initialCostValue = new PreQuantitativeIndicator("Початкове значення витрат", Arrays.asList(quantitativeIndicators.get(6)));
+        PreQuantitativeIndicator initialCostValue = new PreQuantitativeIndicator("Початкове значення витрат", Collections.singletonList(quantitativeIndicators.get(6)));
         preQuantitativeIndicators.add(initialCostValue);
-        PreQuantitativeIndicator profitFromSales = new PreQuantitativeIndicator("Прибуток від реалізації", Arrays.asList(quantitativeIndicators.get(7)));
+        PreQuantitativeIndicator profitFromSales = new PreQuantitativeIndicator("Прибуток від реалізації", Collections.singletonList(quantitativeIndicators.get(7)));
         preQuantitativeIndicators.add(profitFromSales);
         PreQuantitativeIndicator amountOfAssets = new PreQuantitativeIndicator("Сума активів", Arrays.asList(quantitativeIndicators.get(7),quantitativeIndicators.get(14),quantitativeIndicators.get(24),quantitativeIndicators.get(26),quantitativeIndicators.get(30),quantitativeIndicators.get(31),quantitativeIndicators.get(32),quantitativeIndicators.get(37),quantitativeIndicators.get(38)));
         preQuantitativeIndicators.add(amountOfAssets);
         PreQuantitativeIndicator revenueFromSales = new PreQuantitativeIndicator("Виручка від реалізації", Arrays.asList(quantitativeIndicators.get(8),quantitativeIndicators.get(15),quantitativeIndicators.get(23),quantitativeIndicators.get(29),quantitativeIndicators.get(48)));
         preQuantitativeIndicators.add(revenueFromSales);
-        PreQuantitativeIndicator averageAnnualValueOfAccountsReceivable = new PreQuantitativeIndicator("Середньорічна вартість дебіторської заборгованості", Arrays.asList(quantitativeIndicators.get(8)));
+        PreQuantitativeIndicator averageAnnualValueOfAccountsReceivable = new PreQuantitativeIndicator("Середньорічна вартість дебіторської заборгованості", Collections.singletonList(quantitativeIndicators.get(8)));
         preQuantitativeIndicators.add(averageAnnualValueOfAccountsReceivable);
         PreQuantitativeIndicator numberOfDaysInThePeriod = new PreQuantitativeIndicator("Кількість днів у періоді", Arrays.asList(quantitativeIndicators.get(9),quantitativeIndicators.get(11),quantitativeIndicators.get(46)));
         preQuantitativeIndicators.add(numberOfDaysInThePeriod);
-        PreQuantitativeIndicator turnoverOfAccountsReceivable = new PreQuantitativeIndicator("Оборотність дебіторської заборгованості", Arrays.asList(quantitativeIndicators.get(9)));
+        PreQuantitativeIndicator turnoverOfAccountsReceivable = new PreQuantitativeIndicator("Оборотність дебіторської заборгованості", Collections.singletonList(quantitativeIndicators.get(9)));
         preQuantitativeIndicators.add(turnoverOfAccountsReceivable);
-        PreQuantitativeIndicator averageAnnualCostOfAccountsPayable = new PreQuantitativeIndicator("Середньорічна вартість кредиторської заборгованості", Arrays.asList(quantitativeIndicators.get(10)));
+        PreQuantitativeIndicator averageAnnualCostOfAccountsPayable = new PreQuantitativeIndicator("Середньорічна вартість кредиторської заборгованості", Collections.singletonList(quantitativeIndicators.get(10)));
         preQuantitativeIndicators.add(averageAnnualCostOfAccountsPayable);
-        PreQuantitativeIndicator turnoverOfAccountsPayable = new PreQuantitativeIndicator("Оборотність кредиторської заборгованості", Arrays.asList(quantitativeIndicators.get(11)));
+        PreQuantitativeIndicator turnoverOfAccountsPayable = new PreQuantitativeIndicator("Оборотність кредиторської заборгованості", Collections.singletonList(quantitativeIndicators.get(11)));
         preQuantitativeIndicators.add(turnoverOfAccountsPayable);
         PreQuantitativeIndicator repaymentPeriodOfAccountsReceivable = new PreQuantitativeIndicator("Період погашення дебіторської заборгованості", Arrays.asList(quantitativeIndicators.get(12),quantitativeIndicators.get(13)));
         preQuantitativeIndicators.add(repaymentPeriodOfAccountsReceivable);
         PreQuantitativeIndicator periodOfTurnoverOfInventories = new PreQuantitativeIndicator("Період обороту товарно-матеріальних запасів", Arrays.asList(quantitativeIndicators.get(12),quantitativeIndicators.get(13)));
         preQuantitativeIndicators.add(periodOfTurnoverOfInventories);
-        PreQuantitativeIndicator thePeriodOfRepaymentOfDebts = new PreQuantitativeIndicator("Період погашення кредиторської заборгованості", Arrays.asList(quantitativeIndicators.get(13)));
+        PreQuantitativeIndicator thePeriodOfRepaymentOfDebts = new PreQuantitativeIndicator("Період погашення кредиторської заборгованості", Collections.singletonList(quantitativeIndicators.get(13)));
         preQuantitativeIndicators.add(thePeriodOfRepaymentOfDebts);
         PreQuantitativeIndicator quicklyRealizedAssets = new PreQuantitativeIndicator("Швидко реалізовані активи", Arrays.asList(quantitativeIndicators.get(14),quantitativeIndicators.get(23)));
         preQuantitativeIndicators.add(quicklyRealizedAssets);
@@ -354,630 +381,633 @@ public class BankruptcyService implements IBankruptcyService {
         preQuantitativeIndicators.add(netProfit);
         PreQuantitativeIndicator averageAnnualValueOfAssets = new PreQuantitativeIndicator("Середньорічна вартість активів", Arrays.asList(quantitativeIndicators.get(16),quantitativeIndicators.get(29)));
         preQuantitativeIndicators.add(averageAnnualValueOfAssets);
-        PreQuantitativeIndicator averageAnnualCostOfEquityCapital = new PreQuantitativeIndicator("Середньорічна вартість власного капіталу", Arrays.asList(quantitativeIndicators.get(17)));
+        PreQuantitativeIndicator averageAnnualCostOfEquityCapital = new PreQuantitativeIndicator("Середньорічна вартість власного капіталу", Collections.singletonList(quantitativeIndicators.get(17)));
         preQuantitativeIndicators.add(averageAnnualCostOfEquityCapital);
         PreQuantitativeIndicator operatingProfit = new PreQuantitativeIndicator("Операційний прибуток", Arrays.asList(quantitativeIndicators.get(18),quantitativeIndicators.get(22),quantitativeIndicators.get(43)));
         preQuantitativeIndicators.add(operatingProfit);
-        PreQuantitativeIndicator averageAnnualValueOfNetAssets = new PreQuantitativeIndicator("Середньорічна вартість чистих активів", Arrays.asList(quantitativeIndicators.get(19)));
+        PreQuantitativeIndicator averageAnnualValueOfNetAssets = new PreQuantitativeIndicator("Середньорічна вартість чистих активів", Collections.singletonList(quantitativeIndicators.get(19)));
         preQuantitativeIndicators.add(averageAnnualValueOfNetAssets);
         PreQuantitativeIndicator equityCapital = new PreQuantitativeIndicator("Власний капітал", Arrays.asList(quantitativeIndicators.get(20),quantitativeIndicators.get(25),quantitativeIndicators.get(27),quantitativeIndicators.get(28),quantitativeIndicators.get(37)));
         preQuantitativeIndicators.add(equityCapital);
-        PreQuantitativeIndicator averageAnnualValueOfCurrentAssets = new PreQuantitativeIndicator("Середньорічна вартість оборотних активів", Arrays.asList(quantitativeIndicators.get(22)));
+        PreQuantitativeIndicator averageAnnualValueOfCurrentAssets = new PreQuantitativeIndicator("Середньорічна вартість оборотних активів", Collections.singletonList(quantitativeIndicators.get(22)));
         preQuantitativeIndicators.add(averageAnnualValueOfCurrentAssets);
-        PreQuantitativeIndicator profitBeforeTax = new PreQuantitativeIndicator("Прибуток до сплати податків", Arrays.asList(quantitativeIndicators.get(24)));
+        PreQuantitativeIndicator profitBeforeTax = new PreQuantitativeIndicator("Прибуток до сплати податків", Collections.singletonList(quantitativeIndicators.get(24)));
         preQuantitativeIndicators.add(profitBeforeTax);
         PreQuantitativeIndicator nonCurrentAssets = new PreQuantitativeIndicator("Необоротні активи", Arrays.asList(quantitativeIndicators.get(25),quantitativeIndicators.get(33)));
         preQuantitativeIndicators.add(nonCurrentAssets);
-        PreQuantitativeIndicator ownWorkingCapital = new PreQuantitativeIndicator("Власний оборотний капітал", Arrays.asList(quantitativeIndicators.get(26)));
+        PreQuantitativeIndicator ownWorkingCapital = new PreQuantitativeIndicator("Власний оборотний капітал", Collections.singletonList(quantitativeIndicators.get(26)));
         preQuantitativeIndicators.add(ownWorkingCapital);
-        PreQuantitativeIndicator obligation = new PreQuantitativeIndicator("Зобов’язання", Arrays.asList(quantitativeIndicators.get(27)));
+        PreQuantitativeIndicator obligation = new PreQuantitativeIndicator("Зобов’язання", Collections.singletonList(quantitativeIndicators.get(27)));
         preQuantitativeIndicators.add(obligation);
         PreQuantitativeIndicator capitalAttracted = new PreQuantitativeIndicator("Залучений капітал", Arrays.asList(quantitativeIndicators.get(28),quantitativeIndicators.get(32)));
         preQuantitativeIndicators.add(capitalAttracted);
         PreQuantitativeIndicator currentAssets = new PreQuantitativeIndicator("Оборотні активи", Arrays.asList(quantitativeIndicators.get(30),quantitativeIndicators.get(35),quantitativeIndicators.get(36)));
         preQuantitativeIndicators.add(currentAssets);
-        PreQuantitativeIndicator netAssets = new PreQuantitativeIndicator("Чисті активи", Arrays.asList(quantitativeIndicators.get(33)));
+        PreQuantitativeIndicator netAssets = new PreQuantitativeIndicator("Чисті активи", Collections.singletonList(quantitativeIndicators.get(33)));
         preQuantitativeIndicators.add(netAssets);
-        PreQuantitativeIndicator cash = new PreQuantitativeIndicator("Грошові кошти", Arrays.asList(quantitativeIndicators.get(34)));
+        PreQuantitativeIndicator cash = new PreQuantitativeIndicator("Грошові кошти", Collections.singletonList(quantitativeIndicators.get(34)));
         preQuantitativeIndicators.add(cash);
         PreQuantitativeIndicator currentLiabilities = new PreQuantitativeIndicator("Поточні зобов'язання", Arrays.asList(quantitativeIndicators.get(34),quantitativeIndicators.get(35),quantitativeIndicators.get(36)));
         preQuantitativeIndicators.add(currentLiabilities);
-        PreQuantitativeIndicator inventories = new PreQuantitativeIndicator("Товарно-матеріальні запаси", Arrays.asList(quantitativeIndicators.get(35)));
+        PreQuantitativeIndicator inventories = new PreQuantitativeIndicator("Товарно-матеріальні запаси", Collections.singletonList(quantitativeIndicators.get(35)));
         preQuantitativeIndicators.add(inventories);
         PreQuantitativeIndicator financialInvestments = new PreQuantitativeIndicator("Фінансові інвестиції", Arrays.asList(quantitativeIndicators.get(38),quantitativeIndicators.get(39)));
         preQuantitativeIndicators.add(financialInvestments);
-        PreQuantitativeIndicator profit = new PreQuantitativeIndicator("Прибуток", Arrays.asList(quantitativeIndicators.get(39)));
+        PreQuantitativeIndicator profit = new PreQuantitativeIndicator("Прибуток", Collections.singletonList(quantitativeIndicators.get(39)));
         preQuantitativeIndicators.add(profit);
-        PreQuantitativeIndicator numberOfDismissedWorkers = new PreQuantitativeIndicator("Кількість звільнених працівників", Arrays.asList(quantitativeIndicators.get(40)));
+        PreQuantitativeIndicator numberOfDismissedWorkers = new PreQuantitativeIndicator("Кількість звільнених працівників", Collections.singletonList(quantitativeIndicators.get(40)));
         preQuantitativeIndicators.add(numberOfDismissedWorkers);
         PreQuantitativeIndicator averageNumberOfStaff = new PreQuantitativeIndicator("Середньооблікова чисельність персоналу", Arrays.asList(quantitativeIndicators.get(40),quantitativeIndicators.get(41)));
         preQuantitativeIndicators.add(averageNumberOfStaff);
-        PreQuantitativeIndicator payrollFund = new PreQuantitativeIndicator("Фонд оплати праці", Arrays.asList(quantitativeIndicators.get(41)));
+        PreQuantitativeIndicator payrollFund = new PreQuantitativeIndicator("Фонд оплати праці", Collections.singletonList(quantitativeIndicators.get(41)));
         preQuantitativeIndicators.add(payrollFund);
-        PreQuantitativeIndicator finalValueOfTheAverageMonthlySalary = new PreQuantitativeIndicator("Кінцеве значення середньомісячної заробітної плати", Arrays.asList(quantitativeIndicators.get(42)));
+        PreQuantitativeIndicator finalValueOfTheAverageMonthlySalary = new PreQuantitativeIndicator("Кінцеве значення середньомісячної заробітної плати", Collections.singletonList(quantitativeIndicators.get(42)));
         preQuantitativeIndicators.add(finalValueOfTheAverageMonthlySalary);
-        PreQuantitativeIndicator initialValueOfTheAverageMonthlySalary  = new PreQuantitativeIndicator("Початкове значення середньомісячної заробітної плати", Arrays.asList(quantitativeIndicators.get(42)));
+        PreQuantitativeIndicator initialValueOfTheAverageMonthlySalary  = new PreQuantitativeIndicator("Початкове значення середньомісячної заробітної плати", Collections.singletonList(quantitativeIndicators.get(42)));
         preQuantitativeIndicators.add(initialValueOfTheAverageMonthlySalary);
-        PreQuantitativeIndicator volumeOfProduction = new PreQuantitativeIndicator("Обсяг виробництва продукції", Arrays.asList(quantitativeIndicators.get(44)));
+        PreQuantitativeIndicator volumeOfProduction = new PreQuantitativeIndicator("Обсяг виробництва продукції", Collections.singletonList(quantitativeIndicators.get(44)));
         preQuantitativeIndicators.add(volumeOfProduction);
-        PreQuantitativeIndicator productResidues = new PreQuantitativeIndicator("Залишки продукції", Arrays.asList(quantitativeIndicators.get(44)));
+        PreQuantitativeIndicator productResidues = new PreQuantitativeIndicator("Залишки продукції", Collections.singletonList(quantitativeIndicators.get(44)));
         preQuantitativeIndicators.add(productResidues);
-        PreQuantitativeIndicator productImport = new PreQuantitativeIndicator("Імпорт", Arrays.asList(quantitativeIndicators.get(44)));
+        PreQuantitativeIndicator productImport = new PreQuantitativeIndicator("Імпорт", Collections.singletonList(quantitativeIndicators.get(44)));
         preQuantitativeIndicators.add(productImport);
-        PreQuantitativeIndicator productExport = new PreQuantitativeIndicator("Експорт", Arrays.asList(quantitativeIndicators.get(44)));
+        PreQuantitativeIndicator productExport = new PreQuantitativeIndicator("Експорт", Collections.singletonList(quantitativeIndicators.get(44)));
         preQuantitativeIndicators.add(productExport);
-        PreQuantitativeIndicator averageAnnualCostOfInventory = new PreQuantitativeIndicator("Середньорічна вартість товарно-матеріальних запасів", Arrays.asList(quantitativeIndicators.get(45)));
+        PreQuantitativeIndicator averageAnnualCostOfInventory = new PreQuantitativeIndicator("Середньорічна вартість товарно-матеріальних запасів", Collections.singletonList(quantitativeIndicators.get(45)));
         preQuantitativeIndicators.add(averageAnnualCostOfInventory);
-        PreQuantitativeIndicator turnoverOfInventory = new PreQuantitativeIndicator("Оборотність товарно-матеріальних запасів", Arrays.asList(quantitativeIndicators.get(46)));
+        PreQuantitativeIndicator turnoverOfInventory = new PreQuantitativeIndicator("Оборотність товарно-матеріальних запасів", Collections.singletonList(quantitativeIndicators.get(46)));
         preQuantitativeIndicators.add(turnoverOfInventory);
-        PreQuantitativeIndicator variableCosts = new PreQuantitativeIndicator("Змінні витрати", Arrays.asList(quantitativeIndicators.get(47)));
+        PreQuantitativeIndicator variableCosts = new PreQuantitativeIndicator("Змінні витрати", Collections.singletonList(quantitativeIndicators.get(47)));
         preQuantitativeIndicators.add(variableCosts);
-        PreQuantitativeIndicator WZ = new PreQuantitativeIndicator("Приріст застосовуваних ресурсів за певний період, %", Arrays.asList(quantitativeIndicators.get(48)));
+        PreQuantitativeIndicator WZ = new PreQuantitativeIndicator("Приріст застосовуваних ресурсів за певний період, %", Collections.singletonList(quantitativeIndicators.get(48)));
         preQuantitativeIndicators.add(WZ);
-        PreQuantitativeIndicator WP = new PreQuantitativeIndicator("Приріст обсягу виробництва продукції за певний період, %", Arrays.asList(quantitativeIndicators.get(48)));
+        PreQuantitativeIndicator WP = new PreQuantitativeIndicator("Приріст обсягу виробництва продукції за певний період, %", Collections.singletonList(quantitativeIndicators.get(48)));
         preQuantitativeIndicators.add(WP);
-
-        return preQuantitativeIndicators;
     }
 
     @Override
-    public List<QuantitativeIndicator> calculateAmountOfQuantitativeIndicators(List<QuantitativeIndicator> quantitativeIndicators, List<PreQuantitativeIndicator> preQuantitativeIndicators){
-        for(int i=0;i<quantitativeIndicators.size();i++){
+    public List<QuantitativeIndicator> calculateAmountOfQuantitativeIndicators(InDataForCalculationQuantitativeIndicatorAmount inDataForCalculationQuantitativeIndicatorAmount){
+        List<QuantitativeIndicator> quantitativeIndicators = inDataForCalculationQuantitativeIndicatorAmount.getQuantitativeIndicators();
+        List<PreQuantitativeIndicator> preQuantitativeIndicators = inDataForCalculationQuantitativeIndicatorAmount.getPreQuantitativeIndicators();
+        if(isNull(quantitativeIndicators) || isNull(preQuantitativeIndicators)){
+            throw new EntityNotFoundException("This data does not exist or not full");
+        }
+        for(QuantitativeIndicator quantitativeIndicator: quantitativeIndicators){
             double value1 = 0;
             double value2 = 0;
             double value3 = 0;
             double value4 = 0;
-            switch (quantitativeIndicators.get(i).getName()){
+            switch (quantitativeIndicator.getName()){
                 case "Темп приросту (зниження) промислового обсягу виробництва (%)":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Кінцеве значення обсягу виробництва")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Кінцеве значення обсягу виробництва")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Початкове значення обсягу виробництва")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Початкове значення обсягу виробництва")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount((value1-value2)/value2*100);
+                    quantitativeIndicator.setAmount((value1-value2)/value2*100);
                     break;
                 case "Темп приросту (зниження) собівартості продукції (%)":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Кінцеве значення собівартості продукції")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Кінцеве значення собівартості продукції")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Початкове значення собівартості продукції")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Початкове значення собівартості продукції")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount((value1-value2)/value2*100);
+                    quantitativeIndicator.setAmount((value1-value2)/value2*100);
                     break;
                 case "Питома вага собівартості продукції у загальній сумі витрат (%)":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Собівартість продукції за період")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Собівартість продукції за період")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Загальна сума витрат за період")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Загальна сума витрат за період")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2*100);
+                    quantitativeIndicator.setAmount(value1/value2*100);
                     break;
                 case "Ватрати на 1 грн. реалізованої продукції":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Чистий дохід від реалізації продукції")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Чистий дохід від реалізації продукції")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Собівартість реалізованої продукції")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Собівартість реалізованої продукції")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2);
+                    quantitativeIndicator.setAmount(value1/value2);
                     break;
                 case "Продуктивність праці (тис.грн./чол)":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Чиста виручка")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Чиста виручка")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Середньорічна кількість працівників")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Середньорічна кількість працівників")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2);
+                    quantitativeIndicator.setAmount(value1/value2);
                     break;
                 case "Темп приросту (зниження) доходів (%)":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Кінцеве значення доходів")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Кінцеве значення доходів")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Початкове значення доходів")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Початкове значення доходів")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount((value1-value2)/value2*100);
+                    quantitativeIndicator.setAmount((value1-value2)/value2*100);
                     break;
                 case "Темп приросту (зниження) витрат (%)":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Кінцеве значення витрат")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Кінцеве значення витрат")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Початкове значення витрат")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Початкове значення витрат")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount((value1-value2)/value2*100);
+                    quantitativeIndicator.setAmount((value1-value2)/value2*100);
                     break;
                 case "Відношення прибутку від реалізації до суми активів":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Прибуток від реалізації")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Прибуток від реалізації")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Сума активів")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Сума активів")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2);
+                    quantitativeIndicator.setAmount(value1/value2);
                     break;
                 case "Оборотність дебіторської заборгованості (обор)":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Виручка від реалізації")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Виручка від реалізації")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Середньорічна вартість дебіторської заборгованості")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Середньорічна вартість дебіторської заборгованості")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2);
+                    quantitativeIndicator.setAmount(value1/value2);
                     break;
                 case "Період погашення дебіторської заборгованості (дні)":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Кількість днів у періоді")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Кількість днів у періоді")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Оборотність дебіторської заборгованості")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Оборотність дебіторської заборгованості")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2);
+                    quantitativeIndicator.setAmount(value1/value2);
                     break;
                 case "Оборотність кредиторської заборгованості (обор)":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Собівартість реалізованої продукції")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Собівартість реалізованої продукції")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Середньорічна вартість кредиторської заборгованості")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Середньорічна вартість кредиторської заборгованості")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2);
+                    quantitativeIndicator.setAmount(value1/value2);
                     break;
                 case "Період погашення кредиторської заборгованості (дні)":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Кількість днів у періоді")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Кількість днів у періоді")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Оборотність кредиторської заборгованості")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Оборотність кредиторської заборгованості")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2);
+                    quantitativeIndicator.setAmount(value1/value2);
                     break;
                 case "Тривалість операційного циклу, днів":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Період погашення дебіторської заборгованості")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Період погашення дебіторської заборгованості")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Період обороту товарно-матеріальних запасів")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Період обороту товарно-матеріальних запасів")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1+value2);
+                    quantitativeIndicator.setAmount(value1+value2);
                     break;
                 case "Тривалість фінансового циклу, днів":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Період погашення дебіторської заборгованості")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Період погашення дебіторської заборгованості")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Період обороту товарно-матеріальних запасів")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Період обороту товарно-матеріальних запасів")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Період погашення кредиторської заборгованості")){
-                            value3 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Період погашення кредиторської заборгованості")){
+                            value3 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1+value2-value3);
+                    quantitativeIndicator.setAmount(value1+value2-value3);
                     break;
                 case "Відношення швидко реалізованих активів до суми активів":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Швидко реалізовані активи")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Швидко реалізовані активи")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Сума активів")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Сума активів")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2);
+                    quantitativeIndicator.setAmount(value1/value2);
                     break;
                 case "Відношення оборотного капіталу до виручки від реалізації":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Оборотний капітал")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Оборотний капітал")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Виручка від реалізації")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Виручка від реалізації")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2);
+                    quantitativeIndicator.setAmount(value1/value2);
                     break;
                 case "Рентабельність активів (%)":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Чистий прибуток")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Чистий прибуток")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Середньорічна вартість активів")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Середньорічна вартість активів")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2*100);
+                    quantitativeIndicator.setAmount(value1/value2*100);
                     break;
                 case "Рентабельність власного капіталу(%)":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Чистий прибуток")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Чистий прибуток")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Середньорічна вартість власного капіталу")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Середньорічна вартість власного капіталу")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2*100);
+                    quantitativeIndicator.setAmount(value1/value2*100);
                     break;
                 case "Рентабельність продажу (%)":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Операційний прибуток")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Операційний прибуток")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Чиста виручка")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Чиста виручка")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2*100);
+                    quantitativeIndicator.setAmount(value1/value2*100);
                     break;
                 case "Рентабельність чистих актвів (%)":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Чистий прибуток")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Чистий прибуток")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Середньорічна вартість чистих активів")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Середньорічна вартість чистих активів")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2*100);
+                    quantitativeIndicator.setAmount(value1/value2*100);
                     break;
                 case "Рентабельність власного капіталу (%)":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Чистий прибуток")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Чистий прибуток")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Власний капітал")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Власний капітал")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2*100);
+                    quantitativeIndicator.setAmount(value1/value2*100);
                     break;
                 case "Рентабельність реалізованих товарів, робіт послуг (%)":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Чистий прибуток")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Чистий прибуток")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Собівартість реалізованої продукції")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Собівартість реалізованої продукції")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2*100);
+                    quantitativeIndicator.setAmount(value1/value2*100);
                     break;
                 case "Рентабельність оборотних активів (%)":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Операційний прибуток")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Операційний прибуток")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Середньорічна вартість оборотних активів")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Середньорічна вартість оборотних активів")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2*100);
+                    quantitativeIndicator.setAmount(value1/value2*100);
                     break;
                 case "Відношення виручки від реалізації до швидко реалізованих активів":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Виручка від реалізації")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Виручка від реалізації")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Швидко реалізовані активи")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Швидко реалізовані активи")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2);
+                    quantitativeIndicator.setAmount(value1/value2);
                     break;
                 case "Відношення прибутку до сплати податків до суми активів (%)":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Прибуток до сплати податків")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Прибуток до сплати податків")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Сума активів")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Сума активів")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2);
+                    quantitativeIndicator.setAmount(value1/value2);
                     break;
                 case "Власний оборотний капітал":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Власний капітал")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Власний капітал")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Необоротні активи")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Необоротні активи")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1-value2);
+                    quantitativeIndicator.setAmount(value1-value2);
                     break;
                 case "Відношення власного оборотного капіталу до суми активів":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Власний оборотний капітал")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Власний оборотний капітал")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Сума активів")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Сума активів")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2);
+                    quantitativeIndicator.setAmount(value1/value2);
                     break;
                 case "Відношення зобовязань до власного капіталу":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Зобов’язання")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Зобов’язання")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Власний капітал")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Власний капітал")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2);
+                    quantitativeIndicator.setAmount(value1/value2);
                     break;
                 case "Відношення власного капіталу до залученого":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Власний капітал")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Власний капітал")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Залучений капітал")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Залучений капітал")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2);
+                    quantitativeIndicator.setAmount(value1/value2);
                     break;
                 case "Оборотність активів":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Виручка від реалізації")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Виручка від реалізації")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Середньорічна вартість активів")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Середньорічна вартість активів")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2);
+                    quantitativeIndicator.setAmount(value1/value2);
                     break;
                 case "Частка мобільних активів у загальній величині майна підприємства":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Оборотні активи")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Оборотні активи")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Сума активів")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Сума активів")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2);
+                    quantitativeIndicator.setAmount(value1/value2);
                     break;
                 case "Відношення оборотного капіталу до суми активів":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Оборотний капітал")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Оборотний капітал")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Сума активів")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Сума активів")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2);
+                    quantitativeIndicator.setAmount(value1/value2);
                     break;
                 case "Коефіцієнт заборгованості":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Залучений капітал")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Залучений капітал")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Сума активів")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Сума активів")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2);
+                    quantitativeIndicator.setAmount(value1/value2);
                     break;
                 case "Відношення основного капіталу до суми чистих активів":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Необоротні активи")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Необоротні активи")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Чисті активи")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Чисті активи")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2);
+                    quantitativeIndicator.setAmount(value1/value2);
                     break;
                 case "Показники абсолютної платоспроможності":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Грошові кошти")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Грошові кошти")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Поточні зобов'язання")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Поточні зобов'язання")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2);
+                    quantitativeIndicator.setAmount(value1/value2);
                     break;
                 case "Показники проміжної платоспроможності":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Оборотні активи")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Оборотні активи")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Товарно-матеріальні запаси")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Товарно-матеріальні запаси")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Поточні зобов'язання")){
-                            value3 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Поточні зобов'язання")){
+                            value3 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount((value1-value2)/value3);
+                    quantitativeIndicator.setAmount((value1-value2)/value3);
                     break;
                 case "Показники загальної платоспроможності":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Оборотні активи")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Оборотні активи")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Поточні зобов'язання")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Поточні зобов'язання")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2);
+                    quantitativeIndicator.setAmount(value1/value2);
                     break;
                 case "Коефіцієнт фінансової незалежності (автономії)":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Власний капітал")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Власний капітал")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Сума активів")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Сума активів")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2);
+                    quantitativeIndicator.setAmount(value1/value2);
                     break;
                 case "Питома вага фінансових інвестицій в загальній сумі активів (%)":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Фінансові інвестиції")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Фінансові інвестиції")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Сума активів")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Сума активів")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2*100);
+                    quantitativeIndicator.setAmount(value1/value2*100);
                     break;
                 case "Прибутковість фінансових інвестицій":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Прибуток")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Прибуток")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Фінансові інвестиції")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Фінансові інвестиції")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2);
+                    quantitativeIndicator.setAmount(value1/value2);
                     break;
                 case "Плинність кадрів":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Кількість звільнених працівників")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Кількість звільнених працівників")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Середньооблікова чисельність персоналу")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Середньооблікова чисельність персоналу")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2*100);
+                    quantitativeIndicator.setAmount(value1/value2*100);
                     break;
                 case "Середньомісячна заробітна плата":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Фонд оплати праці")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Фонд оплати праці")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Середньооблікова чисельність персоналу")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Середньооблікова чисельність персоналу")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2/12);
+                    quantitativeIndicator.setAmount(value1/value2/12);
                     break;
                 case "Темп зростання (зниження) середньомісячної заробітної плати (%)":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Кінцеве значення середньомісячної заробітної плати")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Кінцеве значення середньомісячної заробітної плати")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Початкове значення середньомісячної заробітної плати")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Початкове значення середньомісячної заробітної плати")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount((value1-value2)/value2*100);
+                    quantitativeIndicator.setAmount((value1-value2)/value2*100);
                     break;
                 case "Рентабельність продажу":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Операційний прибуток")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Операційний прибуток")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Чиста виручка")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Чиста виручка")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2);
+                    quantitativeIndicator.setAmount(value1/value2);
                     break;
                 case "Місткість ринку":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Обсяг виробництва продукції")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Обсяг виробництва продукції")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Залишки продукції")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Залишки продукції")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Імпорт")){
-                            value3 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Імпорт")){
+                            value3 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Експорт")){
-                            value4 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Експорт")){
+                            value4 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1+value2+value3-value4);
+                    quantitativeIndicator.setAmount(value1+value2+value3-value4);
                     break;
                 case "Оборотність товарно-матеріальних запасів":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Собівартість реалізованої продукції")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Собівартість реалізованої продукції")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Середньорічна вартість товарно-матеріальних запасів")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Середньорічна вартість товарно-матеріальних запасів")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2);
+                    quantitativeIndicator.setAmount(value1/value2);
                     break;
                 case "Період обороту товарно-матеріальних запасів":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Кількість днів у періоді")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Кількість днів у періоді")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Оборотність товарно-матеріальних запасів")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Оборотність товарно-матеріальних запасів")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1/value2);
+                    quantitativeIndicator.setAmount(value1/value2);
                     break;
                 case "Маржинальний дохід":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Виручка від реалізації")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Виручка від реалізації")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Змінні витрати")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Змінні витрати")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(value1-value2);
+                    quantitativeIndicator.setAmount(value1-value2);
                     break;
                 case "Частку приросту продукції за рахунок інтенсифікації виробництва":
-                    for(int j=0;j<preQuantitativeIndicators.size();j++){
-                        if(preQuantitativeIndicators.get(j).getName().equals("Приріст застосовуваних ресурсів за певний період, %")){
-                            value1 = preQuantitativeIndicators.get(j).getAmount();
+                    for(PreQuantitativeIndicator preQuantitativeIndicator: preQuantitativeIndicators){
+                        if(preQuantitativeIndicator.getName().equals("Приріст застосовуваних ресурсів за певний період, %")){
+                            value1 = preQuantitativeIndicator.getAmount();
                         }
-                        if(preQuantitativeIndicators.get(j).getName().equals("Приріст обсягу виробництва продукції за певний період, %")){
-                            value2 = preQuantitativeIndicators.get(j).getAmount();
+                        if(preQuantitativeIndicator.getName().equals("Приріст обсягу виробництва продукції за певний період, %")){
+                            value2 = preQuantitativeIndicator.getAmount();
                         }
                     }
-                    quantitativeIndicators.get(i).setAmount(100*(1-value1/value2));
+                    quantitativeIndicator.setAmount(100*(1-value1/value2));
                     break;
                 default: break;
 
@@ -987,139 +1017,42 @@ public class BankruptcyService implements IBankruptcyService {
     }
 
     @Override
-    public Factor calculateFactorPoints(Company company, List<Indicator> factorIndicators, List<String> factorDependencies){
-        double[] r = new double[factorIndicators.size()];
-        r[factorIndicators.size()-1] = 1;
-        if(factorIndicators.size()>1){
-            for(int i = factorIndicators.size()-1; i>0; i--){
-                if(factorDependencies.get(i-1).equals("=")){
-                    r[i-1] = r[i];
-                }
-                else {
-                    r[i-1] = r[i]+1;
-                }
-            }
+    public List<Factor> calculateFactorsPoints(Company company, List<List<Indicator>> factorIndicators, List<List<String>> dependencies){
+        if(factorIndicators.isEmpty() || dependencies.isEmpty()){
+            throw new EntityNotFoundException("Requested data does not exist or not full");
         }
-
-        double K = 0;
-        for (int i = 0; i<factorIndicators.size(); i++){
-            K = K+r[i];
-        }
-
-        double[] p = new double[factorIndicators.size()];
-        for (int i = 0; i<factorIndicators.size(); i++){
-            p[i] = r[i]/K;
-        }
-
-        Factor factor = factorIndicators.get(0).getFactor();
-        factor.setAssessment(new LinguisticAssessment());
+        List<Factor> factorList = new ArrayList<>();
         for(int i = 0; i<factorIndicators.size(); i++){
-            factor.getAssessment().setA(factor.getAssessment().getA()+factorIndicators.get(i).getAssessment().getA()*p[i]);
-            factor.getAssessment().setB(factor.getAssessment().getB()+factorIndicators.get(i).getAssessment().getB()*p[i]);
-            factor.getAssessment().setC(factor.getAssessment().getC()+factorIndicators.get(i).getAssessment().getC()*p[i]);
-            factor.getAssessment().setD(factor.getAssessment().getD()+factorIndicators.get(i).getAssessment().getD()*p[i]);
-        }
+            Factor factor = factorIndicators.get(i).get(0).getFactor();
+            List<LinguisticAssessment> assessments = new ArrayList<>();
+            for(Indicator factorIndicator: factorIndicators.get(i)){
+                assessments.add(factorIndicator.getAssessment());
+            }
 
-        LinguisticAssessment[] linguisticAssessments = {new LinguisticAssessment("Дуже низький"), new LinguisticAssessment("Низький"), new LinguisticAssessment("Середній"), new LinguisticAssessment("Високий"), new LinguisticAssessment("Дуже високий")};
-        double a[] = new double[5];
-        double b[] = new double[5];
-        double c[] = new double[5];
-        double d[] = new double[5];
-        for(int i = 0; i<5; i++){
-            a[i] = (double)Math.round((Math.abs(factor.getAssessment().getA()-linguisticAssessments[i].getA())) * 10000d) / 10000d;
-            b[i] = (double)Math.round((Math.abs(factor.getAssessment().getB()-linguisticAssessments[i].getB())) * 10000d) / 10000d;
-            c[i] = (double)Math.round((Math.abs(factor.getAssessment().getC()-linguisticAssessments[i].getC())) * 10000d) / 10000d;
-            d[i] = (double)Math.round((Math.abs(factor.getAssessment().getD()-linguisticAssessments[i].getD())) * 10000d) / 10000d;
+            factorList.add(calculateAssessmentPoints(company, factor, assessments, dependencies.get(i)));
         }
-        double minA = Math.min(a[0],a[1]);
-        double minB = Math.min(b[0],b[1]);
-        double minC = Math.min(c[0],c[1]);
-        double minD = Math.min(d[0],d[1]);
-        for(int i = 2; i<5; i++){
-            minA = Math.min(minA,a[i]);
-            minB = Math.min(minB,a[i]);
-            minC = Math.min(minC,a[i]);
-            minD = Math.min(minD,a[i]);
-        }
-        int minCount[] = new int[5];
-        for(int i=0;i<5;i++){
-            minCount[i]=0;
-            if(minA==a[i])
-                minCount[i]=minCount[i]+1;
-            if(minB==b[i])
-                minCount[i]=minCount[i]+1;
-            if(minC==c[i])
-                minCount[i]=minCount[i]+1;
-            if(minD==d[i])
-                minCount[i]=minCount[i]+1;
-        }
-        int maximum = Math.max(minCount[0],minCount[1]);
-        for(int i=2;i<5;i++){
-            maximum=Math.max(maximum,minCount[i]);
-        }
-
-        if(maximum==minCount[0])
-            factor.getAssessment().setName("Дуже низький");
-        if(maximum==minCount[1])
-            factor.getAssessment().setName("Низький");
-        if(maximum==minCount[2])
-            factor.getAssessment().setName("Середній");
-        if(maximum==minCount[3])
-            factor.getAssessment().setName("Високий");
-        if(maximum==minCount[4])
-            factor.getAssessment().setName("Дуже високий");
-
-        double v = 0;
-        if(factor.getAssessment().getName().equals("Дуже низький")){
-            double abcdv = Math.max(Math.abs(factor.getAssessment().getA()-linguisticAssessments[0].getA()), Math.abs(factor.getAssessment().getB()-linguisticAssessments[0].getB()));
-            abcdv = Math.min(abcdv, Math.abs(factor.getAssessment().getC()-linguisticAssessments[0].getC()));
-            abcdv = Math.min(abcdv, Math.abs(factor.getAssessment().getD()-linguisticAssessments[0].getD()));
-            v = 1-abcdv;
-            factor.getAssessment().setName(factor.getAssessment().getName()+"("+v+")");
-            factor.setAssessmentPoint(v);
-        }
-        if(factor.getAssessment().getName().equals("Низький")){
-            double abcdv = Math.max(Math.abs(factor.getAssessment().getA()-linguisticAssessments[1].getA()), Math.abs(factor.getAssessment().getB()-linguisticAssessments[1].getB()));
-            abcdv = Math.min(abcdv, Math.abs(factor.getAssessment().getC()-linguisticAssessments[1].getC()));
-            abcdv = Math.min(abcdv, Math.abs(factor.getAssessment().getD()-linguisticAssessments[1].getD()));
-            v = 1-abcdv;
-            factor.getAssessment().setName(factor.getAssessment().getName()+"("+v+")");
-            factor.setAssessmentPoint(v);
-        }
-        if(factor.getAssessment().getName().equals("Середній")){
-            double abcdv = Math.max(Math.abs(factor.getAssessment().getA()-linguisticAssessments[2].getA()), Math.abs(factor.getAssessment().getB()-linguisticAssessments[2].getB()));
-            abcdv = Math.min(abcdv, Math.abs(factor.getAssessment().getC()-linguisticAssessments[2].getC()));
-            abcdv = Math.min(abcdv, Math.abs(factor.getAssessment().getD()-linguisticAssessments[2].getD()));
-            v = 1-abcdv;
-            factor.getAssessment().setName(factor.getAssessment().getName()+"("+v+")");
-            factor.setAssessmentPoint(v);
-        }
-        if(factor.getAssessment().getName().equals("Високий")){
-            double abcdv = Math.max(Math.abs(factor.getAssessment().getA()-linguisticAssessments[3].getA()), Math.abs(factor.getAssessment().getB()-linguisticAssessments[3].getB()));
-            abcdv = Math.min(abcdv, Math.abs(factor.getAssessment().getC()-linguisticAssessments[3].getC()));
-            abcdv = Math.min(abcdv, Math.abs(factor.getAssessment().getD()-linguisticAssessments[3].getD()));
-            v = 1-abcdv;
-            factor.getAssessment().setName(factor.getAssessment().getName()+"("+v+")");
-            factor.setAssessmentPoint(v);
-        }
-        if(factor.getAssessment().getName().equals("Дуже високий")){
-            double abcdv = Math.max(Math.abs(factor.getAssessment().getA()-linguisticAssessments[4].getA()), Math.abs(factor.getAssessment().getB()-linguisticAssessments[4].getB()));
-            abcdv = Math.min(abcdv, Math.abs(factor.getAssessment().getC()-linguisticAssessments[4].getC()));
-            abcdv = Math.min(abcdv, Math.abs(factor.getAssessment().getD()-linguisticAssessments[4].getD()));
-            v = 1-abcdv;
-            factor.getAssessment().setName(factor.getAssessment().getName()+"("+v+")");
-            factor.setAssessmentPoint(v);
-        }
-        companyFactorRepository.saveAndFlush(new CompanyFactor(factor.getName(),factor.getAssessment().getName(), factor.getAssessmentPoint(), company));
-        return factor;
+        return factorList;
     }
 
     @Override
     public Factor calculateCompanyPoints(Company company, List<Factor> factors, List<String> factorDependencies){
-        double[] r = new double[factors.size()];
-        r[factors.size()-1] = 1;
-        if(factors.size()>1){
-            for(int i = factors.size()-1; i>0; i--){
+        if(factorDependencies.isEmpty()){
+            throw new EntityNotFoundException("Requested data does not exist");
+        }
+        Factor factor = new Factor("Стан підприємства");
+        List<LinguisticAssessment> assessments = new ArrayList<>();
+        for(Factor factorFromList: factors){
+            assessments.add(factorFromList.getAssessment());
+        }
+
+        return calculateAssessmentPoints(company, factor, assessments, factorDependencies);
+    }
+
+    private Factor calculateAssessmentPoints(Company company, Factor factor, List<LinguisticAssessment> assessments, List<String> factorDependencies){
+        double[] r = new double[assessments.size()];
+        r[assessments.size()-1] = 1;
+        if(assessments.size()>1){
+            for(int i = assessments.size()-1; i>0; i--){
                 if(factorDependencies.get(i-1).equals("=")){
                     r[i-1] = r[i];
                 }
@@ -1130,29 +1063,28 @@ public class BankruptcyService implements IBankruptcyService {
         }
 
         double K = 0;
-        for (int i = 0; i<factors.size(); i++){
+        for (int i = 0; i<assessments.size(); i++){
             K = K+r[i];
         }
 
-        double[] p = new double[factors.size()];
-        for (int i = 0; i<factors.size(); i++){
+        double[] p = new double[assessments.size()];
+        for (int i = 0; i<assessments.size(); i++){
             p[i] = r[i]/K;
         }
 
-        Factor factor = new Factor("Стан підприємства");
         factor.setAssessment(new LinguisticAssessment());
-        for(int i = 0; i<factors.size(); i++){
-            factor.getAssessment().setA(factor.getAssessment().getA()+factors.get(i).getAssessment().getA()*p[i]);
-            factor.getAssessment().setB(factor.getAssessment().getB()+factors.get(i).getAssessment().getB()*p[i]);
-            factor.getAssessment().setC(factor.getAssessment().getC()+factors.get(i).getAssessment().getC()*p[i]);
-            factor.getAssessment().setD(factor.getAssessment().getD()+factors.get(i).getAssessment().getD()*p[i]);
+        for(int i = 0; i<assessments.size(); i++){
+            factor.getAssessment().setA(factor.getAssessment().getA()+assessments.get(i).getA()*p[i]);
+            factor.getAssessment().setB(factor.getAssessment().getB()+assessments.get(i).getB()*p[i]);
+            factor.getAssessment().setC(factor.getAssessment().getC()+assessments.get(i).getC()*p[i]);
+            factor.getAssessment().setD(factor.getAssessment().getD()+assessments.get(i).getD()*p[i]);
         }
 
         LinguisticAssessment[] linguisticAssessments = {new LinguisticAssessment("Дуже низький"), new LinguisticAssessment("Низький"), new LinguisticAssessment("Середній"), new LinguisticAssessment("Високий"), new LinguisticAssessment("Дуже високий")};
-        double a[] = new double[5];
-        double b[] = new double[5];
-        double c[] = new double[5];
-        double d[] = new double[5];
+        double[] a = new double[5];
+        double[] b = new double[5];
+        double[] c = new double[5];
+        double[] d = new double[5];
         for(int i = 0; i<5; i++){
             a[i] = (double)Math.round((Math.abs(factor.getAssessment().getA()-linguisticAssessments[i].getA())) * 10000d) / 10000d;
             b[i] = (double)Math.round((Math.abs(factor.getAssessment().getB()-linguisticAssessments[i].getB())) * 10000d) / 10000d;
@@ -1169,8 +1101,7 @@ public class BankruptcyService implements IBankruptcyService {
             minC = Math.min(minC,a[i]);
             minD = Math.min(minD,a[i]);
         }
-
-        int minCount[] = new int[5];
+        int[] minCount = new int[5];
         for(int i=0;i<5;i++){
             minCount[i]=0;
             if(minA==a[i])
@@ -1198,7 +1129,7 @@ public class BankruptcyService implements IBankruptcyService {
         if(maximum==minCount[4])
             factor.getAssessment().setName("Дуже високий");
 
-        double v = 0;
+        double v;
         if(factor.getAssessment().getName().equals("Дуже низький")){
             double abcdv = Math.max(Math.abs(factor.getAssessment().getA()-linguisticAssessments[0].getA()), Math.abs(factor.getAssessment().getB()-linguisticAssessments[0].getB()));
             abcdv = Math.min(abcdv, Math.abs(factor.getAssessment().getC()-linguisticAssessments[0].getC()));
@@ -1245,18 +1176,16 @@ public class BankruptcyService implements IBankruptcyService {
 
     @Override
     public MultiFactorModelOfAltman multiFactorModelOfAltmanResult(Company company, MultiFactorModelOfAltmanData multiFactorModelOfAltmanData){
-        double x1;
-        double x2;
-        double x3;
-        double x4;
-        double x5;
-        double z;
-        x1 = (multiFactorModelOfAltmanData.getCurrentAssets()-multiFactorModelOfAltmanData.getСurrentLiabilities())/multiFactorModelOfAltmanData.getTotalValueOfAssets();
-        x2 = multiFactorModelOfAltmanData.getNetProfit()/multiFactorModelOfAltmanData.getTotalValueOfAssets();
-        x3 = multiFactorModelOfAltmanData.getProfitBeforePayments()/multiFactorModelOfAltmanData.getTotalValueOfAssets();
-        x4 = multiFactorModelOfAltmanData.getBookValueOfEquity()/multiFactorModelOfAltmanData.getObligation();
-        x5 = multiFactorModelOfAltmanData.getReceipts()/multiFactorModelOfAltmanData.getTotalValueOfAssets();
-        z = 1.2*x1+1.4*x2+3.3*x3+0.6*x4+x5;
+        if(isNull(multiFactorModelOfAltmanData)){
+            throw new EntityNotFoundException("Requested data of multi factor model of Altman does not exist");
+        }
+        double x1 = (multiFactorModelOfAltmanData.getCurrentAssets()-multiFactorModelOfAltmanData.getCurrentLiabilities())/multiFactorModelOfAltmanData.getTotalValueOfAssets();
+        double x2 = multiFactorModelOfAltmanData.getNetProfit()/multiFactorModelOfAltmanData.getTotalValueOfAssets();
+        double x3 = multiFactorModelOfAltmanData.getProfitBeforePayments()/multiFactorModelOfAltmanData.getTotalValueOfAssets();
+        double x4 = multiFactorModelOfAltmanData.getBookValueOfEquity()/multiFactorModelOfAltmanData.getObligation();
+        double x5 = multiFactorModelOfAltmanData.getReceipts()/multiFactorModelOfAltmanData.getTotalValueOfAssets();
+        double z = 1.2*x1+1.4*x2+3.3*x3+0.6*x4+x5;
+
         MultiFactorModelOfAltman multiFactorModelOfAltman = new MultiFactorModelOfAltman(z,x1,x2,x3,x4,x5,company);
         multiFactorModelOfAltmanRepository.saveAndFlush(multiFactorModelOfAltman);
         return multiFactorModelOfAltman;
@@ -1264,16 +1193,15 @@ public class BankruptcyService implements IBankruptcyService {
 
     @Override
     public LissModel lissModelResult(Company company, LissModelData lissModelData){
-        double x1;
-        double x2;
-        double x3;
-        double x4;
-        double z;
-        x1 = lissModelData.getWorkingCapital()/lissModelData.getAmountOfAssets();
-        x2 = lissModelData.getProfitFromSales()/lissModelData.getAmountOfAssets();
-        x3 = lissModelData.getUndividedProfit()/lissModelData.getAmountOfAssets();
-        x4 = lissModelData.getEquityCapital()/lissModelData.getAttractedCapital();
-        z = 0.063*x1+0.092*x2+0.057*x3+0.001*x4;
+        if(isNull(lissModelData)){
+            throw new EntityNotFoundException("Requested data of liss model does not exist");
+        }
+        double x1 = lissModelData.getWorkingCapital()/lissModelData.getAmountOfAssets();
+        double x2 = lissModelData.getProfitFromSales()/lissModelData.getAmountOfAssets();
+        double x3 = lissModelData.getUndividedProfit()/lissModelData.getAmountOfAssets();
+        double x4 = lissModelData.getEquityCapital()/lissModelData.getAttractedCapital();
+        double z = 0.063*x1+0.092*x2+0.057*x3+0.001*x4;
+
         LissModel lissModel = new LissModel(z,x1,x2,x3,x4,company);
         lissModelRepository.saveAndFlush(lissModel);
         return lissModel;
@@ -1281,16 +1209,15 @@ public class BankruptcyService implements IBankruptcyService {
 
     @Override
     public DavidBelikovModel davidBelikovModelResult(Company company, DavidBelikovModelData davidBelikovModelData){
-        double x1;
-        double x2;
-        double x3;
-        double x4;
-        double z;
-        x1 = davidBelikovModelData.getCurrentAssets()/davidBelikovModelData.getTotalValueOfAssets();
-        x2 = davidBelikovModelData.getNetProfit()/davidBelikovModelData.getEquityCapital();
-        x3 = davidBelikovModelData.getReceipts()/davidBelikovModelData.getTotalValueOfAssets();
-        x4 = davidBelikovModelData.getNetProfit()/davidBelikovModelData.getCost();
-        z = 8.38*x1+1.0*x2+0.054*x3+0.63*x4;
+        if(isNull(davidBelikovModelData)){
+            throw new EntityNotFoundException("Requested data of david-Belikov model does not exist");
+        }
+        double x1 = davidBelikovModelData.getCurrentAssets()/davidBelikovModelData.getTotalValueOfAssets();
+        double x2 = davidBelikovModelData.getNetProfit()/davidBelikovModelData.getEquityCapital();
+        double x3 = davidBelikovModelData.getReceipts()/davidBelikovModelData.getTotalValueOfAssets();
+        double x4 = davidBelikovModelData.getNetProfit()/davidBelikovModelData.getCost();
+        double z = 8.38*x1+1.0*x2+0.054*x3+0.63*x4;
+
         DavidBelikovModel davidBelikovModel = new DavidBelikovModel(z,x1,x2,x3,x4,company);
         davidBelikovModelRepository.saveAndFlush(davidBelikovModel);
         return davidBelikovModel;
@@ -1298,16 +1225,15 @@ public class BankruptcyService implements IBankruptcyService {
 
     @Override
     public SpringateModel springateModelResult(Company company, SpringateModelData springateModelData){
-        double x1;
-        double x2;
-        double x3;
-        double x4;
-        double z;
-        x1 = springateModelData.getWorkingCapital()/springateModelData.getTotalValueOfAssets();
-        x2 = springateModelData.getProfitFromSales()/springateModelData.getTotalValueOfAssets();
-        x3 = springateModelData.getProfitFromSales()/springateModelData.getShortTermDebt();
-        x4 = springateModelData.getSalesVolume()/springateModelData.getTotalValueOfAssets();
-        z = 1.03*x1+3.07*x2+0.66*x3+0.63*x4;
+        if(isNull(springateModelData)){
+            throw new EntityNotFoundException("Requested data of springate model does not exist");
+        }
+        double x1 = springateModelData.getWorkingCapital()/springateModelData.getTotalValueOfAssets();
+        double x2 = springateModelData.getProfitFromSales()/springateModelData.getTotalValueOfAssets();
+        double x3 = springateModelData.getProfitFromSales()/springateModelData.getShortTermDebt();
+        double x4 = springateModelData.getSalesVolume()/springateModelData.getTotalValueOfAssets();
+        double z = 1.03*x1+3.07*x2+0.66*x3+0.63*x4;
+
         SpringateModel springateModel = new SpringateModel(z,x1,x2,x3,x4,company);
         springateModelRepository.saveAndFlush(springateModel);
         return springateModel;
@@ -1316,20 +1242,17 @@ public class BankruptcyService implements IBankruptcyService {
 
     @Override
     public UniversalDiscriminatoryModel universalDiscriminatoryModelResult(Company company, UniversalDiscriminatoryModelData universalDiscriminatoryModelData){
-        double x1;
-        double x2;
-        double x3;
-        double x4;
-        double x5;
-        double x6;
-        double z;
-        x1 = universalDiscriminatoryModelData.getCashFlow()/universalDiscriminatoryModelData.getObligation();
-        x2 = universalDiscriminatoryModelData.getTotalValueOfAssets()/universalDiscriminatoryModelData.getObligation();
-        x3 = universalDiscriminatoryModelData.getNetProfit()/universalDiscriminatoryModelData.getTotalValueOfAssets();
-        x4 = universalDiscriminatoryModelData.getNetProfit()/universalDiscriminatoryModelData.getReceipts();
-        x5 = universalDiscriminatoryModelData.getInventories()/universalDiscriminatoryModelData.getReceipts();
-        x6 = universalDiscriminatoryModelData.getReceipts()/universalDiscriminatoryModelData.getTotalValueOfAssets();
-        z = 1.5*x1+0.08*x2+10*x3+5*x4+0.3*x5+0.1*x6;
+        if(isNull(universalDiscriminatoryModelData)){
+            throw new EntityNotFoundException("Requested data of universal discriminatory model does not exist");
+        }
+        double x1 = universalDiscriminatoryModelData.getCashFlow()/universalDiscriminatoryModelData.getObligation();
+        double x2 = universalDiscriminatoryModelData.getTotalValueOfAssets()/universalDiscriminatoryModelData.getObligation();
+        double x3 = universalDiscriminatoryModelData.getNetProfit()/universalDiscriminatoryModelData.getTotalValueOfAssets();
+        double x4 = universalDiscriminatoryModelData.getNetProfit()/universalDiscriminatoryModelData.getReceipts();
+        double x5 = universalDiscriminatoryModelData.getInventories()/universalDiscriminatoryModelData.getReceipts();
+        double x6 = universalDiscriminatoryModelData.getReceipts()/universalDiscriminatoryModelData.getTotalValueOfAssets();
+        double z = 1.5*x1+0.08*x2+10*x3+5*x4+0.3*x5+0.1*x6;
+
         UniversalDiscriminatoryModel universalDiscriminatoryModel = new UniversalDiscriminatoryModel(z,x1,x2,x3,x4,x5,x6,company);
         universalDiscriminatoryModelRepository.saveAndFlush(universalDiscriminatoryModel);
         return universalDiscriminatoryModel;

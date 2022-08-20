@@ -5,51 +5,58 @@ import com.api.BankruptcyRiskAssessment.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
+
+import static java.util.Objects.isNull;
 
 @Service
 public class RoleService implements IRoleService {
+    private final RoleRepository roleRepository;
 
     @Autowired
-    private RoleRepository roleRepository;
+    public RoleService(RoleRepository roleRepository){ this.roleRepository = roleRepository; }
 
     @Override
     public Role addRole(Role role) {
+        if (isNull(role)) {
+            throw new EntityNotFoundException("Role is empty");
+        }
         return roleRepository.saveAndFlush(role);
     }
 
     @Override
     public Role getRole(Long roleId) {
-        Role role = roleRepository.getOne(roleId);
-        if (role == null) {
-            return null;
-        }
-
-        return role;
+        return roleRepository.findById(roleId).orElseThrow(() -> new EntityNotFoundException("Role not found"));
     }
 
     @Override
     public Role updateRole(Role role) {
+        if (isNull(role)) {
+            throw new EntityNotFoundException("Requested update is empty");
+        }
         return roleRepository.save(role);
     }
 
     @Override
-    public Role deleteRole(Long roleId) {
-        Role role = roleRepository.getOne(roleId);
-        if (role == null) {
-            return null;
-        }
+    public void deleteRole(Long roleId) {
+        Role role = this.getRole(roleId);
         roleRepository.delete(role);
-        return role;
     }
 
     @Override
     public List<Role> getAllRole() {
-        return roleRepository.findAll();
+        List<Role> allRoles = roleRepository.findAll();
+        if (allRoles.isEmpty())
+            throw new EntityNotFoundException("No roles found in DB");
+        return allRoles;
     }
 
     @Override
     public Role getRoleByName(String name){
-        return roleRepository.findByNameLike(name);
+        Role role = roleRepository.findByNameLike(name);
+        if(isNull(role))
+            throw new EntityNotFoundException("No matches found in DB");
+        return role;
     }
 }
